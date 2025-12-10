@@ -313,6 +313,35 @@ Mechanics:
     lose_chance: 0  # 0-1, chance to lose the item on death (0 = never lose, 1 = always lose)
 ```
 
+### Dimmable Light
+
+Create interactive lighting that cycles through brightness levels. Players right-click furniture, noteblocks, or stringblocks to step between a minimum and maximum light value; the current level is stored and restored across restarts.
+
+- Cycles light from `min_light` to `max_light` using `step_size`
+- Base light is applied immediately (uses the standard `light` mechanic)
+- State persistence across server restarts
+- Seamless integration with existing furniture mechanics (barriers, storage, seats, rotation)
+
+**Important notes**
+- For furniture with storage, seat, or rotation mechanics: players must **sneak while right-clicking** to toggle the light
+- For furniture with barriers: the light toggles across all barrier blocks in the furniture structure
+
+#### Per item configuration
+
+```yaml
+Mechanics:
+  dimmable_light:
+    light: 5       # Optional base light (0-15) applied on placement
+    min_light: 0   # Lowest brightness (0-15)
+    max_light: 15  # Highest brightness (0-15)
+    step_size: 1   # Brightness increment per click (>=1)
+```
+
+- `light`: Base light applied when the block is placed; defaults to `min_light` if omitted.
+- `min_light` / `max_light`: Lower and upper bounds for cycling; values are clamped 0–15.
+- `step_size`: How much brightness changes per interaction; minimum of 1.
+
+
 ### Custom mechanic
 
 This mechanic allows you to customize events, conditions and actions. Since it is a quite special mechanic, it has its [dedicated tutorial page](/mechanics/all-mechanics/custom-mechanic).
