@@ -1,0 +1,270 @@
+---
+description: How to customize Oraxen branding, plugin messages, and language files
+---
+
+# Branding & Customization
+
+Learn how to customize Oraxen's branding, change plugin messages, update prefixes, and modify language files to match your server's identity.
+
+## Changing the Plugin Prefix
+
+The plugin prefix appears before all Oraxen messages in chat. To customize it:
+
+**Location:** `plugins/Oraxen/languages/<language>.yml`
+
+For English, edit `plugins/Oraxen/languages/english.yml`:
+
+```yaml
+general:
+  prefix: "<gradient:#9055FF:#13E2DA>Oraxen <gray>| "
+```
+
+### Examples
+
+**Simple colored prefix:**
+```yaml
+prefix: "<gold>[MyServer] "
+```
+
+**Gradient with custom colors:**
+```yaml
+prefix: "<gradient:#FF6B6B:#4ECDC4>MyServer <dark_gray>» "
+```
+
+**Multiple color stops:**
+```yaml
+prefix: "<gradient:#667eea:#764ba2:#f093fb>✦ MyPlugin <gray>| "
+```
+
+After changing the prefix, reload with `/oraxen reload all`.
+
+## Customizing Plugin Messages
+
+All plugin messages are stored in language files. Oraxen supports 9 languages:
+
+- `english.yml` (default)
+- `french.yml`
+- `german.yml`
+- `czech.yml`
+- `spanish.yml`
+- `korean.yml`
+- `japanese.yml`
+- `chinese-simplified.yml` (zh-CN)
+- `chinese-traditional.yml` (zh-TW)
+- `russian.yml` (ru-RU)
+- `portuguese-brazil.yml` (pt-BR)
+
+### Changing the Language
+
+In `settings.yml`:
+
+```yaml
+Plugin:
+  language: "english"  # Change to: french, german, czech, korean, jpn_JP, ru-RU, zh-CN, zh-TW, pt-BR
+```
+
+### Editing Messages
+
+**Location:** `plugins/Oraxen/languages/<language>.yml`
+
+Example customizations in `english.yml`:
+
+```yaml
+general:
+  prefix: "<gradient:#9055FF:#13E2DA>Oraxen <gray>| "
+  no_permission: "<prefix><#fa4943>You're lacking the permission <b><permission></b> to do this!"
+  reload: "<prefix><#55ffa4>Successfully reloaded"
+
+  # Customize to your server's style:
+  reload: "<prefix><green>✓ Configuration reloaded!"
+  no_permission: "<prefix><red>⚠ Missing permission: <yellow><permission>"
+```
+
+### Message Formatting
+
+Oraxen uses [MiniMessage](https://docs.advntr.dev/minimessage/format.html) formatting:
+
+**Colors:**
+- `<red>`, `<green>`, `<blue>`, etc.
+- `<#HEX>` for custom colors: `<#FF5733>`
+- `<gradient:#start:#end>text</gradient>`
+
+**Formatting:**
+- `<bold>`, `<italic>`, `<underlined>`
+- `<strikethrough>`, `<obfuscated>`
+
+**Placeholders:**
+- `<prefix>` - The plugin prefix
+- `<permission>` - Required permission
+- `<player>` - Player name
+- `<item>` - Item name
+- `<amount>` - Numerical amount
+
+Example:
+```yaml
+updated_items: "<prefix><gradient:#00FF00:#00AA00>✓ Updated <amount> items for <player>!"
+```
+
+## Customizing Welcome Messages
+
+### Join Message (Text)
+
+The text message sent when players join (separate from the welcome sound):
+
+**Location:** `settings.yml`
+
+```yaml
+Pack:
+  dispatch:
+    join_message:
+      enabled: false  # Set to true to enable
+      delay: -1       # Delay in ticks (-1 = instant, 20 = 1 second)
+```
+
+The message content is defined in `languages/<language>.yml`:
+
+```yaml
+command:
+  join: |-
+    <dark_gray><st>                           </st><dark_gray>{<aqua><bold>Resource Pack</bold><dark_gray>}<dark_gray><st>                        </st>
+    <gray><bold>To see the new items you need to use a special resourcepack (but don't worry, this doesn't prevent you from using yours at the same time).</bold>
+    <dark_gray>»<gray> To try to load it directly from the game, <click:run_command:"oraxen pack send @p"><hover:show_text:"<red>! loading the resourcepack from the game can cause lags"><red><bold>CLICK HERE</bold></hover></click>
+```
+
+### Welcome Sound
+
+**Location:** `settings.yml`
+
+```yaml
+Pack:
+  receive:
+    loaded:
+      actions:
+        sound:
+          enabled: true           # Set to false to disable
+          type: minecraft:welcome # Change to your custom sound
+          volume: 1.0
+          pitch: 1.0
+```
+
+To use a custom sound, you must first register it in `sound.yml`. See the [sound.yml documentation](./sound-yml) for details.
+
+## Customizing Resource Pack Prompt
+
+When players join, they see a prompt to accept the resource pack:
+
+**Location:** `settings.yml`
+
+```yaml
+Pack:
+  dispatch:
+    prompt: "<#fa4943>Accept the pack to enjoy a full <b><gradient:#9055FF:#13E2DA>Oraxen</b><#fa4943> experience"
+```
+
+### Examples
+
+**Simple prompt:**
+```yaml
+prompt: "<gold>Please accept the resource pack to see custom items!"
+```
+
+**Branded prompt:**
+```yaml
+prompt: "<gradient:#FF6B6B:#4ECDC4>MyServer <white>requires this pack for the full experience!"
+```
+
+**With emojis:**
+```yaml
+prompt: "✨ <yellow>Accept our custom pack for <gold><bold>awesome items</bold><yellow>! ✨"
+```
+
+## Customizing Pack Comments (Watermark)
+
+Add a custom watermark inside the resource pack ZIP file:
+
+**Location:** `settings.yml`
+
+```yaml
+Pack:
+  generation:
+    comment: "The content of this texture pack
+      \nbelongs to the owner of the Oraxen
+      \nplugin and any complete or partial
+      \nuse must comply with the terms and
+      \nconditions of Oraxen."
+```
+
+Change this to your server's copyright notice or branding.
+
+## Creating Custom Language Files
+
+To create a custom language file (e.g., for a language not yet supported):
+
+1. Copy `plugins/Oraxen/languages/english.yml` to your desired language name
+2. Translate all messages while keeping the same structure
+3. Update `settings.yml`:
+
+```yaml
+Plugin:
+  language: "custom"  # Name of your new language file (without .yml)
+```
+
+## Common Customization Examples
+
+### Minimal/Clean Style
+
+```yaml
+general:
+  prefix: "<dark_gray>[<aqua>O<dark_gray>] "
+  reload: "<prefix><green>Reloaded."
+  no_permission: "<prefix><red>No permission."
+```
+
+### Luxury/Premium Style
+
+```yaml
+general:
+  prefix: "<gradient:#FFD700:#FFA500>⚜ ORAXEN <gray>» "
+  reload: "<prefix><gradient:#00FF00:#00AA00>✓ Successfully reloaded all configurations!"
+  no_permission: "<prefix><gradient:#FF0000:#AA0000>⚠ Access Denied <dark_gray>| <gray>Missing: <yellow><permission>"
+```
+
+### Roleplay/Fantasy Style
+
+```yaml
+general:
+  prefix: "<gradient:#8B4513:#D2691E>⚔ Oraxen Magic <gray>~ "
+  reload: "<prefix><#90EE90>The ancient scrolls have been refreshed!"
+  no_permission: "<prefix><#FF6347>The arcane forces deny you access! (<italic><permission></italic>)"
+```
+
+## Troubleshooting
+
+### Messages Show Without Colors
+
+Ensure MiniMessage formatting is enabled in `settings.yml`:
+
+```yaml
+Plugin:
+  formatting:
+    chat: true
+```
+
+### Prefix Doesn't Change
+
+1. Make sure you edited the correct language file (check `Plugin.language` in settings.yml)
+2. Use `/oraxen reload all` to apply changes
+3. Verify you're using MiniMessage format, not legacy color codes (`&c`, `§c` won't work)
+
+### Custom Language File Not Loading
+
+1. Ensure the filename matches exactly (case-sensitive)
+2. Check for YAML syntax errors with an online validator
+3. Verify the file is in `plugins/Oraxen/languages/`
+4. Restart the server (some language changes require restart)
+
+## See Also
+
+- [sound.yml Configuration](./sound-yml) - Customize sounds
+- [Plugin Settings](../plugin-setup/plugin-settings) - General plugin configuration
+- [MiniMessage Documentation](https://docs.advntr.dev/minimessage/format.html) - Full formatting guide

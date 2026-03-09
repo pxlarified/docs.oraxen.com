@@ -123,6 +123,43 @@ The `appearance` section controls how item textures are applied. **Multiple syst
 
 See [Item Appearance](/creating-content/items/appearance#appearance-systems-1214) for detailed documentation and per-item options.
 
+#### Multi-Version Packs
+
+If your server uses ViaVersion or ProtocolSupport to accept players on different Minecraft versions, you can enable multi-version resource pack generation. Oraxen will generate a separate pack for each version range with the correct `pack_format`, and send the right one to each player on join.
+
+```yaml
+Pack:
+  generation:
+    multi_version_packs: false
+```
+
+When enabled, Oraxen generates packs for these version ranges:
+
+| Version Range | Pack Format |
+|---------------|-------------|
+| 1.20-1.20.1 | 15 |
+| 1.20.2 | 18 |
+| 1.20.3-1.20.4 | 22 |
+| 1.20.5-1.20.6 | 32 |
+| 1.21-1.21.1 | 34 |
+| 1.21.2-1.21.3 | 42 |
+| 1.21.4 | 46 |
+| 1.21.5 | 55 |
+| 1.21.6 | 63 |
+| 1.21.7-1.21.8 | 64 |
+| 1.21.9+ (includes 1.21.11) | 69 |
+
+**Requirements:**
+- **ViaVersion** or **ProtocolSupport** plugin installed (for client version detection)
+- Upload type must be `polymath` or `external` (not `self-host`, which can only serve one file)
+- Pack upload must be enabled (`Pack.upload.enabled: true`)
+
+Without a version detection plugin, all players receive the server's own version pack as fallback.
+
+<Callout type="info">
+Legacy predicate overrides are always generated when multi-version packs are enabled, since older clients (pre-1.21.4) cannot use item definitions.
+</Callout>
+
 #### Protection
 
 Protection will allow you to prevent players from stealing your textures easily. This won't make your pack heavier but if you enabled it. You **shall not** try to extract the generated zip, this could damage your disk.
@@ -130,6 +167,42 @@ Protection will allow you to prevent players from stealing your textures easily.
 ![1 Exabyte (EB) = 1000000000 Gigabyte (GB)](/assets/size.png)
 
 ![Your operating system should prevent you from extracting in order to preserve your disk integrity](/assets/extraction.png)
+
+### Import
+
+The `import` section controls how Oraxen merges external resource packs and handles duplicate assets.
+
+```yaml
+Pack:
+  import:
+    merge_duplicate_fonts: true      # Merge duplicate font files (e.g., default.json)
+    merge_duplicates: true            # Enable general duplicate handling
+    retain_custom_model_data: true   # Preserve CustomModelData from imported packs
+    merge_item_base_models: false    # Merge base model JSONs (paper.json, etc.)
+```
+
+#### Import Settings Explained
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `merge_duplicate_fonts` | `true` | Merges duplicate font files (most commonly `default.json`) into a single file. Original files are excluded from the final pack in favor of the merged version. |
+| `merge_duplicates` | `true` | Enables Oraxen's duplicate asset handler. When multiple packs contain the same asset, Oraxen merges them intelligently. |
+| `retain_custom_model_data` | `true` | When importing external packs, preserves their original `custom_model_data` values. **Warning:** May override your OraxenItems if they use the same CMD values. Set to `false` to let Oraxen reassign values automatically. |
+| `merge_item_base_models` | `false` | Attempts to merge base model JSON files (e.g., `paper.json`, `diamond_sword.json`) from imported packs. Less reliable than font merging but useful for complex pack combinations. CustomModelData conflicts may still occur regardless of this setting. |
+
+#### When to Use These Settings
+
+**`retain_custom_model_data: true`** - Use when:
+- You need imported items to keep their exact CMD values for compatibility with another plugin
+- You're importing a vendor pack that requires specific CMD mappings
+
+**`retain_custom_model_data: false`** - Use when:
+- You want Oraxen to automatically handle all CMD assignments
+- You're experiencing CMD conflicts between imported and Oraxen items
+
+**`merge_item_base_models: true`** - Use when:
+- Importing multiple packs that modify the same vanilla items
+- You need predicates from external packs to coexist with Oraxen's
 
 ### Upload
 
@@ -147,6 +220,38 @@ Oraxen integrates with Polymath (a custom web server written in Python especiall
 This section allows you to easily perform actions depending on the resource pack status of your players.
 
 You can send message (through a KICK, the chat, an actionbar or a title) and specify a delay and a period (between the different messages if you are using an actionbar or a title).
+
+#### Resource Pack Layering (1.20.3+)
+
+```yaml
+Pack:
+  dispatch:
+    layer: ""  # Set to any value (e.g., "bungee") for layering, or empty for replacement
+```
+
+The `layer` option controls resource pack layering on Minecraft 1.20.3+ servers:
+
+**Empty string `""` (default):** Traditional behavior
+- Uses `setResourcePack()` which **replaces** any existing packs
+- Best for standalone servers
+- Players only see Oraxen's pack
+
+**Non-empty value (e.g., `"bungee"`, `"proxy"`, `"layer"`):** Layering mode
+- Uses `addResourcePack()` which **layers** packs together
+- Preserves resource packs sent by BungeeCord/Velocity proxies
+- Old Oraxen packs are automatically removed before adding new ones
+- Multiple packs can coexist
+- Requires Minecraft 1.20.3+ clients
+
+**Use layering when:**
+- Running on a BungeeCord/Velocity network with proxy-distributed packs
+- Need Oraxen to coexist with other pack-sending plugins
+- Want players to use multiple resource packs simultaneously
+
+**Use replacement (empty string) when:**
+- Running a standalone server
+- Oraxen is the only pack source
+- Need maximum compatibility with older clients
 
 #### Player Protection During Loading
 
@@ -167,6 +272,21 @@ Pack:
 Both protections are automatically removed once the pack successfully loads, is declined, or fails to download. Players are also removed from the protected state if they disconnect.
 
 #### Status Actions
+
+Oraxen allows you to trigger actions based on the resource pack status reported by each player's client.
+
+**Available Statuses:**
+
+| Status | Minecraft Version | Description |
+|--------|-------------------|-------------|
+| `loaded` | All versions | Pack successfully loaded and applied |
+| `accepted` | All versions | Player clicked "Yes" on the pack prompt |
+| `denied` | All versions | Player clicked "No" on the pack prompt |
+| `failed_download` | All versions | Download failed (network error, timeout, etc.) |
+| `downloaded` | 1.20.3+ only | Pack downloaded but not yet applied |
+| `failed_reload` | 1.20.3+ only | Reloading the pack failed |
+| `invalid_url` | 1.20.3+ only | Pack URL was invalid or unreachable |
+| `discarded` | 1.20.3+ only | Pack was discarded by the client |
 
 ```yaml
 receive:
@@ -245,6 +365,37 @@ receive:
         messages:
           - "<red>You failed to download the ResourcePack, but you need it in order to see the new items. Please </red><click:run_command:/oraxen pack getpack><hover:show_text:\"<red>/!\\ loading the resourcepack from the game can cause lags\"><red><bold>CLICK HERE</bold></hover></click> <red>to retry or type <bold>/o pack</bold> and download it from the internet"
       # If you need to send commands
+      commands:
+        console: []
+        player: []
+        opped_player: []
+
+  # Minecraft 1.20.3+ Additional Statuses
+  # These statuses are only available on Minecraft 1.20.3 and above
+
+  downloaded:  # 1.20.3+ only - Pack was downloaded but not yet applied
+    actions:
+      commands:
+        console: []
+        player: []
+        opped_player: []
+
+  failed_reload:  # 1.20.3+ only - Pack reload failed (when changing packs)
+    actions:
+      commands:
+        console: []
+        player: []
+        opped_player: []
+
+  invalid_url:  # 1.20.3+ only - The pack URL was invalid or unreachable
+    actions:
+      commands:
+        console: []
+        player: []
+        opped_player: []
+
+  discarded:  # 1.20.3+ only - Pack was discarded by the client
+    actions:
       commands:
         console: []
         player: []

@@ -21,7 +21,7 @@ Simply open them in your IDE to get a full list of them.
 
 Oraxen is built around an ItemsBuilder class that allows you to create items easily. When the plugin starts it parses the configurations to generate builders for each type of items. Each builder can be used to generate itemstacks.
 
-### [OraxenItems](https://github.com/Th0rgal/Oraxen/blob/master/core/src/main/java/io/th0rgal/oraxen/api/OraxenItems.java) class:&#x20;
+### [OraxenItems](https://github.com/oraxen/oraxen/blob/master/core/src/main/java/io/th0rgal/oraxen/api/OraxenItems.java) class
 
 #### Get an ItemBuilder from an OraxenID
 
@@ -49,14 +49,24 @@ OraxenItems.getIdByItem(itemstack);
 
 Place an OraxenBlock at a given location
 ```java
-OraxenBlocks.place(itemID, location)
+OraxenBlocks.place(itemID, location);
 ```
 
 Place an OraxenFurniture at a given location, optionally setting a player for rotation purposes
 ```java
-OraxenFurniture.place(itemID, location, @Nullable player)
+OraxenFurniture.place(itemID, location, @Nullable player);
 ```
 
+#### Read storage contents (1.209.0+)
+
+If you work with furniture/noteblock storage mechanics and need to inspect inventory contents without opening a GUI, use `StorageMechanic` accessors:
+
+```java
+ItemStack[] entityContents = storageMechanic.getStorageContents(baseEntity);
+ItemStack[] blockContents = storageMechanic.getStorageContents(block);
+```
+
+These methods read directly from the live GUI (if open) or persistent storage data.
 
 
 ### Add resources to the pack

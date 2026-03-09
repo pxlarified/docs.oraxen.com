@@ -318,17 +318,29 @@ Components:
   Starting from **Minecraft 1.21.3**, Oraxen supports setting arbitrary data components through the generic component system. This allows you to use Minecraft data components that aren't explicitly handled by Oraxen.
 </Callout>
 
-Components that have object/section values (not primitives) can be passed directly to Minecraft's data component system:
+Components that have object/section values (not primitives) can be passed directly to Minecraft's data component system.
+This is useful for vanilla components that Oraxen does not expose as dedicated options yet.
+
+Example (`repairable`):
 
 ```yaml
 Components:
-  # These work through the generic system
+  repairable:
+    items:
+      - minecraft:diamond
+```
+
+Custom object components follow the same pattern:
+
+```yaml
+Components:
+  # Generic object components are supported
   custom_component:
     some_property: value
     another_property: 123
 ```
 
-The generic system converts YAML sections to NBT and applies them to the corresponding Minecraft data component.
+Oraxen validates and deserializes these component objects through Minecraft's component codecs before applying them to the final item.
 
 ---
 

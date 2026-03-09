@@ -1,0 +1,458 @@
+---
+description: Complete guide to custom sound configuration in sound.yml
+---
+
+# sound.yml Configuration
+
+Learn how to register custom sounds, configure jukebox songs, and override vanilla sounds in Oraxen.
+
+## Overview
+
+The `sound.yml` file allows you to:
+- Register custom sound files (.ogg format)
+- Configure jukebox songs with metadata
+- Replace vanilla Minecraft sounds
+- Define sound categories and subtitles
+- Add custom block break/place sounds
+
+**Location:** `plugins/Oraxen/sound.yml`
+
+## File Structure
+
+```yaml
+settings:
+  automatically_generate: true  # Auto-generates sounds.json for the resource pack
+
+sounds:
+  sound_id:
+    category: records           # Sound category
+    sound: filename.ogg         # Sound file (extension optional)
+    stream: true                # Whether to stream (recommended for music)
+    subtitle: "Subtitle Text"   # Subtitle shown in game
+    replace: false              # Whether to replace vanilla sound
+    jukebox_song:               # (Optional) Jukebox song metadata
+      description: "Song description"
+      length_in_seconds: 120
+      comparator_output: 15
+```
+
+## Basic Sound Registration
+
+### Adding a Custom Sound
+
+1. **Place your .ogg file** in `plugins/Oraxen/pack/sounds/` (create subdirectories if needed)
+
+2. **Register in sound.yml:**
+
+```yaml
+sounds:
+  my_custom_sound:
+    category: block
+    sound: custom/my_sound.ogg
+    subtitle: "Custom Sound Effect"
+```
+
+3. **Reload Oraxen:** `/oraxen reload all`
+
+4. **Use in game:** Play with `/playsound oraxen:my_custom_sound`
+
+### Sound Categories
+
+Valid categories:
+- `master` - Master volume slider
+- `music` - Music & Jukebox volume
+- `record` - Alias for music (use for jukebox songs)
+- `weather` - Weather sounds
+- `block` - Block break/place sounds
+- `hostile` - Hostile mob sounds
+- `neutral` - Neutral mob sounds
+- `player` - Player sounds (footsteps, hurt, etc.)
+- `ambient` - Ambient/environment sounds
+- `voice` - Voice/speech sounds
+
+## Jukebox Songs
+
+Create music discs that play custom songs in jukeboxes.
+
+### Configuration
+
+```yaml
+sounds:
+  welcome:
+    category: records
+    sound: welcome.ogg
+    stream: true  # Always use streaming for music
+    subtitle: "Welcome Song"
+    jukebox_song:
+      description:
+        - text: "Oraxen - Welcome"
+          color: "gray"
+          italic: false
+      length_in_seconds: 180
+      comparator_output: 15
+```
+
+### Jukebox Song Properties
+
+**`description`** - Song title shown in item tooltip:
+```yaml
+jukebox_song:
+  description:
+    - text: "Artist - Song Name"
+      color: "aqua"
+      italic: true
+    - text: "Album Name"
+      color: "gray"
+```
+
+**`length_in_seconds`** - Duration of the song (for stopping playback)
+
+**`comparator_output`** - Redstone comparator strength (1-15) when playing
+
+### Creating the Music Disc Item
+
+In your item configuration (e.g., `items/items.yml`):
+
+```yaml
+welcome_disk:
+  displayname: "<gradient:#9055FF:#13E2DA>Welcome Disk"
+  material: MUSIC_DISC_13  # Or any music disc material
+  ItemFlags:
+    - HIDE_ADDITIONAL_TOOLTIP
+  Components:
+    jukebox_playable:
+      show_in_tooltip: true
+      song_key: "oraxen:welcome"  # Must match sound ID
+  Pack:
+    generate_model: true
+    parent_model: "item/handheld"
+    textures:
+      - default/welcome_disk.png
+```
+
+## Replacing Vanilla Sounds
+
+Override Minecraft's default sounds with custom ones.
+
+### Example: Custom Block Break Sound
+
+```yaml
+sounds:
+  custom_stone_break:
+    category: block
+    sound: blocks/custom_stone.ogg
+    replace: true
+    subtitle: "Block breaks"
+```
+
+To apply this to a custom block, reference it in the block's configuration.
+
+### Common Vanilla Sound Replacements
+
+```yaml
+sounds:
+  # Custom wood sounds
+  wood_break:
+    category: block
+    sound: blocks/wood/break.ogg
+    replace: true
+    subtitle: "Block breaks"
+
+  wood_step:
+    category: block
+    sound: blocks/wood/step.ogg
+    replace: true
+
+  wood_place:
+    category: block
+    sound: blocks/wood/place.ogg
+    replace: true
+    subtitle: "Block placed"
+
+  # Custom stone sounds
+  stone_break:
+    category: block
+    sound: blocks/stone/break.ogg
+    replace: true
+    subtitle: "Block breaks"
+
+  stone_step:
+    category: block
+    sound: blocks/stone/step.ogg
+    replace: true
+```
+
+## Block Sound Integration
+
+### Applying Sounds to Custom Blocks
+
+In your block configuration:
+
+```yaml
+my_custom_block:
+  # ... other block properties ...
+  sounds:
+    break: oraxen:custom_stone_break
+    place: oraxen:wood_place
+    step: oraxen:wood_step
+    hit: oraxen:custom_stone_break
+    fall: oraxen:wood_step
+```
+
+### Required Sounds Pattern
+
+For blocks that should use vanilla sound groups (wood, stone, etc.):
+
+```yaml
+sounds:
+  required.wood.break:
+    category: block
+    sound: block/wood/break.ogg
+    replace: true
+
+  required.wood.step:
+    category: block
+    sound: block/wood/step.ogg
+    replace: true
+
+  required.wood.place:
+    category: block
+    sound: block/wood/place.ogg
+    replace: true
+```
+
+The `required.` prefix tells Oraxen these are essential sound mappings.
+
+## Streaming vs Non-Streaming
+
+### When to Use Streaming
+
+**Use `stream: true` for:**
+- Music discs (jukebox songs)
+- Long ambient sounds (>10 seconds)
+- Background music
+- Narration/dialogue
+
+**Use `stream: false` (or omit) for:**
+- Short sound effects (&lt;5 seconds)
+- Block break/place sounds
+- UI sounds
+- Frequently played sounds
+
+### Why It Matters
+
+- **Non-streaming:** Loads entire sound into memory (fast playback, higher memory usage)
+- **Streaming:** Loads sound in chunks (lower memory, slight delay on playback start)
+
+## Sound File Requirements
+
+### Format Requirements
+
+- **Format:** OGG Vorbis (`.ogg`)
+- **Channels:** Mono (stereo is converted automatically but wastes space)
+- **Sample Rate:** 44.1kHz or 48kHz recommended
+- **Bit Rate:** 128-192 kbps for music, 64-96 kbps for effects
+
+### File Placement
+
+Place sound files in `plugins/Oraxen/pack/sounds/`:
+
+```
+pack/
+└── sounds/
+    ├── music/
+    │   ├── welcome.ogg
+    │   └── boss_theme.ogg
+    ├── blocks/
+    │   ├── wood/
+    │   │   ├── break.ogg
+    │   │   ├── step.ogg
+    │   │   └── place.ogg
+    │   └── stone/
+    │       └── break.ogg
+    └── custom/
+        └── my_sound.ogg
+```
+
+### Converting Audio Files
+
+Use FFmpeg to convert audio to OGG:
+
+```bash
+# Convert MP3 to OGG (mono, 128kbps)
+ffmpeg -i input.mp3 -ac 1 -b:a 128k output.ogg
+
+# Convert WAV to OGG (mono, 96kbps for sound effects)
+ffmpeg -i input.wav -ac 1 -b:a 96k output.ogg
+```
+
+## Complete Example
+
+Here's a full sound.yml with various sound types:
+
+```yaml
+settings:
+  automatically_generate: true
+
+sounds:
+  # Music disc
+  epic_theme:
+    category: records
+    sound: music/epic_theme.ogg
+    stream: true
+    subtitle: "Epic Theme Playing"
+    jukebox_song:
+      description:
+        - text: "Epic Theme"
+          color: "gold"
+          italic: false
+        - text: "By Composer Name"
+          color: "gray"
+      length_in_seconds: 240
+      comparator_output: 15
+
+  # Block sounds
+  crystal_break:
+    category: block
+    sound: blocks/crystal/break.ogg
+    subtitle: "Crystal shatters"
+
+  crystal_step:
+    category: block
+    sound: blocks/crystal/step.ogg
+
+  # Ambient sound
+  magical_hum:
+    category: ambient
+    sound: ambient/magical_hum.ogg
+    stream: true
+    subtitle: "Magical humming"
+
+  # UI sound
+  menu_click:
+    category: master
+    sound: ui/menu_click.ogg
+
+  # Weapon sound
+  sword_swing:
+    category: player
+    sound: weapons/sword_swing.ogg
+    subtitle: "Swoosh"
+```
+
+## Using Sounds in Items
+
+### Play Sound on Item Use
+
+In item configuration:
+
+```yaml
+magic_wand:
+  # ... item properties ...
+  Mechanics:
+    custom:
+      one_usage:
+        event: CLICK:right:all
+        actions:
+          sound:
+            name: oraxen:magical_hum
+            volume: 1.0
+            pitch: 1.0
+```
+
+### Play Sound on Block Break
+
+```yaml
+my_custom_block:
+  # ... block properties ...
+  break_sounds:
+    - oraxen:crystal_break
+```
+
+## Troubleshooting
+
+### Sound Not Playing
+
+1. **Check file format:** Must be `.ogg` (OGG Vorbis)
+2. **Verify file path:** Check `plugins/Oraxen/pack/sounds/<path>`
+3. **Reload Oraxen:** `/oraxen reload all`
+4. **Resend pack:** `/oraxen pack send @a`
+5. **Check client logs:** F3 + T to reload resource pack
+
+### Sound Plays But No Subtitle
+
+Ensure subtitle is defined and in-game subtitles are enabled (Options > Accessibility > Subtitles)
+
+### Jukebox Song Not Playing
+
+1. Verify `song_key` matches sound ID: `oraxen:<sound_id>`
+2. Ensure `stream: true` is set
+3. Check `length_in_seconds` is accurate
+4. Confirm item has `jukebox_playable` component
+
+### Sound File Too Large
+
+**For music:**
+- Reduce bitrate: 128kbps is usually sufficient
+- Convert stereo to mono (halves file size)
+- Use streaming (`stream: true`)
+
+**For effects:**
+- Use 64-96kbps for short sounds
+- Ensure mono channel
+- Trim silence from start/end
+
+### Sound Plays at Wrong Volume
+
+Adjust in-game sound sliders:
+- Check the sound's `category` matches intended slider
+- `master` - Master Volume
+- `music` - Music/Jukebox Volume
+- `block` - Blocks Volume
+- `ambient` - Ambient/Environment Volume
+
+## Advanced: Sound Events
+
+### Custom Sound Events
+
+You can trigger sounds via plugin events:
+
+```yaml
+Mechanics:
+  custom:
+    on_kill:
+      event: KILL:player
+      actions:
+        sound:
+          name: oraxen:victory_fanfare
+          volume: 0.8
+          pitch: 1.2
+```
+
+### Multiple Sounds
+
+Play random sounds from a pool:
+
+```yaml
+sounds:
+  footstep_1:
+    category: player
+    sound: footsteps/step1.ogg
+
+  footstep_2:
+    category: player
+    sound: footsteps/step2.ogg
+
+  footstep_3:
+    category: player
+    sound: footsteps/step3.ogg
+```
+
+Then reference randomly in mechanics or via plugin code.
+
+## See Also
+
+- [Item Abilities](../creating-content/items/abilities/) - Use sounds in item mechanics
+- [Custom Blocks](../creating-content/blocks/) - Add sounds to blocks
+- [Branding Customization](./branding-customization) - Customize the welcome sound
+- [MiniMessage Format](https://docs.advntr.dev/minimessage/) - Jukebox song description formatting

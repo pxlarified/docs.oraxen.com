@@ -29,12 +29,31 @@ A pack will be different if the config files on all servers are not identical.
 
 ### Can I Disable The Default Assets And Configs Oraxen Comes With?
 
-Absolutely. Your `settings.yml` file contains options to disable both of these.
-Note: Required configs and assets will still be generated, but most will be disabled.
+Absolutely. Your `settings.yml` file contains options to disable both of these:
+
+```yaml
+Plugin:
+  generation:
+    default_assets: false  # Disables default textures/models/sounds
+    default_configs: false # Disables default item configurations
+```
+
+**Note:** Required files will still be generated even when disabled:
+- `glyphs/required.yml` - Contains essential UI glyphs (exit icons, etc.)
+- Core plugin configurations (settings.yml, mechanics.yml, etc.)
+
+When `default_assets: false`, Oraxen will NOT generate:
+- 13 default item config files (armors, blocks, weapons, furniture, etc.)
+- Default textures and models in the resource pack
+- 5 glyph files (emoji, interface, animations, chat_tags)
+
+When `default_configs: false`, only the required glyph file and core configs remain.
 
 ### How Do I Disable Or Change The Welcome Sound?
 
 Of course, `settings.yml` contains configurable actions to perform when the pack is sent to a user, including a sound by default. The example below shows where you can disable or change the sound as you desire.
+
+To **disable** the sound, set `enabled: false`. To **change** the sound, modify the `type`, `volume`, or `pitch` values.
 
 ```yaml
   receive:
@@ -42,12 +61,12 @@ Of course, `settings.yml` contains configurable actions to perform when the pack
     loaded:
       actions:
         sound:
-          ### Enabled by default, just switch to enabled to send
-          ### the below sound whenever someone joins
+          # Set to false to disable the welcome sound
+          # Set to true to enable the welcome sound
           enabled: true
-          type: minecraft:welcome
-          volume: 1.0
-          pitch: 1.0
+          type: minecraft:welcome  # Change this to use a different sound
+          volume: 1.0  # 0.0 to 1.0
+          pitch: 1.0   # 0.5 to 2.0
 ```
 
 ### Does Oraxen Replace Any Vanilla Items?

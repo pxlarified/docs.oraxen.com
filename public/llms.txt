@@ -1,0 +1,156 @@
+# Oraxen Documentation
+# For AI Agents and LLMs
+# https://docs.oraxen.com
+
+> Oraxen is a Minecraft plugin which allows the creation of new items & blocks using custom textures and models.
+> It handles resourcepack generation, upload and storage, and is entirely open source with an extensible API.
+
+## How to Access Documentation
+
+All docs are available as raw markdown:
+
+1. **Automatic**: If your User-Agent is a known LLM (ChatGPT, GPTBot, PerplexityBot, ClaudeBot, etc.), you automatically get raw markdown
+2. **Add .md extension**: `/plugin-setup/plugin-settings.md` returns raw markdown
+3. **Accept header**: `Accept: text/markdown`
+4. **Query param**: `/plugin-setup/plugin-settings?format=md`
+5. **API directly**: `/api/docs/plugin-setup/plugin-settings`
+
+Known LLM User-Agents that get markdown automatically:
+ChatGPT-User, GPTBot, Claude-Web, ClaudeBot, PerplexityBot, Applebot, cohere-ai, anthropic-ai, Google-Extended, CCBot
+
+## Documentation Index
+
+### Getting Started
+- /index.md - Overview: what Oraxen is, installation guide, and getting started
+- /plugin-setup/understanding-the-basics.md - Understanding Oraxen basics
+- /plugin-setup/plugin-settings.md - Configure plugin settings, pack hosting, and more
+- /faq.md - Frequently asked questions
+
+### Creating Content
+- /creating-content/index.md - Overview of creating custom content
+- /creating-content/items/index.md - Create custom items
+- /creating-content/items/appearance.md - Customize item appearance and models
+- /creating-content/items/components.md - Item components and properties
+- /creating-content/items/dyeable-items.md - Create dyeable custom items
+- /creating-content/blocks/index.md - Create custom blocks
+- /creating-content/blocks/noteblock.md - NoteBlock-based custom blocks
+- /creating-content/blocks/stringblock.md - StringBlock-based custom blocks
+- /creating-content/blocks/chorusblock.md - ChorusBlock-based custom blocks
+- /creating-content/blocks/farmblock.md - Farmable custom blocks
+- /creating-content/blocks/shapedblock.md - Shaped custom blocks
+- /creating-content/furniture/index.md - Create custom furniture
+- /creating-content/furniture/display-entities.md - Display entity furniture
+- /creating-content/furniture/farming.md - Farmable furniture
+- /creating-content/furniture/position.md - Furniture positioning
+- /creating-content/armors/index.md - Create custom armor
+- /creating-content/armors/components.md - Armor components
+- /creating-content/armors/shaders.md - Armor shaders
+- /creating-content/armors/trims.md - Armor trims
+- /creating-content/glyphs-hud/index.md - Custom glyphs and emojis
+- /creating-content/glyphs-hud/custom-gui.md - Custom GUI overlays
+- /creating-content/glyphs-hud/custom-hud.md - Custom HUD elements
+- /creating-content/text-effects/index.md - Text effects and shaders
+- /creating-content/text-effects/api.md - Text effects API
+- /creating-content/text-effects/glsl-customization.md - GLSL shader customization
+
+### Item Abilities
+- /creating-content/items/abilities/index.md - Overview of item abilities
+- /creating-content/items/abilities/clickaction.md - Click action abilities
+- /creating-content/items/abilities/combat.md - Combat abilities
+- /creating-content/items/abilities/farming.md - Farming abilities
+- /creating-content/items/abilities/misc.md - Miscellaneous abilities
+- /creating-content/items/abilities/custom-ability.md - Create custom abilities
+- /creating-content/items/abilities/backpack-cosmetic.md - Backpack cosmetic abilities
+
+### Plugin Configuration
+- /plugin-setup/plugin-settings.md - Various plugin settings and options
+- /plugin-setup/pack-hosting.md - Resource pack hosting configuration
+- /plugin-setup/pack-merging.md - Merge multiple resource packs
+- /usage/commands.md - Available commands
+- /usage/recipes.md - Create custom recipes
+- /usage/default-items.md - Default items included with Oraxen
+
+### Compatibility
+- /compatibility/crucible.md - Crucible compatibility
+- /compatibility/mmoitems.md - MMOItems integration
+- /compatibility/mythicmobs-custom-mobs.md - MythicMobs custom mobs
+- /compatibility/modelengine-custom-mobs.md - ModelEngine custom mobs
+- /compatibility/mythichud.md - MythicHUD integration
+- /compatibility/skript.md - Skript integration
+- /compatibility/packlayer.md - PackLayer compatibility
+- /compatibility/world-generators/index.md - World generator compatibility overview
+- /compatibility/world-generators/iris-world-generator.md - Iris world generator
+- /compatibility/world-generators/terralith.md - Terralith world generator
+- /compatibility/world-generators/custom-ore-generator.md - Custom ore generator
+
+### Developers
+- /developers/api.md - Complete API reference for developers
+- /developers/mechanics.md - Create custom mechanics
+- /developers/create-your-own-compatibility.md - Create compatibility integrations
+- /developers/custom-hosting-service.md - Custom resource pack hosting service
+
+### Vendors
+- /vendors/vendor-guidelines.md - Guidelines for content creators and vendors
+
+### Special Endpoints
+- /api/docs/_index - JSON index of all documents
+- /api/docs/_all - All documentation concatenated (for full context loading)
+
+## Quick Reference
+
+### Installation
+1. Drop Oraxen .jar into /plugins/ folder
+2. Restart server
+3. Auto-downloaded dependencies: CommandAPI, PacketEvents
+4. Optional: ProtocolLib (recommended)
+
+### Supported Versions
+- Minecraft 1.18 → 1.21.6
+- Server software: Paper (recommended), Spigot, or Folia
+- Paper 1.21.11+ fully supported
+
+### Key Features
+- Custom items with textures and models
+- Custom blocks (NoteBlock, StringBlock, ChorusBlock)
+- Custom furniture using display entities
+- Custom armor with shaders and trims
+- Resource pack generation and hosting (Polymath)
+- Custom glyphs, emojis, and HUD elements
+- Text effects with GLSL shaders
+- Item abilities and mechanics
+- Custom recipes
+- Extensive plugin compatibility
+
+### Configuration Structure
+```
+plugins/Oraxen/
+├── items/           # Item configurations (.yml files)
+├── glyphs/          # Custom font/glyph configurations
+├── pack/            # Resource pack assets (textures, models)
+│   ├── textures/    # PNG texture files
+│   ├── models/      # JSON model files
+│   └── pack.zip     # Generated resource pack
+└── settings.yml     # Main plugin settings
+```
+
+### v1.207.0 New Features
+- GUI-only models (gui_model) for 1.21.2+
+- Resource pack layering (Pack.dispatch.layer) for BungeeCord/Velocity
+- Cross-version shader overlay compatibility (1.21.4/1.21.5 vs 1.21.6+)
+- Core shader reference updates for 1.21.4+
+- Fixed invisible shields, conduits, and decorated pots
+- NoteBlock API improvements
+
+## For AI Agents Working With Oraxen
+
+1. Read /api/docs/_all for complete documentation context
+2. Or read specific sections like /plugin-setup/plugin-settings.md
+3. Check /developers/api.md for API usage
+4. Review /faq.md for common issues and solutions
+
+## Source & Links
+
+- Repository: https://github.com/oraxen/oraxen
+- Documentation: https://docs.oraxen.com
+- Discord: https://discord.gg/oraxen
+- Polymath (pack hosting): https://github.com/Th0rgal/Polymath

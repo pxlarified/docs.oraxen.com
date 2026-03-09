@@ -263,6 +263,21 @@ This also works with damaged_textures if you only have texture files
 
 Since Minecraft 1.21.4, you can customize additional item model properties:
 
+**GUI-Only Models (1.21.2+)**
+Define a separate model that only appears in GUI/inventory contexts using the `gui_model` option. This uses Minecraft's `display_context` selector to show different models when held/equipped versus displayed in inventories.
+
+```yaml
+  Pack:
+    generate_model: false
+    model: item/held_sword      # Model when held or equipped
+    gui_model: item/gui_sword   # Model in inventories and GUIs
+```
+
+When a player holds or wears the item, the `model` is used. When viewing in inventories, crafting tables, or item frames, the `gui_model` is displayed instead. This is useful for:
+- Icons that look better in inventory than the 3D held model
+- Simplified GUI versions of complex 3D models
+- Different perspectives for items (e.g., top-down view in inventory, side view when held)
+
 **GUI Oversize**
 Allows items to extend beyond slot boundaries in GUI when scaled up
 
