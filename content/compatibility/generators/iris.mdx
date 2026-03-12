@@ -1,72 +1,81 @@
 ---
-description: Iris is a paid world generator with first-class Oraxen integration
+title: "🌌 Iris"
+description: "Use Oraxen blocks directly inside Iris world-generation configs."
 cover: >-
   https://cdn.discordapp.com/attachments/896841738621177896/966832733290627072/unknown.png
 coverY: 0
 ---
 
-import { Callout } from 'nextra/components'
+import { Callout, Steps } from 'nextra/components'
 
-# Iris World Generator
+# 🌌 Iris
 
-Iris World Generator allows you to easily generate beautiful worlds with custom terrain, biomes, and structures. It features **first-class Oraxen integration**, allowing you to use custom blocks and items from Oraxen directly in your world generation configurations.
+## Overview
+Iris includes first-class Oraxen integration. Once both plugins are installed, Oraxen registers itself as an external data provider, so Iris can resolve your custom blocks directly inside pack configs.
 
 <Callout type="info">
-  Oraxen automatically registers as an external data provider with Iris. Just install both plugins and the integration works out of the box - no additional setup required.
+  No extra bridge, addon, or manual registration is required. Install both plugins and use the `oraxen:block_id` format in Iris configs.
 </Callout>
 
-**Spigot Link:** [Iris World Generator](https://www.spigotmc.org/resources/iris-world-gen-the-dimension-engine.84586/)
+## Block Format
+Use the Oraxen namespace followed by your block ID.
 
-## Using Oraxen blocks in Iris
-
-You can reference any Oraxen custom block using the `oraxen:` prefix followed by your block's ID. Iris will automatically resolve these references through Oraxen's data provider.
-
-```
+```yml
 oraxen:your_block_id
 ```
 
-## How to create custom ores
+## Example
+This example assumes you already created an Oraxen ore block, such as `amethyst_ore`.
 
-In this example we assume that you have added a block (an amethyst ore for example) following [this example](/creating-content/blocks/noteblock#ores) to your oraxen configuration.
+<Steps>
+### Open your dimension config
+Go to `plugins/Iris/packs/YOUR_PACK_NAME/dimensions/YOUR_DIMENSION_NAME.json`.
 
-### 1) Locate your dimension configuration
+For the default overworld pack, this is usually `plugins/Iris/packs/overworld/dimensions/overworld.json`.
 
-Go to `Iris/pack/YOUR_PACK_NAME/dimensions/YOUR_DIMENSION_NAME.json`, by default this should be: `Iris/packs/overworld/dimensions/overworld.json`
+### Find the ore deposit section
+Locate the `deposits` list inside the dimension config.
 
-Then, open the file (or the vscode workspace to enjoy the cool vscode integration).
-
-### 2) Add your ore!
-
-Locate this part of the config:
-
-```yaml
-    "ORES": "All settings in regards to deposits. Contains the ores spawning in your world.",
-    "deposits": [
-        {
-            "minHeight": 19,
-            "maxPerChunk": 4,
-            "maxHeight": 150,
-            "minPerChunk": 1,
-            "minSize": 25,
-            "maxSize": 25,
-            "palette": [{"block": "granite"}],
-            "varience": 2
-        },
+```json
+"deposits": [
+  {
+    "minHeight": 19,
+    "maxPerChunk": 4,
+    "maxHeight": 150,
+    "minPerChunk": 1,
+    "minSize": 25,
+    "maxSize": 25,
+    "palette": [{ "block": "granite" }],
+    "varience": 2
+  }
+]
 ```
 
-Add your own config using the custom ore properties found at step one. For example:
+### Add your Oraxen ore
+Create a new deposit entry and point the palette block to your Oraxen ID.
 
-```yaml
-    {
-      "minHeight": 2,
-      "maxPerChunk": 2,
-      "maxHeight": 30,
-      "minPerChunk": 0,
-      "minSize": 3,
-      "maxSize": 6,
-      "palette": [{ "block": "oraxen:amethyst_ore" }],
-      "varience": 5
-    },
+```json
+{
+  "minHeight": 2,
+  "maxPerChunk": 2,
+  "maxHeight": 30,
+  "minPerChunk": 0,
+  "minSize": 3,
+  "maxSize": 6,
+  "palette": [{ "block": "oraxen:amethyst_ore" }],
+  "varience": 5
+}
 ```
 
-You can now save the file, reset your world and restart!
+### Regenerate the world
+Save the file, then generate fresh chunks or create a new world so Iris can place the new ore deposits.
+</Steps>
+
+## Notes
+<Callout type="warning">
+  World-generation changes only apply to newly generated chunks. Existing terrain will not retroactively gain your custom ores.
+</Callout>
+
+<Callout type="note">
+  Iris pack paths can differ if you use a custom pack or dimension name, but the `oraxen:block_id` format stays the same.
+</Callout>
