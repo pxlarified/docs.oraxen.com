@@ -1,0 +1,40 @@
+---
+title: "📘 Introduction"
+description: "Introduction to Oraxen and the Oraxen documentation."
+---
+
+import Highlight from '../../components/Highlight.js'
+import { Callout } from 'nextra/components'
+
+# 📘 Introduction
+
+Hey there and welcome to the Oraxen documentation.
+
+## Overview
+Oraxen allows you to customize your Minecraft server by allowing the creation of new blocks, items, and recipes. 
+This can be accomplished entirely through a resource pack and server-side implementation, eliminating the requirement for any client-side mod installations
+
+## How It Works
+Oraxen reads your configuration files and uses them to generate a minecraft resource pack that will then be uploaded to a resource pack server which then sends the pack to players joining your server.
+Polymath is a free and opensource software written in Python by Oraxen to host Minecraft resourcepacks. Oraxen supplies you with a free Polymath instance, hosted in Switzerland on an Oracle Virtual Private Server.
+
+## Purchasing
+Oraxen can be purchased on <Highlight color="#FFA500" to="https://www.spigotmc.org/resources/oraxen.72448">**Spigot**</Highlight>, <Highlight color="#2E8B57" to="https://polymart.org/resource/oraxen.629">**Polymart**</Highlight> & <Highlight color="#1877F2" to="https://builtbybit.com/resources/16594">**BuiltByBit**</Highlight>.
+
+## Support
+- You can receive support in our <Highlight color="#1877F2" to="https://discord.gg/sstfjsJcQ5">**Discord**</Highlight> from our support team or via the community help channels.
+- You can use a free LLM AI Assistant via <Highlight color="#f218e3bd" to="http://deepwiki.com/oraxen/oraxen">**DeepWiki**</Highlight>
+
+<Callout type="info">
+  Verification is required to access support (pre-purchase & community support excluded). If you are a developer for an openly available project (e.g. a paid or free plugin that wants to integrate with Oraxen) you will also receive support.
+</Callout>
+
+## Version
+Oraxen is developed and designed for the <Highlight color="#1877F2" to="https://papermc.io/downloads/paper">**Paper**</Highlight> Server Software. It is compatible with most common forks including <Highlight color="#1877F2" to="https://papermc.io/software/folia/">**Folia**</Highlight>. Oraxen is also compatible with the <Highlight color="#1877F2" to="https://mcserverjars.com/spigot">**Spigot**</Highlight> Server Software, however our changes are not actively tested against it. When using 1.21.3 or lower, please install Oraxen version 1.183.0 to get compatible default assets for your version. After that you can upgrade Oraxen to the latest version.
+
+## Installation
+Installing Oraxen is a fairly straight forward process. Simply drag and drop the .jar file into your server's /plugins folder and restart your server.
+
+<Callout type="info">
+  Oraxen requires CommandAPI and PacketEvents (or Protocollib) to function. Since Version 1.203.1, Oraxen automatically downloads CommandAPI and PacketEvents when not already installed.
+</Callout>

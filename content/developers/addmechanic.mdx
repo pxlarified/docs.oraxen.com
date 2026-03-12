@@ -1,0 +1,222 @@
+---
+title: "🧩 Mechanics"
+description: "Developer guide to adding a custom mechanic to Oraxen."
+---
+
+import Highlight from '../../components/Highlight.js'
+import { Callout, Tabs, Steps } from 'nextra/components'
+
+# 🧩 Mechanics (Developers)
+
+## Overview
+Mechanics are item-bound behaviors in Oraxen. A mechanic is configured per-item under `Mechanics:` in your item YAML, and Oraxen applies the mechanic during item parsing.
+
+<Callout type="info">
+  Oraxen is open source, allowing you to create a pull request with the needed changes for your integration. If you are unsure about how to contribute, refer to our <Highlight color="#1877F2" to="./contributing">**Contributing Guide**</Highlight>.
+</Callout>
+
+<Callout type="warning">
+  Minecraft 1.20.5+ introduces vanilla item components. Some legacy mechanics (like `durability`) are deprecated in favor of components. Use mechanics for custom behavior; use `Components:` for vanilla-backed data when possible.
+</Callout>
+
+## Usage
+
+<Callout type="info">
+  A custom mechanic usually has three parts.
+
+  - `Mechanic` - holds the per-item configuration and optional item modifiers
+  - `MechanicFactory` - parses the item config, caches mechanics by item id, registers listeners/tasks
+  - One or more `Listener`s that implement the behavior
+
+  Core types:
+
+  ```java
+  // Per-item mechanic instance
+  public abstract class Mechanic {
+      protected Mechanic(MechanicFactory factory, ConfigurationSection section,
+                         Function<ItemBuilder, ItemBuilder>... modifiers) { ... }
+  }
+
+  // Per-mechanic parser + registry
+  public abstract class MechanicFactory {
+      public abstract Mechanic parse(ConfigurationSection itemMechanicConfiguration);
+      protected void addToImplemented(Mechanic mechanic) { ... }
+  }
+  ```
+</Callout>
+
+<Steps>
+### Create the Mechanic Class
+
+This example mechanic stores a `multiplier` on the item and uses it later during combat.
+
+```java
+import io.th0rgal.oraxen.OraxenPlugin;
+import io.th0rgal.oraxen.items.ItemBuilder;
+import io.th0rgal.oraxen.mechanics.Mechanic;
+import io.th0rgal.oraxen.mechanics.MechanicFactory;
+import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.persistence.PersistentDataType;
+
+public class DamageMultiplierMechanic extends Mechanic {
+    public static final NamespacedKey KEY = new NamespacedKey(OraxenPlugin.get(), "damage_multiplier");
+    private final double multiplier;
+
+    public DamageMultiplierMechanic(MechanicFactory factory, ConfigurationSection section) {
+        super(factory, section, (ItemBuilder item) ->
+                item.setCustomTag(KEY, PersistentDataType.DOUBLE, section.getDouble("multiplier", 1.0))
+        );
+        this.multiplier = section.getDouble("multiplier", 1.0);
+    }
+
+    public double getMultiplier() {
+        return multiplier;
+    }
+}
+```
+
+### Create the Factory Class
+
+The factory parses the per-item config, caches mechanics via `addToImplemented`, and registers your listeners using `MechanicsManager` so Oraxen can unload them on reload.
+
+```java
+import io.th0rgal.oraxen.mechanics.Mechanic;
+import io.th0rgal.oraxen.mechanics.MechanicConfigProperty;
+import io.th0rgal.oraxen.mechanics.MechanicFactory;
+import io.th0rgal.oraxen.mechanics.MechanicsManager;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+public class DamageMultiplierMechanicFactory extends MechanicFactory {
+    public DamageMultiplierMechanicFactory(JavaPlugin plugin, ConfigurationSection section) {
+        super(section);
+        MechanicsManager.registerListeners(plugin, getMechanicID(), new DamageMultiplierListener(this));
+    }
+
+    @Override
+    public Mechanic parse(ConfigurationSection itemMechanicConfiguration) {
+        Mechanic mechanic = new DamageMultiplierMechanic(this, itemMechanicConfiguration);
+        addToImplemented(mechanic);
+        return mechanic;
+    }
+
+    @Override
+    public @NotNull List<MechanicConfigProperty> getConfigSchema() {
+        return List.of(
+                MechanicConfigProperty.decimal("multiplier", "Damage multiplier applied on hit", 1.0, 0.0)
+        );
+    }
+}
+```
+
+### Implement the Behavior (Listener)
+
+```java
+import io.th0rgal.oraxen.api.OraxenItems;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
+
+public class DamageMultiplierListener implements Listener {
+    private final DamageMultiplierMechanicFactory factory;
+
+    public DamageMultiplierListener(DamageMultiplierMechanicFactory factory) {
+        this.factory = factory;
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onDamage(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Player player)) return;
+        ItemStack item = player.getInventory().getItemInMainHand();
+        if (!OraxenItems.exists(item)) return;
+
+        DamageMultiplierMechanic mechanic = (DamageMultiplierMechanic) factory.getMechanic(item);
+        if (mechanic == null) return;
+
+        event.setDamage(event.getDamage() * mechanic.getMultiplier());
+    }
+}
+```
+
+### Configure the Mechanic
+
+Enable it in `plugins/Oraxen/mechanics.yml` (global mechanic settings).
+
+```yaml
+damage_multiplier:
+  enabled: true
+```
+
+Use it on any item under `Mechanics:`.
+
+```yaml
+my_sword:
+  material: DIAMOND_SWORD
+  Mechanics:
+    damage_multiplier:
+      multiplier: 1.25
+```
+
+### Register the Mechanic
+
+Register your factory on `OraxenNativeMechanicsRegisteredEvent` (this event is fired again on `/oraxen reload all`, and the registry is cleared during reload).
+
+```java
+import io.th0rgal.oraxen.OraxenPlugin;
+import io.th0rgal.oraxen.api.OraxenItems;
+import io.th0rgal.oraxen.api.events.OraxenNativeMechanicsRegisteredEvent;
+import io.th0rgal.oraxen.mechanics.MechanicsManager;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class MyOraxenMechanicsPlugin extends JavaPlugin implements Listener {
+    @Override
+    public void onEnable() {
+        Bukkit.getPluginManager().registerEvents(this, this);
+    }
+
+    @EventHandler
+    public void onMechanicsRegistered(OraxenNativeMechanicsRegisteredEvent event) {
+        ConfigurationSection section = OraxenPlugin.get().getResourceManager()
+                .getMechanics().getConfigurationSection("damage_multiplier");
+        if (section == null) return;
+
+        boolean enabled = section.getBoolean("enabled", true);
+        MechanicsManager.registerMechanicFactory(
+                "damage_multiplier",
+                new DamageMultiplierMechanicFactory(this, section),
+                enabled
+        );
+
+        // Re-parse items so the new mechanic is applied.
+        OraxenItems.loadItems();
+    }
+}
+```
+</Steps>
+
+## Example
+
+If you prefer learning from existing implementations, browse the built-in mechanic factories in the Oraxen codebase.
+
+- `oraxen/core/src/main/java/io/th0rgal/oraxen/mechanics/provided/gameplay/durability/DurabilityMechanicFactory.java` (deprecated on 1.20.5+)
+- `oraxen/core/src/main/java/io/th0rgal/oraxen/mechanics/provided/gameplay/togglelight/ToggleLightMechanicFactory.java`
+- `oraxen/core/src/main/java/io/th0rgal/oraxen/mechanics/provided/misc/soulbound/SoulBoundMechanicFactory.java`
+
+## Notes
+
+<Callout type="info">
+  - `Mechanic` instances are created per item during item parsing.
+  - Use `addToImplemented(mechanic)` in your factory so you can later query it with `factory.getMechanic(itemStack)`.
+  - Prefer `MechanicConfigProperty` / `@ConfigProperty` to expose your mechanic's config schema for tools.
+</Callout>

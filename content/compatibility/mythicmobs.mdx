@@ -1,0 +1,57 @@
+---
+title: "🐄 MythicMobs"
+description: "MythicMobs compatibility for Oraxen."
+---
+
+import Highlight from '../../components/Highlight.js'
+import { Callout, Tabs, Tab, Steps } from 'nextra/components'
+
+# 🐄 MythicMobs
+
+## Overview
+Oraxen includes built-in MythicMob compatibility. This allows you to use Oraxen items for MythicMobs Lootpool or equip your Mobs with Oraxen Items.
+
+<Callout type="info">
+  MythicMobs 5.0.2+ is required for full compatibility. Using lower versions may cause issues.
+</Callout>
+
+## Usage
+<details>
+<summary><strong>Using an Oraxen Item for Drops</strong></summary>
+`oraxen [oraxen item name] [amount to drop(number or region)] [chance to drop(0-1)]`
+
+**Example**
+```yml
+oraxen myitem 6-7 0.75
+```
+This means that it has **75** percent chance to drop **6 to 7 myitem** items.
+</details>
+
+<details>
+<summary><strong>Using an Oraxen Item for Mob Equipment</strong></summary>
+`oraxen [slot] [oraxen item(equipment) name]`
+
+**Slots**
+* 0, mainhand, weapon
+* 1, boots, shoes
+* 2, leggings, pants
+* 3, chestpiece, chestplate, body
+* 4, helmet, helm
+* 5, shield
+
+<Callout type="info">
+  5 (shield) is OffHand, but you can't use **offhand**, because MythicMobs's Author didn't put allow alias.
+</Callout>
+
+**Example**
+```yml
+oraxen mainhand custom_sword
+```
+It means that you put a **custom_sword** item in **MainHand**.
+
+```yml
+oraxen 3 custom_chestplate
+```
+It means that you put a **custom_chestplate** item in **ChestPlate** slot (as an armor)
+
+</details>

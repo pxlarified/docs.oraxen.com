@@ -1,0 +1,160 @@
+---
+title: "⚙️ Configuration"
+description: "Creating custom content using Oraxen."
+asIndexPage: true
+---
+
+import Highlight from '../../components/Highlight.js'
+import { Callout } from 'nextra/components'
+
+# ⚙️ Configuration
+
+## Overview
+Oraxen allows you to create a wide variety of custom content for your Minecraft server. This section covers everything you need to know about creating them.
+
+## Tips
+### Organization
+Maintaining Organization is heavily recommended for future changes (especially if your Workspace gets bigger over time).
+We recommend a layout like this.
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/items",
+              name: "items",
+              children: [
+                {
+                  id: "plugins/Oraxen/items/weapons",
+                  name: "weapons",
+                  children: [
+                    { id: "plugins/Oraxen/items/weapons/swords.yml", name: "swords.yml", isLeaf: true },
+                    { id: "plugins/Oraxen/items/weapons/bows.yml", name: "bows.yml", isLeaf: true },
+                    { id: "plugins/Oraxen/items/weapons/other.yml", name: "other.yml", isLeaf: true }
+                  ]
+                }
+              ]
+            },
+            {
+              id: "plugins/Oraxen/pack",
+              name: "pack",
+              children: [
+                {
+                  id: "plugins/Oraxen/pack/models",
+                  name: "models",
+                  children: [
+                    {
+                      id: "plugins/Oraxen/pack/models/weapons",
+                      name: "weapons",
+                      children: [
+                        {
+                          id: "plugins/Oraxen/pack/models/weapons/swords",
+                          name: "swords",
+                          children: [
+                            {
+                              id: "plugins/Oraxen/pack/models/weapons/swords/ice_sword.json",
+                              name: "ice_sword.json",
+                              isLeaf: true
+                            }
+                          ]
+                        },
+                        {
+                          id: "plugins/Oraxen/pack/models/weapons/bows",
+                          name: "bows",
+                          children: [
+                            {
+                              id: "plugins/Oraxen/pack/models/weapons/bows/skeleton_bow.json",
+                              name: "skeleton_bow.json",
+                              isLeaf: true
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  id: "plugins/Oraxen/pack/textures",
+                  name: "textures",
+                  children: [
+                    {
+                      id: "plugins/Oraxen/pack/textures/weapons",
+                      name: "weapons",
+                      children: [
+                        {
+                          id: "plugins/Oraxen/pack/textures/weapons/swords",
+                          name: "swords",
+                          children: [
+                            {
+                              id: "plugins/Oraxen/pack/textures/weapons/swords/ice_sword.png",
+                              name: "ice_sword.png",
+                              isLeaf: true
+                            }
+                          ]
+                        },
+                        {
+                          id: "plugins/Oraxen/pack/textures/weapons/bows",
+                          name: "bows",
+                          children: [
+                            {
+                              id: "plugins/Oraxen/pack/textures/weapons/bows/skeleton_bow.png",
+                              name: "skeleton_bow.png",
+                              isLeaf: true
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      id: "plugins/Oraxen/pack/textures/glyphs",
+                      name: "glyphs",
+                      children: [
+                        {
+                          id: "plugins/Oraxen/pack/textures/glyphs/ranks",
+                          name: "ranks",
+                          children: [
+                            { id: "plugins/Oraxen/pack/textures/glyphs/ranks/admin.png", name: "admin.png", isLeaf: true },
+                            { id: "plugins/Oraxen/pack/textures/glyphs/ranks/moderator.png", name: "moderator.png", isLeaf: true },
+                            { id: "plugins/Oraxen/pack/textures/glyphs/ranks/player.png", name: "player.png", isLeaf: true }
+                          ]
+                        },
+                        {
+                          id: "plugins/Oraxen/pack/textures/glyphs/emojis",
+                          name: "emojis",
+                          children: [
+                            { id: "plugins/Oraxen/pack/textures/glyphs/emojis/heart.png", name: "heart.png", isLeaf: true },
+                            { id: "plugins/Oraxen/pack/textures/glyphs/emojis/laugh.png", name: "laugh.png", isLeaf: true },
+                            { id: "plugins/Oraxen/pack/textures/glyphs/emojis/angry.png", name: "angry.png", isLeaf: true }
+                          ]
+                        },
+                        {
+                          id: "plugins/Oraxen/pack/textures/glyphs/gui",
+                          name: "gui",
+                          children: [
+                            { id: "plugins/Oraxen/pack/textures/glyphs/gui/store.png", name: "store.png", isLeaf: true },
+                            { id: "plugins/Oraxen/pack/textures/glyphs/gui/welcome.png", name: "welcome.png", isLeaf: true }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              id: "plugins/Oraxen/glyphs",
+              name: "glyphs",
+              children: [{ id: "plugins/Oraxen/glyphs/emoji.yml", name: "emoji.yml", isLeaf: true }, { id: "plugins/Oraxen/glyphs/ranks.yml", name: "ranks.yml", isLeaf: true }]
+            }
+          ]
+        }
+      ]
+    }
+  ]}
+/>

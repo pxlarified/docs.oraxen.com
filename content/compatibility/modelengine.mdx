@@ -1,0 +1,47 @@
+---
+title: "🔧 ModelEngine"
+description: "ModelEngine compatibility for Oraxen."
+---
+
+import Highlight from '../../components/Highlight.js'
+import { Callout, Tabs, Tab, Steps } from 'nextra/components'
+
+# 🔧 ModelEngine
+
+## Overview
+Oraxen allows you to merge / integrate ModelEngines pack into Oraxen for ModelEngine to use it to display their custom mobs.
+
+<Callout type="warning">
+  Ensure you are not using ModelEngine Item Types (e.g. Leather Horse Armor) in e.g. Oraxen (as material) or in other Merged Packs.
+</Callout>
+
+## Merging
+Merging a pack into Oraxen is simple and we have a dedicated documentation page for it [here](./usage/merging).
+You have to choose either one of those methods for merging your ModelEngine pack.
+
+<Callout type="note">
+  We recommend the ZIP file uploads, since they are the easiest to maintain if you want to update the ModelEngine pack.
+</Callout>
+
+<details>
+<summary><strong>ZIP file uploads</strong></summary>
+1. Go to your ModelEngine folder (`plugins/ModelEngine`)
+2. Open the resource pack folder (`plugins/ModelEngine/resource pack`)
+3. Select the assets folder (`plugins/ModelEngine/resource pack/assets`)
+4. Compress the selected (assets) folder (Compress to ZIP file)
+5. Copy / Move the compressed ZIP file into Oraxens upload folder (`plugins/Oraxen/pack/uploads`)
+<Callout type="important">
+  Make sure to select the assets folder, not its contents. If other packs are overwriting modelengine, rename the ZIP file to 99_modelengine for it to take priority.
+</Callout>
+</details>
+
+<details>
+<summary><strong>Direct folder structure</strong></summary>
+1. Go to your ModelEngine folder (`plugins/ModelEngine`)
+2. Open the resource pack folder (`plugins/ModelEngine/resource pack`)
+3. Copy the assets folder (`plugins/ModelEngine/resource pack/assets`)
+<Callout type="important">
+  Make sure to copy the assets folder, not its contents.
+</Callout>
+4. Paste the assets folder into Oraxens pack folder (`plugins/Oraxen/pack`)
+</details>

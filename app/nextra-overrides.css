@@ -1,0 +1,289 @@
+/* Nextra theme overrides */
+
+/* Breadcrumbs: make it look like navigation (pill) instead of plain text */
+.nextra-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 1.25rem;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+/* Extra breathing room before the page title */
+.nextra-breadcrumb + h1 {
+  margin-top: 1.25rem;
+}
+
+html.dark .nextra-breadcrumb {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Decorative home icon like the reference (not a link) */
+.nextra-breadcrumb::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpath d='M12 3.172 3 10.5v10.25A1.25 1.25 0 0 0 4.25 22H9.5v-6.25c0-.69.56-1.25 1.25-1.25h2.5c.69 0 1.25.56 1.25 1.25V22h5.25A1.25 1.25 0 0 0 21 20.75V10.5l-9-7.328Z'/%3E%3C/svg%3E")
+    no-repeat center / 16px 16px;
+  opacity: 0.9;
+}
+
+html.dark .nextra-breadcrumb::before {
+  background: rgba(255, 255, 255, 0.06)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Cpath d='M12 3.172 3 10.5v10.25A1.25 1.25 0 0 0 4.25 22H9.5v-6.25c0-.69.56-1.25 1.25-1.25h2.5c.69 0 1.25.56 1.25 1.25V22h5.25A1.25 1.25 0 0 0 21 20.75V10.5l-9-7.328Z'/%3E%3C/svg%3E")
+    no-repeat center / 16px 16px;
+}
+
+/* Arrow separators are direct children (the page icon usually isn't) */
+.nextra-breadcrumb > svg {
+  opacity: 0.45;
+}
+
+/* Make breadcrumb items look like chips */
+.nextra-breadcrumb a,
+.nextra-breadcrumb span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.nextra-breadcrumb a {
+  color: inherit;
+}
+
+.nextra-breadcrumb a:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+html.dark .nextra-breadcrumb a:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Current page: more prominent pill + accent text */
+.nextra-breadcrumb > :last-child {
+  background: rgba(0, 0, 0, 0.06);
+  color: #0f766e;
+  font-weight: 600;
+}
+
+html.dark .nextra-breadcrumb > :last-child {
+  background: rgba(255, 255, 255, 0.07);
+  color: #2dd4bf;
+}
+
+/* If a breadcrumb item includes an icon/image, keep it crisp */
+.nextra-breadcrumb img {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+}
+
+/* Callouts */
+.nextra-callout {
+  --callout-accent: #0f766e;
+  --callout-bg: #d9f2f3;
+  --callout-border: color-mix(in srgb, var(--callout-accent) 55%, transparent);
+  --callout-title: var(--callout-accent);
+  --callout-text: #0b2d35;
+  --callout-radius: 16px;
+  --callout-label-size: 0.9rem;
+  --callout-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm1.25 10h-2.5v-2h.75v-4h-.75v-2h2.5v6h.75v2Z'/%3E%3C/svg%3E");
+
+  position: relative;
+  overflow: hidden;
+  border: none !important;
+  border-radius: var(--callout-radius) !important;
+  background: var(--callout-bg) !important;
+  color: var(--callout-text) !important;
+  padding: 0.75rem 0.9rem !important;
+  gap: 0.6rem;
+  align-items: flex-start;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Left accent bar (inside the border) */
+.nextra-callout::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: var(--callout-accent);
+  border-top-left-radius: var(--callout-radius);
+  border-bottom-left-radius: var(--callout-radius);
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+html.dark .nextra-callout {
+  --callout-bg: #123c46;
+  --callout-border: color-mix(in srgb, var(--callout-accent) 38%, #0a0a0a);
+  --callout-title: color-mix(in srgb, var(--callout-accent) 72%, #ffffff);
+  --callout-text: rgba(230, 252, 255, 0.92);
+}
+
+/* Icon bubble */
+.nextra-callout > div:first-child {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  font-size: var(--callout-label-size);
+  line-height: 1;
+  width: 1em;
+  height: 1em;
+  padding: 0 !important;
+  margin: 0 0 0 2px !important;
+  border-radius: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--callout-title);
+  position: relative;
+}
+
+.nextra-callout > div:first-child svg {
+  margin-top: 0 !important;
+  width: 1em;
+  height: 1em;
+  display: none;
+}
+
+.nextra-callout > div:first-child::before {
+  content: "";
+  width: 1em;
+  height: 1em;
+  display: block;
+  background: currentColor;
+  -webkit-mask: var(--callout-icon-mask) no-repeat center / contain;
+  mask: var(--callout-icon-mask) no-repeat center / contain;
+}
+
+/* Title + content */
+.nextra-callout > div:last-child {
+  padding: 0 !important;
+}
+
+.nextra-callout > div:last-child::before {
+  content: "NOTE";
+  display: block;
+  margin: 0 0 0.2rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: var(--callout-label-size);
+  line-height: 1;
+  color: var(--callout-title);
+}
+
+.nextra-callout > div:last-child > :first-child {
+  margin-top: 0 !important;
+}
+
+.nextra-callout a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+}
+
+.nextra-callout a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Type mapping (Nextra uses utility classes on the root) */
+.nextra-callout.x\:border-blue-700 {
+  --callout-accent: #0ea5e9;
+  --callout-bg: #e0f2fe;
+  --callout-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm1.25 10h-2.5v-2h.75v-4h-.75v-2h2.5v6h.75v2Z'/%3E%3C/svg%3E");
+}
+
+.nextra-callout.x\:border-blue-700 > div:last-child::before {
+  content: "INFO";
+}
+
+.nextra-callout.x\:border-yellow-700 {
+  --callout-accent: #d97706;
+  --callout-bg: #fffbeb;
+  --callout-text: #3a2a00;
+  --callout-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 2 1 21h22L12 2Zm0 6c.55 0 1 .45 1 1v5a1 1 0 0 1-2 0V9c0-.55.45-1 1-1Zm0 10a1.25 1.25 0 1 1 0 2.5A1.25 1.25 0 0 1 12 18Z'/%3E%3C/svg%3E");
+}
+
+.nextra-callout.x\:border-yellow-700 > div:last-child::before {
+  content: "WARNING";
+}
+
+.nextra-callout.x\:border-red-700 {
+  --callout-accent: #dc2626;
+  --callout-bg: #fef2f2;
+  --callout-text: #3a0a0a;
+  --callout-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-1.4 5.2 1.4 1.4 1.4-1.4 1.4 1.4-1.4 1.4 1.4 1.4-1.4 1.4-1.4-1.4-1.4 1.4-1.4-1.4 1.4-1.4-1.4-1.4 1.4-1.4ZM12 16.25a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z'/%3E%3C/svg%3E");
+}
+
+.nextra-callout.x\:border-red-700 > div:last-child::before {
+  content: "ERROR";
+}
+
+.nextra-callout.x\:border-purple-600 {
+  --callout-accent: #2563eb;
+  --callout-bg: #eff6ff;
+  --callout-text: #081b3c;
+  --callout-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1.4 4-1.1 5.2H16l-5.8 7.8 1.2-5.2H8l5.8-7.8Z'/%3E%3C/svg%3E");
+}
+
+.nextra-callout.x\:border-purple-600 > div:last-child::before {
+  content: "IMPORTANT";
+}
+
+.nextra-callout.x\:border-green-700 {
+  --callout-accent: #16a34a;
+  --callout-bg: #ecfdf5;
+  --callout-text: #052e17;
+  --callout-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M10 20v-2h4v2h-4Zm6.6-10.9c0 1.8-.9 3.2-2.2 4.3-.7.6-1.4 1.5-1.4 2.6h-2c0-1.1-.7-2-1.4-2.6-1.3-1.1-2.2-2.5-2.2-4.3A4.6 4.6 0 0 1 12 4.5a4.6 4.6 0 0 1 4.6 4.6Z'/%3E%3C/svg%3E");
+}
+
+.nextra-callout.x\:border-green-700 > div:last-child::before {
+  content: "TIP";
+}
+
+/* Dark mode type backgrounds */
+html.dark .nextra-callout.x\:border-blue-700 {
+  --callout-bg: #123c46;
+}
+
+html.dark .nextra-callout.x\:border-yellow-700 {
+  --callout-bg: #3a2f12;
+  --callout-text: rgba(255, 249, 229, 0.92);
+}
+
+html.dark .nextra-callout.x\:border-red-700 {
+  --callout-bg: #3b1414;
+  --callout-text: rgba(255, 237, 237, 0.92);
+}
+
+html.dark .nextra-callout.x\:border-purple-600 {
+  --callout-bg: #0f2548;
+  --callout-text: rgba(234, 245, 255, 0.92);
+}
+
+html.dark .nextra-callout.x\:border-green-700 {
+  --callout-bg: #0f2f1d;
+  --callout-text: rgba(236, 253, 245, 0.92);
+}

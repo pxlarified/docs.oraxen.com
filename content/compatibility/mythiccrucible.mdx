@@ -1,0 +1,22 @@
+---
+title: "⚡️ MythicCrucible"
+description: "MythicCrucible integration into Oraxen."
+---
+
+import Highlight from '../../components/Highlight.js'
+import { Callout, Tabs, Tab, Steps } from 'nextra/components'
+
+# ⚡️ MythicCrucible
+
+## Overview
+Oraxen includes built-in MythicCrucible compatibility that allows you to import items created with MythicMobs & MythicCrucible and use them as a base for your Oraxen items (you will keep everything configured with MythicCrucible and add your own mechanics, textures, 3d models, etc).
+
+## Configuration
+To do this, simply add a crucible section and specify the itemID in Oraxen.
+
+```yaml
+myitem:
+  displayname: "<gradient:#59A7EA:#F1D2FF>Test"
+  crucible:
+    id: my_crucible_itemid # This will now "import" models, textures, mechanics from MythicCrucible
+```

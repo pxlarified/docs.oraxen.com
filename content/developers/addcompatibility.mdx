@@ -1,0 +1,171 @@
+---
+title: "🤝 Compatibility"
+description: "Developers compatibility / integration."
+---
+
+import Highlight from '../../components/Highlight.js'
+import { Callout, Tabs, Steps } from 'nextra/components'
+
+# 🤝 Compatibility (Developers)
+
+## Overview
+Oraxen provides a robust compatibility system that allows developers to easily integrate with other plugins. The system automatically manages the lifecycle of compatibility providers and supports both built-in integrations and custom implementations.
+
+<Callout type="info">
+  Oraxen is open source, allowing you to create a pull request with the needed changes for your Integration. If you are unsure about how to contribute, refer to our <Highlight color="#1877F2" to="./contributing">**Contributing Guide**</Highlight>.
+</Callout>
+
+## Usage
+
+<Callout type="info">
+	All compatibility providers must extend the `CompatibilityProvider` abstract class with these key methods.
+
+	```java
+	public abstract class CompatibilityProvider<T extends Plugin> implements Listener {
+	    protected T plugin;
+	    private boolean enabled = false;
+	    
+	    public void enable(String pluginName) {
+	        // Called when target plugin is detected
+	        // Register event listeners and initialize integration
+	    }
+	    
+	    public void disable() {
+	        // Called when compatibility is disabled
+	        // Clean up resources and unregister listeners
+	    }
+	}
+	```
+</Callout>
+
+<Steps>
+### Create the Compatibility Class
+
+Create a class that extends `CompatibilityProvider<T>` where T is the main class of the target plugin.
+
+```java
+import io.th0rgal.oraxen.compatibilities.CompatibilityProvider;
+import org.bukkit.event.EventHandler;
+import org.bukkit.plugin.Plugin;
+
+public class MyPluginCompatibility extends CompatibilityProvider<MyTargetPlugin> {
+    
+    @Override
+    public void enable(String pluginName) {
+        super.enable(pluginName);
+        // Initialize your integration here
+        // Event listeners are automatically registered
+        getOraxenPlugin().getLogger().info("MyPlugin compatibility enabled!");
+    }
+    
+    @Override
+    public void disable() {
+        super.disable();
+        // Clean up your integration here
+        // Event listeners are automatically unregistered
+        getOraxenPlugin().getLogger().info("MyPlugin compatibility disabled!");
+    }
+    
+    @EventHandler
+    public void onMyPluginEvent(MyPluginEvent event) {
+        // Handle integration events here
+        // This will only be called when compatibility is enabled
+    }
+}
+```
+
+### Register the Compatibility
+
+Add your compatibility to Oraxen's system. This can be done from your plugin or through a pull request to Oraxen.
+
+```java
+import io.th0rgal.oraxen.compatibilities.CompatibilitiesManager;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class MyOraxenIntegrationPlugin extends JavaPlugin {
+    
+    @Override
+    public void onEnable() {
+        // Register compatibility with auto-enable when target plugin loads
+        CompatibilitiesManager.addCompatibility("MyTargetPlugin", MyPluginCompatibility.class, true);
+        
+        // Or register without auto-enable (manual control)
+        CompatibilitiesManager.addCompatibility("MyTargetPlugin", MyPluginCompatibility.class, false);
+    }
+}
+```
+
+### Automatic Lifecycle Management
+
+The compatibility system automatically handles.
+- **Detection** - Monitors when target plugins are enabled/disabled
+- **Instantiation** - Creates compatibility instances when needed
+- **Event Registration** - Registers/unregisters event listeners
+- **Cleanup** - Properly disables compatibilities when plugins unload
+</Steps>
+
+## Example
+
+```java
+import io.lumine.xikage.mythicmobs.MythicMobs;
+import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicDropLoadEvent;
+import io.lumine.xikage.mythicmobs.drops.Drop;
+import io.lumine.xikage.mythicmobs.drops.DropMetadata;
+import io.th0rgal.oraxen.compatibilities.CompatibilityProvider;
+import io.th0rgal.oraxen.items.OraxenItems;
+import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.ItemStack;
+
+public class MythicMobsCompatibility extends CompatibilityProvider<MythicMobs> {
+    
+    @Override
+    public void enable(String pluginName) {
+        super.enable(pluginName);
+        getOraxenPlugin().getLogger().info("MythicMobs compatibility enabled!");
+    }
+    
+    @Override
+    public void disable() {
+        super.disable();
+        getOraxenPlugin().getLogger().info("MythicMobs compatibility disabled!");
+    }
+    
+    @EventHandler
+    public void onMythicDropLoadEvent(MythicDropLoadEvent event) {
+        String dropName = event.getDropName();
+        
+        if (!dropName.equals("oraxen")) return;
+        
+        // Register custom Oraxen drop type
+        event.register(new Drop() {
+            @Override
+            public ItemStack getDrop(DropMetadata dropMetadata, double amount) {
+                String itemId = dropMetadata.getDropConfig().getString("item", "");
+                ItemStack oraxenItem = OraxenItems.getItemById(itemId).build();
+                
+                if (oraxenItem != null) {
+                    int dropAmount = (int) Math.max(1, amount);
+                    oraxenItem.setAmount(dropAmount);
+                    return oraxenItem;
+                }
+                
+                return null;
+            }
+        });
+    }
+}
+```
+
+```java
+// Registration in your plugin's onEnable()
+import io.th0rgal.oraxen.compatibilities.CompatibilitiesManager;
+
+@Override
+public void onEnable() {
+    CompatibilitiesManager.addCompatibility("MythicMobs", MythicMobsCompatibility.class, true);
+}
+```
+
+<Callout type="warning">
+  Compatibility providers are automatically instantiated when the target plugin is detected. Make sure your compatibility class has a public no-args constructor and doesn't perform heavy operations in the constructor.
+</Callout>

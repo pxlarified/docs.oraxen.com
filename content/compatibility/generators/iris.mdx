@@ -1,0 +1,72 @@
+---
+description: Iris is a paid world generator with first-class Oraxen integration
+cover: >-
+  https://cdn.discordapp.com/attachments/896841738621177896/966832733290627072/unknown.png
+coverY: 0
+---
+
+import { Callout } from 'nextra/components'
+
+# Iris World Generator
+
+Iris World Generator allows you to easily generate beautiful worlds with custom terrain, biomes, and structures. It features **first-class Oraxen integration**, allowing you to use custom blocks and items from Oraxen directly in your world generation configurations.
+
+<Callout type="info">
+  Oraxen automatically registers as an external data provider with Iris. Just install both plugins and the integration works out of the box - no additional setup required.
+</Callout>
+
+**Spigot Link:** [Iris World Generator](https://www.spigotmc.org/resources/iris-world-gen-the-dimension-engine.84586/)
+
+## Using Oraxen blocks in Iris
+
+You can reference any Oraxen custom block using the `oraxen:` prefix followed by your block's ID. Iris will automatically resolve these references through Oraxen's data provider.
+
+```
+oraxen:your_block_id
+```
+
+## How to create custom ores
+
+In this example we assume that you have added a block (an amethyst ore for example) following [this example](/creating-content/blocks/noteblock#ores) to your oraxen configuration.
+
+### 1) Locate your dimension configuration
+
+Go to `Iris/pack/YOUR_PACK_NAME/dimensions/YOUR_DIMENSION_NAME.json`, by default this should be: `Iris/packs/overworld/dimensions/overworld.json`
+
+Then, open the file (or the vscode workspace to enjoy the cool vscode integration).
+
+### 2) Add your ore!
+
+Locate this part of the config:
+
+```yaml
+    "ORES": "All settings in regards to deposits. Contains the ores spawning in your world.",
+    "deposits": [
+        {
+            "minHeight": 19,
+            "maxPerChunk": 4,
+            "maxHeight": 150,
+            "minPerChunk": 1,
+            "minSize": 25,
+            "maxSize": 25,
+            "palette": [{"block": "granite"}],
+            "varience": 2
+        },
+```
+
+Add your own config using the custom ore properties found at step one. For example:
+
+```yaml
+    {
+      "minHeight": 2,
+      "maxPerChunk": 2,
+      "maxHeight": 30,
+      "minPerChunk": 0,
+      "minSize": 3,
+      "maxSize": 6,
+      "palette": [{ "block": "oraxen:amethyst_ore" }],
+      "varience": 5
+    },
+```
+
+You can now save the file, reset your world and restart!

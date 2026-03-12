@@ -1,0 +1,262 @@
+---
+title: "🖼️ Glyphs"
+description: "Creating custom images / glyphs & GUIs using Oraxen."
+asIndexPage: true
+---
+
+import Highlight from '../../../components/Highlight.js'
+import { Callout } from 'nextra/components'
+
+# 🖼️ Glyphs
+
+## Overview
+Glyphs allow you to display custom textures anywhere text appears in Minecraft. Including chat messages, item names, lore, scoreboards, and more. They work by mapping Unicode characters to custom image files through Minecraft's font system. Since Minecraft supports multiple font sets, the same character can display different visuals depending on the font used. This powerful system enables you to create custom GUIs, HUDs, emojis, rank icons, and much more.
+
+## Configuration
+Glyphs are configured in `.yml` files in the `plugins/Oraxen/glyphs` directory.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/glyphs",
+              name: "glyphs",
+              children: [
+                {
+                  id: "plugins/Oraxen/glyphs/emojis.yml",
+                  name: "emojis.yml",
+                },
+                {
+                  id: "plugins/Oraxen/glyphs/ranks.yml",
+                  name: "ranks.yml",
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]}
+/>
+
+### Properties
+`texture` - The path to your texture file (relative to `pack/textures/`).<br />
+`ascent` - The vertical offset of the glyph.<br />
+`height` - The scale/height of the glyph.<br />
+`char` - The unicode character used for this glyph (the character the glyph will be mapped to).<br />
+`is_emoji` - Whether this glyph appears in `/oraxen emojis`. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+
+<Callout type="warning">
+  The height value must always be greater than or equal to the ascent value. This is a strict requirement enforced by Minecraft.
+</Callout>
+<Callout type="info">
+    Glyphs will not affect standard characters and cannot be used by players through chat, anvils, or other means, unless you use minecrafts `minecraft:default` font. Please avoid using that font unless you have to.
+</Callout>
+
+### Additional Properties
+<details>
+<summary><strong>💬 Tab Completion</strong></summary>
+
+Makes glyphs tab complete in chat.
+
+<Callout type="note">
+  This only works for glyphs using the `minecraft:default` font.
+</Callout>
+
+`tabcomplete` - Wheter the glyph should tabcomplete.
+
+```vb
+chat:
+  tabcomplete: true
+```
+</details>
+
+<details>
+<summary><strong>🔤 Font</strong></summary>
+
+Defines the font used for the glyph.
+
+`font` - The font that should be used for the glyph.
+
+```vb
+appearance:
+  font: "minecraft:default"
+```
+</details>
+
+<details>
+<summary><strong>🖌️ Shadow Appearance</strong></summary>
+
+Defines the text shadow color.
+<Callout type="note">
+  This is only available on 1.21.4+.
+</Callout>
+
+`shadow_color` - The shadow color that should be used for the glyph.
+
+Supports ARGB, RGB and ShortRGB formats.<br />
+`#AARRGGBB` - Full format with alpha, red, green, blue.<br />
+`#RRGGBB` - RGB format (assumes FF alpha).<br />
+`#RGB` - Short format (expands to `#FFRRGGBB`).<br />
+
+```vb
+appearance:
+  shadow_color: "#80000000"
+```
+</details>
+
+<details>
+<summary><strong>🎞️ Animations</strong></summary>
+
+Renders PNG sprite sheets and makes them animated ingame using core shaders.
+
+<Callout type="info">
+  The sprite sheet should be a PNG file which can be referenced in the `texture` field.<br />
+</Callout>
+
+`frames` - The number of frames in the sprite sheet.<br />
+`fps` - The frames per second of the animation.<br />
+`loop` - Whether the animation should loop.<br />
+`offset` - The horizontal offset of the animation. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+
+```
+animation:
+  frames: 12
+  fps: 12
+  loop: true
+  offset: 0  
+```
+</details>
+
+<details>
+<summary><strong>🧿 Bitmaps</strong></summary>
+
+Multi-bitmap glyphs allow you to display multiple custom textures from a single image file.
+
+<Callout type="important">
+  You will first need to define your bitmap in the `fonts.yml` file.<br />
+
+  `texture` - Path to your bitmap image (relative to `pack/textures/`)<br />
+  `rows` - Number of rows in your bitmap grid.<br />
+  `columns` - Number of columns in your bitmap grid.<br />
+  `ascent` - Vertical offset applied to all glyphs in this bitmap.<br />
+  `height` - Scale/height applied to all glyphs in this bitmap.<br />
+
+  ```yml
+  bitmaps:
+    yourbitmap:
+      texture: example/example_bitmap
+      rows: 4
+      columns: 9
+      ascent: 8
+      height: 8
+  ```
+</Callout>
+
+`id` - The unique identifier of the bitmap (defined in `fonts.yml`).<br />
+`row` - The row index of the glyph within the bitmap.<br />
+`column` - The column index of the glyph within the bitmap.<br />
+
+<Callout type="warning">
+  Row and column positions are 1-indexed, meaning the first row/column is 1, not 0.
+</Callout>
+
+```vb
+bitmap:
+  id: yourbitmap
+  row: 1
+  column: 1
+```
+</details>
+
+<details>
+<summary><strong>🔗 Reference</strong></summary>
+Reference glyphs let you alias part of an existing multi bitmap glyph.
+
+`glyph` - The unique identifier of the glyph.<br />
+`index` - The Characters to include (1-indexed).<br />
+
+```vb
+reference:
+  glyph: yourglyph
+  index: 1
+```
+
+```vb
+emoji-1:
+  reference: yourmultibitmap
+  index: 1
+
+emoji-10:
+  reference: yourmultibitmap
+  index: 10
+```
+</details>
+
+### Example
+
+```yaml
+farmer:
+  texture: default/chat/farmer
+  ascent: 8
+  height: 8
+  appearance:
+    font: "minecraft:default"
+    shadow_color: "#80000000"
+  chat:
+    tabcomplete: true
+    placeholders:
+      - ":farmer:"
+    permission: oraxen.chat.farmer
+```
+
+## Usage
+<details>
+<summary><strong>💬 MiniMessage</strong></summary>
+<Callout type="info">
+  You can use shorthand aliases.<br />
+  `<g:yourglyph>` for `<glyph:yourglyph>`.<br />
+  `<g:yourglyph:c>` for `<glyph:yourglyph:colorable>`.<br />
+  `<g:yourglyph:s:#FF0000>` for `<glyph:yourglyph:shadow:#FF0000>`.<br />
+</Callout>
+
+`<glyph:yourglyph>` - Basic usage.<br />
+`<glyph:yourglyph:colorable>` - Inherits surrounding text color.<br />
+`<glyph:yourglyph:shadow:#FF0000>` - Override shadow with specific color.<br />
+`<shift:N>` - Shifts N pixels (Negative values supported).<br />
+
+You can combine multiple options together.<br />
+`<glyph:yourglyph:c:s:#80FF0000>` - Example of multiple arguments being used together.
+</details>
+
+<details>
+<summary><strong>🔤 PlaceholderAPI</strong></summary>
+<Callout type="warning">
+  PlaceholderAPI has to be installed for this to work.<br />
+</Callout>
+
+`%oraxen_yourglyph%` - Basic usage.<br />
+`%oraxen_shift_N%` - Shifts N pixels to the right (positive).<br />
+`%oraxen_neg_shift_N%` - Shifts N pixels to the left (negative).<br />
+</details>
+
+<details>
+<summary><strong>💼 GUIs</strong></summary>
+<Callout type="warning">
+  ProtocolLib or PacketEvents has to be installed for GUI Title placeholders to work.<br />
+</Callout>
+
+Oraxen handles GUI visuals rather than inventory logic. By aligning glyphs in titles, you can overlay custom textures on the standard Minecraft interface.<br />
+
+Oraxen dynamically replaces placeholders when a GUI opens, ensuring titles remain functional even if the underlying Unicode characters change.
+
+`<glyph:yourglyph>` - Basic usage.<br />
+`<shift:N>` - Shifts N pixels (Negative values supported).<br />
+</details>

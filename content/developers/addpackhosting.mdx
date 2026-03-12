@@ -1,0 +1,217 @@
+---
+title: "📦 Pack Hosting"
+description: "Developers pack hosting."
+---
+
+import Highlight from '../../components/Highlight.js'
+import { Callout, Tabs, Steps } from 'nextra/components'
+
+# 📦 Pack Hosting (Developers)
+
+## Overview
+Oraxen allows you to easily add your own custom pack hosting provider with just a little bit of coding. The system supports multiple hosting types including built-in self-hosting, external services like Polymath, and custom implementations.
+
+<Callout type="info">
+  Oraxen is open source, allowing you to create a pull request with the needed changes for your Integration. If you are unsure about how to contribute, refer to our <Highlight color="#1877F2" to="./contributing">**Contributing Guide**</Highlight>.
+</Callout>
+
+## Usage
+
+<Callout type="info">
+	All hosting providers must implement the `HostingProvider` interface with these required methods.
+
+	```java
+	public interface HostingProvider {
+    	boolean uploadPack(File resourcePack);
+    	String getPackURL();
+    	byte[] getSHA1();
+    	String getOriginalSHA1();
+    	UUID getPackUUID();
+	}
+```
+</Callout>
+
+<Steps>
+### Create the Provider Class
+
+Create a class that implements `HostingProvider`. You can use either constructor:
+
+```java
+import io.th0rgal.oraxen.pack.upload.hosts.HostingProvider;
+import org.bukkit.configuration.ConfigurationSection;
+import java.io.File;
+import java.util.UUID;
+
+public class MyCustomHostingProvider implements HostingProvider {
+    
+    // Option 1: No-args constructor
+    public MyCustomHostingProvider() {
+        // Initialize with default settings
+    }
+    
+    // Option 2: Configuration constructor (recommended)
+    public MyCustomHostingProvider(ConfigurationSection config) {
+        // Initialize with custom configuration from settings.yml
+        String apiKey = config.getString("api_key");
+        String endpoint = config.getString("endpoint");
+    }
+    
+    @Override
+    public boolean uploadPack(File resourcePack) {
+        // Implement your upload logic here
+        // Return true if upload was successful, false otherwise
+        try {
+            // Your upload implementation
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    @Override
+    public String getPackURL() {
+        // Return the public URL where players can download the pack
+        return "https://your-cdn.com/packs/latest.zip";
+    }
+    
+    @Override
+    public byte[] getSHA1() {
+        // Return SHA1 hash as byte array
+        return sha1Bytes;
+    }
+    
+    @Override
+    public String getOriginalSHA1() {
+        // Return SHA1 hash as hex string
+        return sha1String;
+    }
+    
+    @Override
+    public UUID getPackUUID() {
+        // Return unique identifier for this pack version
+        return packUUID;
+    }
+}
+```
+
+### Configure in settings.yml
+
+Add your provider to the configuration.
+
+```yaml
+Pack:
+  upload:
+    enabled: true
+    type: external
+    options:
+      class: "com.example.MyCustomHostingProvider"
+      # Your custom configuration parameters
+      api_key: "your-api-key"
+      endpoint: "https://api.example.com/upload"
+      timeout: 30000
+```
+
+### Deploy Your Provider
+
+Place your compiled class in the server's classpath or create a plugin that includes your hosting provider.
+</Steps>
+
+## Example
+
+```java
+import io.th0rgal.oraxen.pack.upload.hosts.HostingProvider;
+import org.bukkit.configuration.ConfigurationSection;
+import java.io.*;
+import java.net.http.*;
+import java.nio.file.Files;
+import java.security.MessageDigest;
+import java.util.UUID;
+
+public class CustomCloudHostingProvider implements HostingProvider {
+    
+    private final String apiKey;
+    private final String uploadEndpoint;
+    private String packURL;
+    private byte[] sha1Bytes;
+    private String sha1String;
+    private UUID packUUID;
+    
+    public CustomCloudHostingProvider(ConfigurationSection config) {
+        this.apiKey = config.getString("api_key", "");
+        this.uploadEndpoint = config.getString("endpoint", "");
+    }
+    
+    @Override
+    public boolean uploadPack(File resourcePack) {
+        try {
+            // Calculate SHA1
+            MessageDigest sha1 = MessageDigest.getInstance("SHA-1");
+            byte[] packBytes = Files.readAllBytes(resourcePack.toPath());
+            this.sha1Bytes = sha1.digest(packBytes);
+            this.sha1String = bytesToHex(sha1Bytes);
+            this.packUUID = UUID.randomUUID();
+            
+            // Upload to your service
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(uploadEndpoint))
+                .header("Authorization", "Bearer " + apiKey)
+                .header("Content-Type", "application/zip")
+                .POST(HttpRequest.BodyPublishers.ofFile(resourcePack.toPath()))
+                .build();
+                
+            HttpResponse<String> response = client.send(request, 
+                HttpResponse.BodyHandlers.ofString());
+                
+            if (response.statusCode() == 200) {
+                // Parse response to get pack URL
+                this.packURL = parseUploadResponse(response.body());
+                return true;
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    @Override
+    public String getPackURL() {
+        return packURL;
+    }
+    
+    @Override
+    public byte[] getSHA1() {
+        return sha1Bytes;
+    }
+    
+    @Override
+    public String getOriginalSHA1() {
+        return sha1String;
+    }
+    
+    @Override
+    public UUID getPackUUID() {
+        return packUUID;
+    }
+    
+    private String bytesToHex(byte[] bytes) {
+        StringBuilder result = new StringBuilder();
+        for (byte b : bytes) {
+            result.append(String.format("%02x", b));
+        }
+        return result.toString();
+    }
+    
+    private String parseUploadResponse(String response) {
+        // Parse your API response to extract the pack URL
+        // This depends on your API's response format
+        return response; // Simplified
+    }
+}
+```
+
+<Callout type="warning">
+  Make sure your hosting provider properly calculates and stores the SHA1 hash, as this is used by Minecraft clients to verify pack integrity.
+</Callout>

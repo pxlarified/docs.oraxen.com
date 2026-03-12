@@ -1,0 +1,84 @@
+---
+title: "🤝 Contributing"
+description: "How to contribute to Oraxen (code, docs, issues, PRs)."
+---
+
+import Highlight from '../../components/Highlight.js'
+import { Callout, Tabs, Steps } from 'nextra/components'
+
+# 🤝 Contributing (Developers)
+
+## Overview
+Oraxen is open source and welcomes contributions ranging from bug fixes and new integrations to documentation improvements.
+
+<Callout type="info">
+  - Core plugin - <Highlight color="#1877F2" to="https://github.com/oraxen/oraxen">**github.com/oraxen/oraxen**</Highlight>
+  - Docs site - <Highlight color="#1877F2" to="https://github.com/oraxen/docs.oraxen.com">**github.com/oraxen/docs.oraxen.com**</Highlight>
+</Callout>
+
+## Usage
+
+<Callout type="warning">
+  - You have to fork the repository first and then make your changes to your fork. Then you can make a pull request from your fork against master / main.
+</Callout>
+
+<Tabs items={["Code", "Docs"]}>
+<Tabs.Tab>
+<Steps>
+### Pick What You Want to Change
+- Choose what to fix or implement. This can e.g. be an issue or a new feature.
+
+### Create a Branch
+Use a short, descriptive branch name.
+
+- `fix/...` for bug fixes
+- `feat/...` for new features
+- `docs/...` for documentation-only changes
+
+### Implement the Change
+Keep PRs focused - one problem, one solution.
+
+- Follow existing patterns and naming.
+- Avoid drive-by formatting changes in unrelated files.
+- Prefer adding tests when behavior changes.
+
+### Run the Usual Checks
+Run the project's build/test tasks locally and verify your changes e.g. ingame.
+
+### Open a Pull Request
+In the PR description, include.
+- What you changed and why
+- How to test it
+- Any relevant issue links (`Fixes #123`)
+</Steps>
+
+<Callout type="info">
+  When implementing a new feature, also make sure to update the documentation accordingly.
+</Callout>
+</Tabs.Tab>
+
+<Tabs.Tab>
+<Steps>
+### Find the Right Page
+The docs live in the `docs.oraxen.com` repository. Pages are MDX files under `content/`.
+
+### Match Existing Style
+- Prefer the same layout components used across developer pages (`Callout`, `Steps`, `Tabs`).
+- Keep examples minimal and copy/paste friendly.
+- Use internal links for docs pages (for example `./contributing`).
+
+### Preview Your Changes
+Use the docs repository instructions to run the site locally and confirm the page renders as expected.
+
+### Open a Pull Request
+Explain the change and include screenshots if it affects layout.
+</Steps>
+</Tabs.Tab>
+</Tabs>
+
+## Notes
+
+<Callout type="info">
+  - Keep changes small and reviewable - large changes are easier to merge when split into steps.
+  - If you add a new integration entry/page, link it from the appropriate index page.
+</Callout>
