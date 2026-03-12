@@ -1,0 +1,115 @@
+---
+title: "📦 Pack Hosting"
+description: "Oraxen resource pack hosting."
+---
+
+import { Callout } from 'nextra/components'
+import Highlight from '../../components/Highlight.js'
+
+# 📦 Pack Hosting
+
+## Overview
+Oraxen needs a hosted resource pack so players can download it when they join your server.
+After Oraxen builds the pack, it uploads the file and serves it through your selected hosting method.
+
+## Configuration
+<details>
+<summary><strong>🧿 Oraxen Atlas</strong></summary>
+
+Oraxen Atlas is a managed Polymath service run by the Oraxen team.  
+It works out of the box, needs almost no setup, and avoids extra port work.
+
+<Callout type="warning">
+  Oraxen Atlas is blocked in Russia and China, you have to use your own Hosting Method if you have users from these regions.
+</Callout>
+<Callout type="important">
+  Oraxen Atlas may only be used for Oraxen.
+</Callout>
+
+```vb
+upload:
+  enabled: true
+  type: polymath
+  polymath:
+    server: atlas.oraxen.com
+    secret: "oraxen"
+```
+
+**➕ Pros**
+- Free to use.
+- Fast setup. 
+- No extra ports required.
+
+**➖ Tradeoffs**
+- Blocked in Russia and China.
+- Short service interruptions can happen (unlikely though).
+
+</details>
+<details>
+<summary><strong>📦 Polymath</strong></summary>
+You can run your own Polymath service and point Oraxen to it.  
+This removes dependency on Atlas and helps in regions where external access is limited.
+
+Set up Polymath first from the <Highlight color="#2E8B57" to="https://github.com/oraxen/polymath/">**official repository**</Highlight>, then update Oraxen upload settings.
+
+```vb
+upload:
+  enabled: true
+  type: polymath
+  polymath:
+    server: your-domain.example
+    secret: "your-secret"
+```
+
+**➕ Pros**
+- Full control over hosting  
+- Works globally including restricted regions  
+
+**➖ Tradeoffs**
+- Requires a web server  
+- Requires deployment and maintenance  
+- Public network access is required  
+</details>
+
+<details>
+<summary><strong>💻 Self Host</strong></summary>
+Oraxen can serve the resource pack directly from your Minecraft server machine through Java HTTP support.
+
+<Callout type="warning">
+  Your selected port must be reachable from outside your local network.
+</Callout>
+
+```vb
+upload:
+  enabled: true
+  type: self-host
+  self-host:
+    host: "0.0.0.0"
+    port: 8080
+    domain: "your-domain.example:8080"
+```
+
+**➕ Pros**
+- Independent from Atlas.  
+- Works globally including restricted regions.
+
+**➖ Tradeoffs**
+- Open port is required.
+- Slight extra server resource usage may occur (unlikely though). 
+</details>
+
+## Example
+
+```vb
+Pack:
+  upload:
+    enabled: true
+    type: polymath
+    polymath:
+      server: atlas.oraxen.com
+      secret: "oraxen"
+    self-host:
+      host: "0.0.0.0"
+      port: 8080
+      domain: "localhost:8080"
+```

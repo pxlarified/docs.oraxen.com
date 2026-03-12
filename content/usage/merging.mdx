@@ -1,0 +1,33 @@
+---
+title: "📥 Pack Merging"
+description: "Oraxen resource pack merging."
+---
+
+import { Callout, Steps } from 'nextra/components'
+import Highlight from '../../components/Highlight.js'
+
+# 📥 Pack Merging / Importing
+
+## Overview
+Oraxen provides a powerful system to merge multiple resource packs into a single cohesive pack. You can merge packs using two methods. ZIP file uploads or direct folder structure. Both methods are processed automatically during pack generation.
+
+## Configuration
+
+### 📦 ZIP Upload
+<Steps>
+#### 1. Place your resource pack ZIP files in `Oraxen/pack/uploads/`.
+#### 2. Reload or restart the server.
+#### 3. Files are automatically merged into the final pack.
+</Steps>
+
+<Callout type="info">
+  ZIP files are processed alphabetically by filename. The last file processed wins in case of conflicts.
+  Merge conflicts are shown in the console.
+</Callout>
+
+### 📂 Direct Folder
+<Steps>
+#### 1. Place your resource pack files directly in `Oraxen/pack/assets/` or `Oraxen/pack/` folders.
+#### 2. Reload or restart the server.
+#### 3. Files are automatically merged into the final pack.
+</Steps>
