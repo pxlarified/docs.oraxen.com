@@ -11,8 +11,18 @@ import { Callout, Tabs, Tab, Steps } from 'nextra/components'
 ## Overview
 Oraxen allows you to merge / integrate ModelEngines pack into Oraxen for ModelEngine to use it to display their custom mobs.
 
-<Callout type="warning">
+<Callout>
   Ensure you are not using ModelEngine Item Types (e.g. Leather Horse Armor) in e.g. Oraxen (as material) or in other Merged Packs.
+</Callout>
+
+<Callout type="important">
+    ModelEngine typically includes core shader files. It is not possible to merge those files into Oraxen, its considered unstable and will cause issues. Oraxen has a settings option to automatically detect and disable core shader files from merged packs that you must enable.
+
+    ```yml
+    Pack:
+      import:
+        remove_core_shaders_from_imported_packs: true
+    ```
 </Callout>
 
 ## Merging
