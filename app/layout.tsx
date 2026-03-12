@@ -5,6 +5,7 @@ import { Head } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import "nextra-theme-docs/style.css";
 import "./external-link.css";
+import "./nextra-overrides.css";
 import ExternalLinkHandler from "../components/ExternalLinkHandler";
 import GoogleAnalytics from "../components/GoogleAnalytics";
 
@@ -123,7 +124,8 @@ export default async function RootLayout({
           navbar={navbar}
           //footer={<Footer>MIT {new Date().getFullYear()} © Nextra.</Footer>}
           editLink="Edit this page on GitHub"
-          docsRepositoryBase="https://github.com/shuding/nextra/blob/main/examples/docs"
+          docsRepositoryBase="https://github.com/oraxen/docs.oraxen.com/tree/master"
+          feedback={{ link: "https://discord.gg/2ng6q3JNQ7" }}
           sidebar={{ defaultMenuCollapseLevel: 1 }}
           pageMap={normalizedPageMap as any}
         >

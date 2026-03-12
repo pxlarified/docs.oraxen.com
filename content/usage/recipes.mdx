@@ -1,51 +1,231 @@
 ---
-description: How to create custom recipes using Oraxen
-cover: >-
-  https://cdn.discordapp.com/attachments/896841738621177896/966826759293136996/unknown.png
-coverY: 0
+title: "📖 Recipes"
+description: "Creating, saving, configuring, and disabling custom Oraxen recipes."
+asIndexPage: true
 ---
 
-# Recipes
+import Highlight from '../../components/Highlight.js'
+import { Callout } from 'nextra/components'
 
-Recipes are ways that already exist in minecraft that allow players to create items from others. The craft table allows you to craft swords, armors and more, the crafts of these items are called ShapedRecipes because they are recipes with a particular shape. There are also ShapelessRecipes (you just have to put the ingredients in any order to get your result) or FurnaceRecipes (to obtain the item by burning the ingredient in a furnace). The objective of oraxen is to be able to support them all but for the moment only shaped recipes are supported.
+# 📖 Recipes
 
-## How to create a recipe?
+## Overview
+Oraxen supports multiple custom recipe types and loads them from `.yml` files in the `plugins/Oraxen/recipes` folder. You can create recipes through the ingame builder, edit them manually, reload them without restarting the server, and disable vanilla or existing recipes by namespaced key.
 
-You can see the list of commands and permissions required in the [wiki page](commands#create-recipes).
+## Configuration
+Recipes are stored in separate files based on recipe type.
 
-### First step: open a builder inventory
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/recipes",
+              name: "recipes",
+              children: [
+                { id: "plugins/Oraxen/recipes/shaped.yml", name: "shaped.yml" },
+                { id: "plugins/Oraxen/recipes/shapeless.yml", name: "shapeless.yml" },
+                { id: "plugins/Oraxen/recipes/furnace.yml", name: "furnace.yml" },
+                { id: "plugins/Oraxen/recipes/blasting.yml", name: "blasting.yml" },
+                { id: "plugins/Oraxen/recipes/campfire.yml", name: "campfire.yml" },
+                { id: "plugins/Oraxen/recipes/smoking.yml", name: "smoking.yml" },
+                { id: "plugins/Oraxen/recipes/stonecutting.yml", name: "stonecutting.yml" },
+                { id: "plugins/Oraxen/recipes/disabled.yml", name: "disabled.yml" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]}
+/>
 
-Start by typing **/o recipe builder SHAPED**, it will open you a crafting table:
+### Supported Recipe Types
+`shaped.yml` - Standard crafting recipes where ingredient position matters.<br />
+`shapeless.yml` - Crafting recipes where ingredient order does not matter.<br />
+`furnace.yml` - Furnace smelting recipes with time and experience.<br />
+`blasting.yml` - Blast furnace recipes with time and experience.<br />
+`campfire.yml` - Campfire cooking recipes with time and experience.<br />
+`smoking.yml` - Smoker recipes with time and experience.<br />
+`stonecutting.yml` - Stonecutter recipes with one input and one result.<br />
+`disabled.yml` - Recipe keys that should be removed when Oraxen loads recipes.<br />
 
-Then place the ingredients in the order you want in the left part. Place the wanted result in the slot on the right.
+### Item Definitions
+Recipe inputs and results support several item formats.
 
-### Damn, I'm missing an ingredient, can I close the inventory?
+`oraxen_item` - Use an Oraxen item ID.<br />
+`minecraft_type` - Use a vanilla material such as `DIAMOND` or `STICK`.<br />
+`minecraft_item` - Use a fully serialized Bukkit `ItemStack`.<br />
+`tag` - Use a vanilla item or block tag as an ingredient, such as `planks` or `minecraft:logs`. <Highlight color="#2E8B57">**Ingredients only**</Highlight><br />
+`crucible_item` - Use a MythicCrucible item ID. <Highlight color="#2E8B57">**Optional compatibility**</Highlight><br />
+`mmoitems_type` + `mmoitems_id` - Use an MMOItems item. <Highlight color="#2E8B57">**Optional compatibility**</Highlight><br />
+`ecoitem_id` - Use an EcoItems item ID. <Highlight color="#2E8B57">**Optional compatibility**</Highlight><br />
+`amount` - Set the stack size for a result, or the amount of one shapeless ingredient entry.<br />
+`permission` - Require a permission to craft or unlock the recipe. <Highlight color="#2E8B57">**Optional**</Highlight><br />
 
-Absolutely, you can close the inventory at any time, to reopen it simply type **/o recipes open** (you will find the items you left in it).
+<Callout type="info">
+  Oraxen creates the recipe files automatically on first load. You can add entries manually or generate them ingame with the recipe builder.
+</Callout>
 
-### I finished my craft, how to load it?
+## Recipe Formats
 
-You must register your craft. To do this, you must choose a name, then type the command **/o recipes save your_name**. Unfortunately Oraxen does not yet know how to load these crafts in game, it will be necessary to wait for the server to restart before using them.
+<details>
+<summary><strong>🧩 Shaped</strong></summary>
 
+Use `shape` and `ingredients` together. Each character in `shape` maps to one entry in `ingredients`, while `_` means an empty slot.
 
-You can also use **/o recipes save \<name> \<permission>** so that crafting your item with the name \<name> requires the permission \<permission>
+`shape` - Up to three crafting rows.<br />
+`ingredients` - Character-to-item mapping.<br />
+`result` - Crafted output item.<br />
 
+```yaml
+bedrock_pickaxe:
+  shape:
+    - AAA
+    - BCB
+    - _D_
+  result:
+    oraxen_item: bedrock_pickaxe
+  ingredients:
+    A:
+      minecraft_type: DIAMOND_BLOCK
+    B:
+      minecraft_type: OBSIDIAN
+    C:
+      minecraft_type: NETHER_STAR
+    D:
+      minecraft_type: STICK
+```
+</details>
 
-## How to edit my recipe?
+<details>
+<summary><strong>🌀 Shapeless</strong></summary>
 
-You can simply edit the configuration with the name of your craft type (shaped.yml for example), then find your craft and change the ingredients, result or permission.
+Shapeless recipes ignore slot position. Each ingredient entry should include an `amount`.
 
-## How to disable vanilla or existing recipes?
+`ingredients` - Arbitrary ingredient keys such as `A`, `B`, `C`.<br />
+`amount` - How many times that ingredient must appear.<br />
+`result` - Crafted output item.<br />
 
-You can disable any vanilla Minecraft recipe or existing recipe by adding its namespaced key to the `disabled.yml` file in your recipes folder. This file is automatically created when Oraxen first loads.
+```yaml
+obsidian_mix:
+  result:
+    oraxen_item: obsidian_ingot
+  ingredients:
+    A:
+      minecraft_type: OBSIDIAN
+      amount: 2
+    B:
+      tag: coals
+      amount: 1
+```
+</details>
 
-Simply add the recipe keys you want to disable:
+<details>
+<summary><strong>🔥 Cooking Recipes</strong></summary>
+
+`furnace.yml`, `blasting.yml`, `campfire.yml`, and `smoking.yml` all use the same structure.
+
+`input` - The item that gets cooked.<br />
+`result` - The cooked output item.<br />
+`cookingTime` - Cooking duration in ticks.<br />
+`experience` - Experience granted when the recipe completes.<br />
+
+```yaml
+amethyst:
+  experience: 200
+  cookingTime: 200
+  result:
+    oraxen_item: amethyst
+  input:
+    oraxen_item: amethyst_ore
+```
+</details>
+
+<details>
+<summary><strong>🪨 Stonecutting</strong></summary>
+
+Stonecutting recipes use one `input` and one `result`.
+
+```yaml
+polished_obsidian:
+  result:
+    oraxen_item: polished_obsidian_tile
+  input:
+    minecraft_type: OBSIDIAN
+```
+</details>
+
+## Ingame Builder
+
+### Commands
+You can create recipes ingame with the recipe builder commands listed on the [commands page](commands#recipes).
+
+```yml
+/oraxen recipes builder shaped
+/oraxen recipes builder shapeless
+/oraxen recipes builder furnace <cookingtime> <experience>
+/oraxen recipes builder blasting <cookingtime> <experience>
+/oraxen recipes builder campfire <cookingtime> <experience>
+/oraxen recipes builder smoking <cookingtime> <experience>
+/oraxen recipes builder stonecutting
+/oraxen recipes save <name> [permission]
+```
+
+### Workflow
+1. Open the builder for the recipe type you want.
+2. Place the input ingredients in the builder UI.
+3. Place the output item in the result slot.
+4. Run `/oraxen recipes save <name>` to write the recipe to the matching `.yml` file.
+5. Run `/oraxen reload recipes` or restart the server to register the new recipe.
+
+<Callout type="note">
+  Running `/oraxen recipes builder` with no type reopens your current builder if one is already active.
+</Callout>
+
+<Callout type="warning">
+  Recipe builders are player-only commands. Cooking builders require both `cookingtime` and `experience` arguments when you create them.
+</Callout>
+
+## Recipe Showcase And Permissions
+
+`permission` can be added to any recipe entry or passed when saving from the builder.<br />
+Players without that permission cannot use the recipe.<br />
+
+Crafting-table recipes can also appear in `/oraxen recipes show`, which opens Oraxen's showcase GUI for recipes the player is allowed to use.
+
+<Callout type="info">
+  The showcase GUI is built from Oraxen's whitelisted crafting recipes, so it applies to crafting-style recipes rather than furnace-like cooking recipes.
+</Callout>
+
+## Disabling Existing Recipes
+You can disable vanilla or already-registered recipes by adding their namespaced keys to `disabled.yml`.
 
 ```yaml
 disabled:
-  - minecraft:diamond_sword # Same namespcaed key that shows up in e.g. the /recipes command
+  - minecraft:diamond_sword
   - minecraft:iron_pickaxe
   - oraxen:custom_recipe
 ```
 
-The server will need to restart for changes to take effect. Invalid recipe keys or recipes that don't exist will show a warning in the console.
+Oraxen attempts to remove each listed recipe whenever recipes load or reload.
+
+<Callout type="warning">
+  Invalid keys or recipes that do not exist will log a warning in the console.
+</Callout>
+
+## Notes
+
+<Callout type="info">
+  If you edit recipe files manually, use `/oraxen reload recipes` to apply the changes without a full server restart.
+</Callout>
+
+<Callout type="note">
+  If `settings.yml` has recipe-book support enabled, Oraxen automatically discovers permitted recipes for players when they join.
+</Callout>

@@ -15,6 +15,15 @@ const withNextra = nextra({
 
 export default withNextra({
   reactStrictMode: true,
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/introduction",
+        permanent: true,
+      },
+    ];
+  },
   turbopack: {
     root: __dirname,
     resolveAlias: {

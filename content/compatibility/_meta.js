@@ -1,11 +1,11 @@
 export default {
-  'packlayer': 'PackLayer - Proxy Optimization',
-  crucible: 'MythicCrucible',
-  mythichud: 'MythicHUD',
-  mmoitems: 'MMoItems',
-  'modelengine-custom-mobs': 'ModelEngine - custom mobs',
-  'mythicmobs-custom-mobs': 'MythicMobs - custom mobs',
-  skript: 'Skript',
-  'world-generators': 'World Generators',
-  archives: 'Archives'
+  skript: '⌨️ Skript',
+  packlayer: '✂️ PackLayer',
+  modelengine: '🔧 ModelEngine',
+  mythichud: '🖥️ MythicHUD',
+  mythiccrucible: '⚡️ MythicCrucible',
+  mythicmobs: '🐄 MythicMobs',
+  mmoitems: '🧪 MMoItems',
+  generators: '🌍 World Generators',
+  archives: '📂 Archives'
 }

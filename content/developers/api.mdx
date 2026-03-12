@@ -1,82 +1,243 @@
 ---
-description: How to integrate your plugin with Oraxen
-cover: >-
-  https://www.techyon.es/media/news/full-stack-developer-cu%C3%81les-son-las-principales-competencias_1637600851_21.jpg
-coverY: 0
+title: "\ud83d\udd0c API"
+description: "Integrate your plugin with Oraxen using the public API and events."
 ---
 
-# API
+import Highlight from '../../components/Highlight.js'
+import { Callout, Tabs, Steps } from 'nextra/components'
 
-## Add Oraxen to your plugin
+# 🔗 API (Developers)
 
-### Repository & Dependency Info
-You can find the repository and dependency notice [here](https://github.com/oraxen/oraxen#api).
+## Overview
 
+Oraxen exposes a small public API surface for other plugins. Most integrations revolve around these classes.
 
-All methods and better explanations of their functionality and parameters can be found in the actual Classes.
-Simply open them in your IDE to get a full list of them.
+- `io.th0rgal.oraxen.api.OraxenItems`
+- `io.th0rgal.oraxen.api.OraxenBlocks`
+- `io.th0rgal.oraxen.api.OraxenFurniture`
+- `io.th0rgal.oraxen.api.OraxenPack`
 
+<Callout type="info">
+  Oraxen is open source, allowing you to create a pull request with the needed changes for your integration. If you are unsure about how to contribute, refer to our <Highlight color="#1877F2" to="./contributing">**Contributing Guide**</Highlight>.
+</Callout>
 
-## Examples of use
+## Setup
 
-Oraxen is built around an ItemsBuilder class that allows you to create items easily. When the plugin starts it parses the configurations to generate builders for each type of items. Each builder can be used to generate itemstacks.
+<Steps>
+### Add the Maven Repository + Dependency
 
-### [OraxenItems](https://github.com/oraxen/oraxen/blob/master/core/src/main/java/io/th0rgal/oraxen/api/OraxenItems.java) class
+Oraxen is a server plugin, so in most cases you want `compileOnly` / `provided`.
 
-#### Get an ItemBuilder from an OraxenID
+<Tabs items={["Gradle (Kotlin)", "Gradle (Groovy)", "Maven"]}>
+  <Tabs.Tab>
 
-```java
-OraxenItems.getItemById(itemID); // where itemID is a section in items configurations
+```kotlin
+repositories {
+  maven("https://repo.oraxen.com/releases")
+}
+
+dependencies {
+  compileOnly("io.th0rgal:oraxen:VERSION")
+}
 ```
 
-#### Check if an OraxenID exists
+  </Tabs.Tab>
+  <Tabs.Tab>
 
-```java
-OraxenItems.isAnItem(itemID);
+```groovy
+repositories {
+  maven { url "https://repo.oraxen.com/releases" }
+}
+
+dependencies {
+  compileOnly "io.th0rgal:oraxen:VERSION"
+}
 ```
 
-#### Extract an OraxenID from an ItemStack
+  </Tabs.Tab>
+  <Tabs.Tab>
 
-You can use to check if an ItemStack is an OraxenItem (it will return null if OraxenID doesn't exist)
+```xml
+<repository>
+  <id>oraxen</id>
+  <url>https://repo.oraxen.com/releases</url>
+</repository>
 
-```java
-OraxenItems.getIdByItem(itemstack);
+<dependency>
+  <groupId>io.th0rgal</groupId>
+  <artifactId>oraxen</artifactId>
+  <version>VERSION</version>
+  <scope>provided</scope>
+</dependency>
 ```
 
-### Custom Blocks & Furniture
+  </Tabs.Tab>
+</Tabs>
 
-#### Place an OraxenBlock
+Snapshot builds are also available at `https://repo.oraxen.com/snapshots`.
 
-Place an OraxenBlock at a given location
-```java
-OraxenBlocks.place(itemID, location);
+### Add Oraxen to `plugin.yml`
+
+Use `depend` if your plugin cannot run without Oraxen, otherwise use `softdepend`.
+
+```yaml
+name: MyPlugin
+main: com.example.myplugin.MyPlugin
+version: 1.0.0
+
+softdepend: [Oraxen]
 ```
 
-Place an OraxenFurniture at a given location, optionally setting a player for rotation purposes
-```java
-OraxenFurniture.place(itemID, location, @Nullable player);
-```
+### Use Events Instead of Guessing Load Order
 
-#### Read storage contents (1.209.0+)
+Items and mechanics are reloaded on `/oraxen reload all`. Prefer listening to Oraxen events (see below) rather than caching results forever.
+</Steps>
 
-If you work with furniture/noteblock storage mechanics and need to inspect inventory contents without opening a GUI, use `StorageMechanic` accessors:
+## Items (`OraxenItems`)
 
-```java
-ItemStack[] entityContents = storageMechanic.getStorageContents(baseEntity);
-ItemStack[] blockContents = storageMechanic.getStorageContents(block);
-```
-
-These methods read directly from the live GUI (if open) or persistent storage data.
-
-
-### Add resources to the pack
-
-#### Get access to the assets/ folder&#x20;
+Oraxen assigns an item id into the `PersistentDataContainer` using `OraxenItems.ITEM_ID`.
 
 ```java
-ResourcePack.getAssetsFolder();
+import io.th0rgal.oraxen.api.OraxenItems;
+import io.th0rgal.oraxen.items.ItemBuilder;
+import org.bukkit.inventory.ItemStack;
+
+public class MyIntegration {
+    public ItemStack build(String itemId) {
+        ItemBuilder builder = OraxenItems.getItemById(itemId);
+        return builder != null ? builder.build() : null;
+    }
+
+    public boolean isOraxenItem(ItemStack stack) {
+        return OraxenItems.exists(stack);
+    }
+
+    public String getOraxenId(ItemStack stack) {
+        return OraxenItems.getIdByItem(stack); // null if not an Oraxen item
+    }
+}
 ```
 
-### Mechanics:
+<Callout type="info">
+  **Useful helpers**
+  - `OraxenItems.exists(String)` / `OraxenItems.exists(ItemStack)`
+  - `OraxenItems.getItemById(String)` and `OraxenItems.getOptionalItemById(String)`
+  - `OraxenItems.getBuilderByItem(ItemStack)`
+  - `OraxenItems.getNames()` (all loaded ids) and `OraxenItems.getItemNames()` (filtered for commands)
+</Callout>
 
-Oraxen allows you to add your own mechanics to the plugin, it is a little bit more complex than the rest, that's why there is a [dedicated tutorial](mechanics#how-does-the-mechanic-system-work).
+## Custom Blocks (`OraxenBlocks`)
+
+Oraxen custom blocks can be backed by different mechanics (note block / tripwire / chorus plant). The API provides common queries and safe placement/removal methods.
+
+```java
+import io.th0rgal.oraxen.api.OraxenBlocks;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+
+public class MyBlocks {
+    public boolean isOraxen(Block block) {
+        return OraxenBlocks.isOraxenBlock(block);
+    }
+
+    public void place(String itemId, Location at) {
+        OraxenBlocks.place(itemId, at);
+    }
+
+    public boolean remove(Location at) {
+        return OraxenBlocks.remove(at, null); // player optional
+    }
+}
+```
+
+<Callout type="info">
+  Also available.
+  
+  - Type checks - `isOraxenNoteBlock(...)`, `isOraxenStringBlock(...)`, `isOraxenChorusBlock(...)`
+  - Mechanic accessors - `getNoteBlockMechanic(...)`, `getStringMechanic(...)`, `getChorusMechanic(...)`
+  - Block data creation - `getOraxenBlockData(itemId)`
+</Callout>
+
+## Furniture (`OraxenFurniture`)
+
+Furniture is entity-backed (and may optionally use barrier hitboxes). The API lets you detect furniture, place it with a rotation, and remove it while respecting drops.
+
+```java
+import io.th0rgal.oraxen.api.OraxenFurniture;
+import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
+import org.bukkit.Rotation;
+
+public class MyFurniture {
+    public Entity place(String itemId, Location at) {
+        return OraxenFurniture.place(itemId, at, Rotation.NONE, BlockFace.UP);
+    }
+}
+```
+
+<Callout type="warning">
+  The old boolean-returning `OraxenFurniture.place(Location, String, Rotation, BlockFace)` is deprecated. Use `OraxenFurniture.place(String, Location, Rotation, BlockFace)` instead.
+</Callout>
+
+## Resource Pack (`OraxenPack`)
+
+Use `OraxenPack` when you need to trigger pack actions or inject additional files into the generated output.
+
+```java
+import io.th0rgal.oraxen.api.OraxenPack;
+import java.io.File;
+
+public class MyPack {
+    public File getPackFile() {
+        return OraxenPack.getPack();
+    }
+
+    public void reload() {
+        OraxenPack.reloadPack();
+    }
+
+    public void upload() {
+        OraxenPack.uploadPack();
+    }
+}
+```
+
+### Add extra files to the generated pack
+
+```java
+import io.th0rgal.oraxen.api.OraxenPack;
+import java.io.File;
+
+OraxenPack.addFilesToPack(new File[] {
+    new File("plugins/MyPlugin/pack_overrides/pack.mcmeta")
+});
+```
+
+## Events
+
+All events live under `io.th0rgal.oraxen.api.events.*` and can be listened to like any other Bukkit event.
+
+```java
+import io.th0rgal.oraxen.api.events.OraxenItemsLoadedEvent;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+
+public class MyListener implements Listener {
+    @EventHandler
+    public void onItemsLoaded(OraxenItemsLoadedEvent event) {
+        // Items were (re)parsed, rebuild your caches here
+    }
+}
+```
+
+<Callout type="info">
+  **Common integration events**
+  
+  - `OraxenItemsLoadedEvent` - items were parsed/reloaded
+  - `OraxenNativeMechanicsRegisteredEvent` - native mechanics registered; hook custom mechanics here (see <Highlight color="#1877F2" to="./addmechanic">**Mechanics**</Highlight>)
+  - `OraxenPackGeneratedEvent` - pack output list is available
+  - `OraxenPackPreUploadEvent` - cancellable, fired async (avoid unsafe Bukkit calls)
+  - `OraxenPackUploadEvent` - pack got uploaded; provides URL and SHA1
+  - Block / furniture events: `events.noteblock.*`, `events.stringblock.*`, `events.chorusblock.*`, `events.furniture.*`
+</Callout>

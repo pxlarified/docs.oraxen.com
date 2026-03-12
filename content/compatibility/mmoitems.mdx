@@ -1,20 +1,20 @@
 ---
-description: MMoItems introduces very unique attack effect
-cover: >-
-  https://cdn.discordapp.com/attachments/896841738621177896/966832308395049000/unknown.png
-coverY: 0
+title: "🧪 MMOItems"
+description: "MMOItems integration for Oraxen."
 ---
 
-# MMOItems
+import Highlight from '../../components/Highlight.js'
+import { Callout, Tabs, Tab, Steps } from 'nextra/components'
 
-The compatibility with MMOItems allows you to import items created with this plugin and use them as a base for your Oraxen items (you will keep everything configured with MmoItems and add your own mechanics, textures, 3d models, etc).
+# 🧪 MMOItems
 
-To do this, simply add an mmoitem section to your item section in Oraxen
+## Overview
+Oraxen includes built-in MMOItems compatibility. This allows you to that allows you to import items created with MMOItems and use them as a base for your Oraxen items (you will keep everything configured with MMOItems and add your own mechanics, textures, 3d models, etc).
 
+## Usage
 ```yaml
-example_mmoitem:
+mymmoitem:
   displayname: "<gradient:#59A7EA:#F1D2FF>Test"
-
   mmoitem:
     type: SWORD
     id: FALCON_BLADE
@@ -22,4 +22,3 @@ example_mmoitem:
     tier: RARE # Optional
     match_level: true # Optional
 ```
-

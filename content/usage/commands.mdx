@@ -1,184 +1,435 @@
 ---
-description: A simple explanation to use the plugin commands
-cover: >-
-  https://cdn.discordapp.com/attachments/896841738621177896/966827022758330398/unknown.png
-coverY: 0
+title: "⌨️ Commands"
+description: "All available Oraxen commands, aliases, permissions, and usage."
+asIndexPage: true
 ---
 
-# Commands
+import Highlight from '../../components/Highlight.js'
+import { Callout } from 'nextra/components'
 
-## General informations
+# ⌨️ Commands
 
-All the oraxen commands start with the same label. This label, oraxen, has a few aliases so if you don't want to type `/oraxen` every time you can also use `/oxn` and even `/o` .
+## Overview
+Oraxen is managed through the `/oraxen` root command. It also includes the `/o` and `/oxn` aliases. Most subcommands are intended for administrators, while a few are player-facing tools such as item browsing, emoji browsing, and HUD toggling.
 
-For this tutorial we will use /o because it is the shortest, but if this command is already used by another plugin or you can't use it for any reason, just replace the label of the commands starting with a /o by /oxn or /oraxen.
+## Permissions
+The root command uses `oraxen.command`.<br />
+Most subcommands also use their own permission nodes, such as `oraxen.command.give` or `oraxen.command.reload`.<br />
+Some subcommands inherit access from their parent command, while others add an extra permission requirement.<br />
 
-## Get the items
+## Command Reference
 
-### For testing
+### Core Commands
 
-The main benefit of this method is that it allows you to see all the items at the same time and therefore to be more efficient (you just have to click on an item to make it appear in your inventory). But you can't use it to automatically give an item to another player (for example from the shop).
+<details>
+<summary><strong>📦 Inventory</strong></summary>
 
-#### Usage: `/oraxen inventory`
+Opens the Oraxen item browser GUI.
 
-#### Permissions:
+`/oraxen inventory` - Open the item browser.<br />
+`/oraxen inv` - Alias for the same command.<br />
 
-```yaml
-oraxen.command.inventory.view # Allows to view the inventory visualizer
-oraxen.command.inventory.give# Allows to get item from the inventory visualizer
-oraxen.command.inventory.* # Gives you the two previous permissions
+```yml
+/oraxen inventory
+/oraxen inv
 ```
 
-### In order to give them
+`oraxen.command.inventory.view` - Allows viewing the item browser.<br />
+`oraxen.command.inventory.give` - Allows taking items from the browser. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+</details>
 
-This command will be mainly useful if you want to give an item to another player or when you want to automate the give. If the target of this command has its inventory full, the stack will be looted on the ground.
+<details>
+<summary><strong>🎁 Give</strong></summary>
 
-#### Usage:
+Gives an Oraxen item to one or more players.
 
-```yaml
-/oraxen give <player> <item> <amount> # Gives amount items to player
+```yml
+/oraxen give <targets> <item>
+/oraxen give <targets> <item> <amount>
 ```
 
-#### Permission:
+`oraxen.command.give` - Allows using the give command.<br />
 
-```yaml
-oraxen.command.give # Allows you to use /o give
+<Callout type="note">
+  `targets` uses the standard Minecraft player selector format, so you can target one player, multiple players, or selector groups.
+</Callout>
+</details>
+
+<details>
+<summary><strong>📤 Take</strong></summary>
+
+Removes matching Oraxen items from one or more players.
+
+```yml
+/oraxen take <targets> <item>
+/oraxen take <targets> <item> [amount]
 ```
 
-## Repair
+If `amount` is omitted, Oraxen removes all matching items from each target.
 
-### Repair only one item
+`oraxen.command.take` - Allows using the take command.<br />
+</details>
 
-This command can be used to repair an item you hold in your main hand. You can configure the plugin to repair only items using oraxen custom durability or also vanilla durability.
+<details>
+<summary><strong>🎨 Dye</strong></summary>
 
-#### Usage:
+Dyes the item in your main hand using a hex color.
 
-```yaml
-/oraxen repair hand # Repair the item you hold
+```yml
+/oraxen dye <#RRGGBB>
 ```
 
-#### Permissions:
+`oraxen.command.dye` - Allows using the dye command.<br />
 
-```yaml
-oraxen.command.repair # Allows to use the /o repair command
+<Callout type="warning">
+  This command only works for players and expects a valid hex color such as `#FFAA00`.
+</Callout>
+</details>
+
+<details>
+<summary><strong>🛠️ Repair</strong></summary>
+
+Repairs the item in your hand or all repairable items in your inventory.
+
+```yml
+/oraxen repair hand
+/oraxen repair all
 ```
 
-### Repair all items in your inventory
+`oraxen.command.repair` - Allows using `/oraxen repair`.<br />
+`oraxen.command.repair.all` - Allows using `/oraxen repair all`.<br />
 
-This command can be used to repair every single item in your inventory (or in your armor slots). You can configure the plugin to repair only items using oraxen custom durability or also vanilla durability.
+<Callout type="note">
+  This command is marked as deprecated in the plugin source, but it is still registered and available.
+</Callout>
+</details>
 
-#### Usage:
+<details>
+<summary><strong>🔄 Reload</strong></summary>
 
-```yaml
-/oraxen repair all # Repair all your item (inside your inventory)
+Reloads specific Oraxen systems or everything at once.
+
+```yml
+/oraxen reload <items|pack|hud|recipes|messages|all>
+/oraxen rl <items|pack|hud|recipes|messages|all>
 ```
 
-#### Permissions:
+`oraxen.command.reload` - Allows using the reload command.<br />
 
-```yaml
-oraxen.command.repair # so you are also able to use /o repair hand
-oraxen.command.repair.all # Allows to use the /o repair all command
+`items` - Reload item definitions and refresh the item browser.<br />
+`pack` - Regenerate the resource pack.<br />
+`hud` - Reload HUD configuration and restart HUD tasks.<br />
+`recipes` - Reload recipes.<br />
+`messages` - Listed by suggestions, but the current implementation falls through to the full reload path.<br />
+`all` - Reload configs, mechanics, items, pack, HUDs, and recipes.<br />
+</details>
+
+<details>
+<summary><strong>🏷️ Version</strong></summary>
+
+Shows the installed Oraxen version.
+
+```yml
+/oraxen version
 ```
 
-## Manage recipes
+`oraxen.command.version` - Allows using the version command.<br />
+</details>
 
-This command allows you to add new recipes to the configuration directly from the game using recipes builder. For more information on how to use it, see [Recipes](recipes).
+### Resource Pack
 
-![Recipe showcase using /o recipes show all](/assets/recipe_showcase.png)
+<details>
+<summary><strong>🧳 Pack</strong></summary>
 
-#### Usage:
+Handles resource-pack delivery utilities and default asset extraction.
 
-```yaml
-/oraxen recipes builder <builder> # Creates a recipe builder of type <builder> and opens it
-/oraxen recipes save <name> # Saves your recipe with name <name>
-/oraxen recipes show all # Shows you the loaded recipes
-/oraxen recipes show <recipe> # Shows you one recipe
+```yml
+/oraxen pack send [targets]
+/oraxen pack msg [targets]
+/oraxen pack extract_default [all|textures|models|sounds] [override]
 ```
 
-#### Permission:
+`oraxen.command.pack` - Base permission for the pack command.<br />
+`oraxen.command.pack.send` - Extra permission required for `/oraxen pack send`.<br />
 
-```yaml
-oraxen.command.recipes # Allows you to create new recipes via /o recipes
+`send` - Sends the configured resource pack to the selected players, or to yourself if no target is provided.<br />
+`msg` - Sends the resource-pack join message with the resolved pack URL.<br />
+`extract_default` - Extracts bundled default assets into the Oraxen data folder.<br />
+
+<Callout type="warning">
+  `pack msg` and `pack extract_default` do not define their own extra permission in code, so access depends on the parent `/oraxen pack` permission.
+</Callout>
+</details>
+
+### Recipes
+
+<details>
+<summary><strong>📖 Recipes Showcase</strong></summary>
+
+Opens the recipe showcase GUI for all permitted recipes or one specific recipe.
+
+```yml
+/oraxen recipes show <all|recipe_name>
 ```
 
-## Emojis
+`oraxen.command.recipes` - Base permission for recipe commands.<br />
+`oraxen.command.recipes.show` - Allows opening the recipe showcase.<br />
+</details>
 
-This command displays a list of available emojis/glyphs. The output depends on the `emoji_list_permission_only` setting (see [Glyphs Settings](/plugin-setup/plugin-settings#glyphs)).
+<details>
+<summary><strong>🧪 Recipe Builder</strong></summary>
 
-#### Usage:
+Opens the interactive recipe builder or creates a builder for a specific recipe type.
 
-```yaml
-/oraxen emojis # Shows available emojis with permission status
+```yml
+/oraxen recipes builder
+/oraxen recipes builder shaped
+/oraxen recipes builder shapeless
+/oraxen recipes builder furnace <cookingtime> <experience>
+/oraxen recipes builder blasting <cookingtime> <experience>
+/oraxen recipes builder campfire <cookingtime> <experience>
+/oraxen recipes builder smoking <cookingtime> <experience>
+/oraxen recipes builder stonecutting
 ```
 
-#### Permission:
+`oraxen.command.recipes.builder` - Allows opening and using the recipe builder.<br />
+</details>
 
-```yaml
-oraxen.command.emojis # Allows you to use /o emojis
+<details>
+<summary><strong>💾 Recipe Save</strong></summary>
+
+Saves the currently open recipe builder to disk.
+
+```yml
+/oraxen recipes save <name> [permission]
 ```
 
-## Pack
+`oraxen.command.recipes.builder` - Allows saving built recipes.<br />
 
-This command allows you to interact with the Oraxen pack: send the configured message to download it from the internet or load it directly through the game.
+If `permission` is set, the saved recipe uses that permission as its unlock requirement.
+</details>
 
-#### Usage:
+### Player Utilities
 
-```yaml
-/oraxen pack send <player> # Send to <player> the pack directly through the game
-/oraxen pack msg <player> # Send to <player> the configured message
+<details>
+<summary><strong>😊 Emojis</strong></summary>
+
+Opens the emoji book and shows all configured emoji glyphs the player can access.
+
+```yml
+/oraxen emojis
 ```
 
-#### Permission:
+`oraxen.command.emojis` - Allows using the emoji command.<br />
+`oraxen.command.emoji` - Also required by the current command registration.<br />
 
-```yaml
-oraxen.command.pack # Allows you to use /o pack
+<Callout type="note">
+  Clicking an emoji entry suggests the glyph character in chat, and hovering it shows its placeholders.
+</Callout>
+</details>
+
+<details>
+<summary><strong>🖥️ HUD Toggle</strong></summary>
+
+Enables or disables a specific HUD for the player.
+
+```yml
+/oraxen hud toggle <hud_id>
 ```
 
-## Item info
+`oraxen.command.hud.toggle` - Allows toggling HUDs.<br />
 
-This command allows you to print item infos and custom-model-data-id
+<Callout type="warning">
+  The root `hud` command defines a `toggle` argument in code, but the actual executable path is `/oraxen hud toggle <hud_id>`.
+</Callout>
+</details>
 
-#### Usage:
+### Information Commands
 
-```yaml
-/oraxen iteminfo <itemname> # prints the requested item information
+<details>
+<summary><strong>🔤 Glyph Info</strong></summary>
+
+Shows information about a configured glyph, including texture, bitmap state, and Unicode character.
+
+```yml
+/oraxen glyphinfo <glyphid>
 ```
 
-#### Permission:
+`oraxen.command.glyphinfo` - Allows using the glyph info command.<br />
+</details>
 
-```yaml
-oraxen.command.iteminfo # Allows you to use /o iteminfo
+<details>
+<summary><strong>📦 Item Info</strong></summary>
+
+Shows debug information about an Oraxen item such as material, model data, and generated model path.
+
+```yml
+/oraxen iteminfo <itemid>
 ```
 
-## Reload
+`oraxen.command.iteminfo` - Allows using the item info command.<br />
+</details>
 
-This command allows you to reload oraxen configurations quickly and without causing bugs (you cannot reload oraxen using plugman). However, it should be noted that for the time being, customs crafts created with oraxen cannot be reloaded.
+<details>
+<summary><strong>🧱 Block Info</strong></summary>
 
-#### Usage
+Shows block-state information for Oraxen blocks, including noteblock or stringblock data.
 
-```yaml
-/oraxen reload all # Reloads items configuration, Reloads recipes configuration, regenerates the pack and upload it
-/oraxen reload items # Reloads items configuration
-/oraxen reload pack # Regenerates resourcepack and upload it
-/oraxen reload recipes # Reloads recipes configuration
+```yml
+/oraxen blockinfo <itemid>
 ```
 
-#### Permission:
+`oraxen.command.blockinfo` - Allows using the block info command.<br />
+</details>
 
-```yaml
-oraxen.command.reload # Allows you to use /o reload
+<details>
+<summary><strong>🧾 Report</strong></summary>
+
+Prints a small system report with plugin, server, and operating-system information.
+
+```yml
+/oraxen report
 ```
 
-## Debug
+`oraxen.command.report` - Allows using the report command.<br />
+</details>
 
-I wish you never have to use it but if you ever have a bug with Oraxen, I will probably ask you to execute this command to get more information about your installation. This will display advanced logs in the console.
+<details>
+<summary><strong>🧮 Highest Model Data</strong></summary>
 
-#### Usage:
+Lists the highest used custom model data value for each material.
 
-It will depend on the situation and could change with the updates of oraxen, I will explain everything.
-
-#### Permissions:
-
-```yaml
-oraxen.command.debug # Allows you to use /o debug
+```yml
+/oraxen highest_modeldata
+/oraxen h_md
 ```
+
+`oraxen.command.debug` - Allows using this command.<br />
+</details>
+
+### Update And Admin Tools
+
+<details>
+<summary><strong>♻️ Update</strong></summary>
+
+Updates Oraxen items in player inventories or refreshes nearby furniture entities.
+
+```yml
+/oraxen update item <targets>
+/oraxen update furniture [radius]
+```
+
+`oraxen.command.update` - Allows using update commands.<br />
+
+`item` - Updates Oraxen items for the selected players.<br />
+`furniture` - Updates nearby furniture around the executing player. The default radius is `10`.<br />
+</details>
+
+<details>
+<summary><strong>🧱 Admin Block Tools</strong></summary>
+
+Places or removes Oraxen blocks in a single location or in an area.
+
+```yml
+/oraxen admin block <block> <place|remove> [location] [radius] [random]
+```
+
+`oraxen.command.admin` - Allows using admin tools.<br />
+
+`location` defaults to the executing player's position.<br />
+`radius` defaults to `1`.<br />
+`random` limits the action to one random block in the selected area when set to `true`.<br />
+</details>
+
+<details>
+<summary><strong>🪑 Admin Furniture Tools</strong></summary>
+
+Places or removes Oraxen furniture in a single location or in an area.
+
+```yml
+/oraxen admin furniture <place|remove> <furniture> [location] [radius] [random]
+```
+
+`oraxen.command.admin` - Allows using admin tools.<br />
+
+Use `all` as the furniture ID together with `remove` to clear any Oraxen furniture found in the selected area.
+</details>
+
+### Debug And Maintenance
+
+<details>
+<summary><strong>🐞 Debug</strong></summary>
+
+Enables or disables Oraxen debug mode in `settings.yml`.
+
+```yml
+/oraxen debug
+/oraxen debug <true|false>
+```
+
+`oraxen.command.debug` - Allows toggling debug mode.<br />
+</details>
+
+<details>
+<summary><strong>📋 Dump Log</strong></summary>
+
+Uploads `logs/latest.log` to mclo.gs, with a Hastebin fallback if needed.
+
+```yml
+/oraxen dump_log
+```
+
+`oraxen.command.dumplog` - Allows using the log dump command.<br />
+
+<Callout type="warning">
+  Oraxen redacts the default Atlas pack URL pattern before uploading, but you should still review logs before sharing them publicly.
+</Callout>
+</details>
+
+<details>
+<summary><strong>🧬 Schema</strong></summary>
+
+Generates the Oraxen JSON schema file inside the plugin folder.
+
+```yml
+/oraxen schema
+```
+
+`oraxen.command.schema` - Allows generating the schema.<br />
+</details>
+
+### Text Effects
+
+<details>
+<summary><strong>🌈 Text Effect Preview</strong></summary>
+
+Applies a configured text effect to a message preview in chat and the action bar.
+
+```yml
+/oraxen texteffect <effect> <text>
+```
+
+`oraxen.command.texteffect` - Allows using text effect commands.<br />
+</details>
+
+<details>
+<summary><strong>📝 Text Effects List</strong></summary>
+
+Lists all available text effects, their descriptions, and a live demo for players.
+
+```yml
+/oraxen texteffects
+```
+
+`oraxen.command.texteffect` - Allows using text effect commands.<br />
+</details>
+
+## Notes
+
+<Callout type="info">
+  Many utility and admin commands are player-only in practice, even when the syntax looks generic. Commands such as `/oraxen inventory`, `/oraxen repair`, `/oraxen recipes`, `/oraxen emojis`, `/oraxen hud toggle`, and the admin placement tools should be run by a player ingame.
+</Callout>
+
+<Callout type="warning">
+  This page is based on the currently registered commands in the plugin source. If you are using an older build, some commands may be missing or behave slightly differently.
+</Callout>

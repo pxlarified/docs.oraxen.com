@@ -1,39 +1,56 @@
 ---
-description: PackLayer optimizes resource pack distribution on proxy networks by preventing duplicate pack sends.
+title: "✂️ PackLayer"
+description: "PackLayer integration into Oraxen."
 ---
 
-# PackLayer - Proxy Resource Pack Optimization
+import Highlight from '../../components/Highlight.js'
+import { Callout, Tabs, Tab, Steps } from 'nextra/components'
 
-PackLayer is a **Velocity and BungeeCord proxy plugin** that optimizes resource pack distribution on multi-server networks.
+# ✂️ PackLayer
 
-## The Problem
+## Overview
+Oraxen supports [PackLayer](https://www.spigotmc.org/resources/94978/), a Velocity and BungeeCord proxy plugin developed by Oraxen to optimize Resource pack distribution on multi-server networks.
 
-When players switch between backend servers on a proxy network, each server typically sends its own resource pack request. If multiple servers use the **same pack** (like Oraxen's pack), the client is forced to re-download and re-apply it on every switch — causing:
+---
 
-- **Unnecessary delays** when switching servers
-- **Wasted bandwidth** for both players and servers
-- **Poor player experience** with loading screens
+PackLayer intercepts resource pack requests at the proxy level and prevents duplicate downloads when players switch between servers using the same pack.
 
-## The Solution
-
-PackLayer intercepts outgoing `ResourcePackSend` packets at the proxy level and **cancels duplicates**. If a player already has a pack with a matching hash, the packet is dropped, making server switching instant.
+<Callout type="info">
+  This is a **proxy plugin** for Velocity/BungeeCord, not a backend server plugin.
+</Callout>
 
 ## Installation
 
-1. Download the latest `bungee-pack-layer-X.X.X.jar` from [GitHub Releases](https://github.com/oraxen/bungee-pack-layer/releases)
-2. Place it in your **proxy's plugins folder** (Velocity or BungeeCord)
-3. Restart your proxy
-4. (Optional) Edit the generated `config.yml` to customize behavior
+<Steps>
+### Download PackLayer
+Get the latest `PackLayer.jar` from [GitHub](https://github.com/oraxen/bungee-pack-layer/releases)
 
-**Note:** This is a **proxy plugin**, not a backend server plugin. It goes on Velocity/BungeeCord, not on Paper/Spigot.
+### Install on Proxy
+Place the jar in your **proxy's plugins folder** (Velocity or BungeeCord)
+
+### Restart
+Restart your proxy server
+</Steps>
+
+---
 
 ## Configuration
 
-PackLayer generates a `config.yml` in its data folder with sensible defaults:
+<details>
+<summary><strong>Skip Modes</strong></summary>
+
+Determines how PackLayer detects duplicate packs.
+
+| Mode | Description |
+|------|-------------|
+| `HASH_ONLY` | **Default.** Skip packs with identical SHA-1 hash |
+| `URL_ONLY` | Skip packs from the same URL |
+| `HASH_OR_URL` | Skip if either hash or URL matches |
+| `HASH_AND_URL` | Skip only if both hash and URL match |
+| `ALWAYS_SKIP` | Always skip pack sends (testing only) |
+| `NEVER_SKIP` | Never skip (effectively disables plugin) |
 
 ```yaml
-# PackLayer Configuration
-
 # Skip Mode - determines how PackLayer decides to skip duplicate packs
 # Options:
 #   HASH_ONLY    - Skip if SHA-1 hash matches (default, recommended)
@@ -43,7 +60,51 @@ PackLayer generates a `config.yml` in its data folder with sensible defaults:
 #   ALWAYS_SKIP  - Always skip pack sends (testing only)
 #   NEVER_SKIP   - Never skip (effectively disables plugin)
 skip-mode: HASH_ONLY
+```
+</details>
 
+<details>
+<summary><strong>Server Filtering</strong></summary>
+
+Control which backend servers PackLayer applies to.
+
+```yaml
+server-filter:
+  mode: WHITELIST  # DISABLED, WHITELIST, or BLACKLIST
+  servers:
+    - survival
+    - creative
+```
+</details>
+
+<details>
+<summary><strong>Trusted Domains</strong></summary>
+
+Always skip packs from specific domains.
+
+```yaml
+trusted-domains:
+  - atlas.oraxen.com      # Oraxen's pack host
+  - "*.example.com"       # Wildcard support
+```
+</details>
+
+<details>
+<summary><strong>Full Configuration</strong></summary>
+
+```yaml
+# PackLayer Configuration
+ 
+# Skip Mode - determines how PackLayer decides to skip duplicate packs
+# Options:
+#   HASH_ONLY    - Skip if SHA-1 hash matches (default, recommended)
+#   URL_ONLY     - Skip if URL matches
+#   HASH_OR_URL  - Skip if either hash OR URL matches
+#   HASH_AND_URL - Skip only if both hash AND URL match
+#   ALWAYS_SKIP  - Always skip pack sends (testing only)
+#   NEVER_SKIP   - Never skip (effectively disables plugin)
+skip-mode: HASH_ONLY
+ 
 # Server Filter - control which backend servers PackLayer applies to
 server-filter:
   # Mode: DISABLED (all servers), WHITELIST, or BLACKLIST
@@ -52,175 +113,106 @@ server-filter:
   servers:
     - lobby
     - hub
-
+ 
 # Trusted Domains - always skip packs from these domains
 # Supports wildcards: *.example.com, cdn.example.com/*
 trusted-domains:
   # - atlas.oraxen.com
   # - cdn.example.com
-
+ 
 # Grace period (ms) after server switch before applying skip logic
 # Set to 0 to disable. Useful if backend servers intentionally re-send packs.
 server-switch-grace-ms: 0
-
+ 
 # Enable debug logging
 debug: false
-
+ 
 # Enable statistics tracking (packs skipped, bandwidth saved)
 statistics-enabled: true
 ```
+</details>
 
-## Skip Modes Explained
-
-| Mode | When to Use |
-|------|-------------|
-| `HASH_ONLY` | **Default.** Best for most setups. Skips packs with identical SHA-1 hash. |
-| `URL_ONLY` | Use when different pack versions share the same URL (e.g., self-hosted with static URL). |
-| `HASH_OR_URL` | Most aggressive. Skips if either hash or URL matches. |
-| `HASH_AND_URL` | Most conservative. Only skips if both match exactly. |
-| `ALWAYS_SKIP` | Testing/debugging only. Skips all pack sends. |
-| `NEVER_SKIP` | Effectively disables PackLayer. |
-
-## Server Filtering
-
-You can limit PackLayer to specific backend servers:
-
-```yaml
-server-filter:
-  mode: WHITELIST
-  servers:
-    - survival
-    - creative
-    - minigames
-```
-
-Or exclude specific servers:
-
-```yaml
-server-filter:
-  mode: BLACKLIST
-  servers:
-    - auth  # Don't apply to auth server
-```
-
-## Trusted Domains
-
-Skip all packs from specific domains without checking hashes:
-
-```yaml
-trusted-domains:
-  - atlas.oraxen.com      # Oraxen's default pack host
-  - cdn.myserver.com      # Your CDN
-  - "*.example.com"       # Wildcard matching
-```
-
-This is useful when you trust the pack source and want to minimize overhead.
+---
 
 ## Commands
 
-All commands require the `packlayer.admin` permission.
+All commands require `packlayer.admin` permission.
 
 | Command | Description |
 |---------|-------------|
 | `/packlayer reload` | Reload configuration |
 | `/packlayer stats` | Show skip statistics |
-| `/packlayer clear <player\|*>` | Clear pack cache for player(s) |
-| `/packlayer info <player>` | Show cached pack info for a player |
-| `/packlayer debug` | Show debug mode status |
+| `/packlayer clear <player\|*>` | Clear pack cache |
+| `/packlayer info <player>` | Show cached pack info |
 
-## Best Practices for Oraxen Networks
+---
 
-### Single Pack Across All Servers
+## Usage
 
-If all your backend servers use the same Oraxen resource pack:
+<details>
+<summary><strong>Single Pack Network</strong></summary>
 
-1. Install PackLayer on your proxy
-2. Use default settings (`skip-mode: HASH_ONLY`)
-3. Done! Players will only download the pack once.
+All servers use the same Oraxen pack.
 
-### Different Packs Per Server
+1. Install PackLayer with default settings
+2. Players download the pack once
+3. Server switching becomes instant
 
-If some servers have different packs:
+```yaml
+skip-mode: HASH_ONLY
+```
+</details>
+
+<details>
+<summary><strong>Mixed Pack Network</strong></summary>
+
+Some servers have different packs.
 
 ```yaml
 server-filter:
   mode: WHITELIST
   servers:
-    - survival    # These servers share the same pack
+    - survival    # These share the same pack
     - creative
     - lobby
 ```
 
-Servers not in the list will always send their packs.
+Unlisted servers always send their packs.
+</details>
 
-### Using Polymath (atlas.oraxen.com)
+<details>
+<summary><strong>Using Oraxen's Pack Host</strong></summary>
 
-Add Oraxen's pack host to trusted domains for optimal performance:
+Optimize for atlas.oraxen.com.
 
 ```yaml
 trusted-domains:
   - atlas.oraxen.com
 ```
+</details>
 
-## Developer API
-
-PackLayer provides an event API for other plugins:
-
-```java
-// Get the service (Velocity example)
-PackLayerVelocityPlugin plugin = /* get plugin instance */;
-PackLayerService service = plugin.getService();
-
-// Register an event handler
-service.registerEventHandler(event -> {
-    // Called when a pack skip is about to occur
-    if (shouldForceResend(event.getPlayerId())) {
-        event.setCancelled(true); // Force pack to be sent
-    }
-});
-
-// Manual pack cache control
-service.clearPlayer(playerId);
-```
+---
 
 ## Troubleshooting
 
-### Pack still being re-sent
+<Callout type="warning">
+  Ensure PackLayer is installed on your **proxy server**, not backend servers.
+</Callout>
 
-1. Check `debug: true` in config to see what's happening
-2. Verify all backend servers use the exact same pack (check SHA-1 hashes)
-3. Make sure PackLayer is on the **proxy**, not backend servers
+**Pack still re-downloading**
+- Enable `debug: true` to see what's happening
+- Verify all servers use identical packs (same SHA-1 hash)
 
-### Players seeing old pack version
-
-Clear their pack cache:
+**Players see old pack version**
 ```
 /packlayer clear PlayerName
 ```
 
-### Need to force re-download
-
-Temporarily disable for a player:
-```
-/packlayer clear PlayerName
-```
-
-They'll receive the pack on next server switch.
-
-## Performance
-
-PackLayer is designed to be lightweight:
-
-- **Zero disk I/O** during normal operation
-- **Minimal memory** footprint (only stores pack hashes per player)
-- **No network overhead** (only intercepts packets, doesn't modify them)
-
-Typical impact: **< 1ms latency** per pack check.
+<Callout type="warning">
+  When using Oraxen's self-host (not polymart self-hosting) pack hosting option, make sure to use a Skip mode that utilizes hash checking since the pack URL stays the same when self-hosting.
+</Callout>
 
 ## Compatibility
-
-- **Velocity:** 3.0.0+
-- **BungeeCord:** 1.20+
-- **Minecraft:** 1.8 - 1.21.x (all versions supported)
-
-PackLayer uses [PacketEvents](https://github.com/retrooper/packetevents) for packet interception, which provides broad version compatibility.
+- **Velocity** - 3.0.0+
+- **BungeeCord** - 1.20+  
+- **Minecraft** - 1.8 - 1.21.x

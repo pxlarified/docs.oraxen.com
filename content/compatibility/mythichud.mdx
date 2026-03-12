@@ -1,28 +1,43 @@
 ---
-description: MythicHUD (formerly HappyHUD) lets you make really customizable HUDs
+title: "🖥️ MythicHUD"
+description: "MythicHUD compatibility for Oraxen."
 ---
 
-import { Callout } from 'nextra/components'
+import Highlight from '../../components/Highlight.js'
+import { Callout, Tabs, Tab, Steps } from 'nextra/components'
 
-# MythicHUD
+# 🖥️ MythicHUD
+
+## Overview
+Oraxen includes built-in Skript compatibility that loads automatically when [Skript](https://github.com/SkriptLang/Skript) is present on the server. This allows you to use Oraxen items, custom blocks, and furniture directly in your scripts.
 
 <Callout type="info">
   HappyHUD has been rebranded to **MythicHUD** and is now part of the MythicCraft ecosystem. If you're migrating from HappyHUD, MythicHUD includes automatic migration support.
 </Callout>
 
-This will detail how to properly make MythicHUD compatible with Oraxen.
+## Overview
+Oraxen allows you to configure MythicHUD and Oraxen to work fully compatible together. For MythicHUD to display the custom textures you have to merge MythicHUDs Pack into Oraxens Pack.
 
-## Setup Steps
+## Merging
+Merging a pack into Oraxen is simple and we have a dedicated documentation page for it [here](./usage/merging).
 
-1. Set `hide_scoreboard_numbers: false` in settings.yml
-2. Delete `Oraxen/pack/shaders/core/render_text.vsh` and `render_text.json` if they exist
-3. In MythicHUD's config, enable `copy-resource-pack` and set `path: "Oraxen/pack/assets"`
+1. Go to Oraxens settings.yml (`plugins/Oraxen/settings.yml`)
+2. Ensure `hide_scoreboard_numbers` is set to `false`. (`plugins/Oraxen/settings.yml`)
+3. Ensure `TextEffects` is set to `Enabled: false`. (`plugins/Oraxen/settings.yml`)
+4. Ensure you have no animated glyphs configured. (No glyphs of the <Highlight color="#1877F2" to="./configuration/glyphs/animations">**Animation**</Highlight> type)
+5. Edit your MythicHUD configuration to have the `copy_path` set to `Oraxen/pack/uploads/MythicHUD.zip`.
+<details>
+<summary>Config</summary>
+```yml
+copy-pack:
+  enabled: true
+  path: Oraxen/pack/uploads/MythicHud.zip
+```
+</details>
 
 ## Hiding Scoreboard Numbers
-
 If you really want to also hide scoreboard numbers, you can manually merge Oraxen's shader file into MythicHUD's in `MythicHUD/pack/minecraft/shaders/core/`.
 
 ## Resources
-
-- [MythicHUD Documentation](https://mythiccraft.io)
+- [MythicHUD](https://mythiccraft.io)
 - [MythicHUD GitLab](https://git.mythiccraft.io/mythiccraft/mythichud)

@@ -1,31 +1,26 @@
 ---
-description: Skript integration allows you to work with Oraxen items, blocks, and furniture in your Skript scripts
+title: "⌨️ Skript"
+description: "Skript integration into Oraxen."
 ---
 
+import Highlight from '../../components/Highlight.js'
 import { Callout, Tabs, Tab, Steps } from 'nextra/components'
 
-# Skript Integration
+# ⌨️ Skript
 
+## Overview
 Oraxen includes built-in Skript compatibility that loads automatically when [Skript](https://github.com/SkriptLang/Skript) is present on the server. This allows you to use Oraxen items, custom blocks, and furniture directly in your scripts.
 
 <Callout type="info">
-  Skript 2.9+ is recommended for full compatibility.
+  Skript 2.9+ is recommended for full compatibility. Skript and Oraxen integrated successfully if you see this message in your console `Skript compatibility enabled - Oraxen syntax registered`.
 </Callout>
 
-## Getting Started
+## Syntax
 
-No configuration needed! Simply have both Oraxen and Skript installed on your server. Oraxen will automatically detect Skript and register all syntax elements.
+### ⚡️ Expressions
 
-You'll see this message in console when it loads:
-```
-[Oraxen] Skript compatibility enabled - Oraxen syntax registered
-```
-
-## Available Syntax
-
-### Expressions
-
-#### Get Oraxen Item
+<details>
+<summary><strong>Get Oraxen Item</strong></summary>
 
 Get an ItemStack from an Oraxen item ID.
 
@@ -34,14 +29,15 @@ oraxen item %string%
 oraxen item from id %string%
 ```
 
-**Examples:**
 ```vb
 give player oraxen item "ruby_sword"
 set {_item} to oraxen item "emerald_pickaxe"
 drop oraxen item "custom_helmet" at player's location
 ```
+</details>
 
-#### Get Oraxen ID
+<details>
+<summary><strong>Get Oraxen ID</strong></summary>
 
 Get the Oraxen ID from an ItemStack, Block, Entity, or Location.
 
@@ -50,15 +46,16 @@ oraxen id of %itemstack/block/entity/location%
 %itemstack/block/entity/location%'s oraxen id
 ```
 
-**Examples:**
 ```vb
 set {_id} to oraxen id of player's tool
 broadcast "Block ID: %oraxen id of clicked block%"
 if oraxen id of target entity is "treasure_chest":
     # do something
 ```
+</details>
 
-#### Get Oraxen Block
+<details>
+<summary><strong>Get Oraxen Block</strong></summary>
 
 Get the Oraxen block ID at a location or block.
 
@@ -67,14 +64,15 @@ oraxen block at %location/block%
 %location/block%'s oraxen block
 ```
 
-**Examples:**
 ```vb
 set {_blockId} to oraxen block at player's location
 if oraxen block at clicked block exists:
     broadcast "This is an Oraxen block!"
 ```
+</details>
 
-#### Get Oraxen Furniture
+<details>
+<summary><strong>Get Oraxen Furniture</strong></summary>
 
 Get the Oraxen furniture ID at a location, block, or from an entity.
 
@@ -83,18 +81,19 @@ oraxen furniture at %location/block/entity%
 %location/block/entity%'s oraxen furniture
 ```
 
-**Examples:**
 ```vb
 set {_furnitureId} to oraxen furniture at target entity
 if oraxen furniture at clicked entity is "wooden_chair":
     make player sit
 ```
+</details>
 
 ---
 
-### Conditions
+### ❔ Conditions
 
-#### Is Oraxen Item
+<details>
+<summary><strong>Is Oraxen Item</strong></summary>
 
 Check if an item is an Oraxen item.
 
@@ -104,7 +103,6 @@ Check if an item is an Oraxen item.
 %itemstack% is not [an] oraxen item
 ```
 
-**Examples:**
 ```vb
 if player's tool is an oraxen item:
     broadcast "You're holding a custom item!"
@@ -112,8 +110,10 @@ if player's tool is an oraxen item:
 if player's tool is oraxen item "ruby_sword":
     broadcast "You have the Ruby Sword!"
 ```
+</details>
 
-#### Is Oraxen Block
+<details>
+<summary><strong>Is Oraxen Block</strong></summary>
 
 Check if a block is an Oraxen custom block.
 
@@ -123,7 +123,6 @@ Check if a block is an Oraxen custom block.
 %block/location% is not [an] oraxen block
 ```
 
-**Examples:**
 ```vb
 if clicked block is an oraxen block:
     cancel event
@@ -131,8 +130,10 @@ if clicked block is an oraxen block:
 if block at player's location is oraxen block "ruby_ore":
     broadcast "You found ruby ore!"
 ```
+</details>
 
-#### Is Oraxen Furniture
+<details>
+<summary><strong>Is Oraxen Furniture</strong></summary>
 
 Check if an entity, block, or location is Oraxen furniture.
 
@@ -142,7 +143,6 @@ Check if an entity, block, or location is Oraxen furniture.
 %entity/block/location% is not [an] oraxen furniture
 ```
 
-**Examples:**
 ```vb
 if target entity is oraxen furniture:
     broadcast "You're looking at furniture!"
@@ -150,14 +150,16 @@ if target entity is oraxen furniture:
 if clicked entity is oraxen furniture "wooden_chair":
     # handle chair interaction
 ```
+</details>
 
 ---
 
-### Events
+### 🗓️ Events
 
 All events support filtering by a specific Oraxen item ID using `of "item_id"`.
 
-#### Oraxen Block Break
+<details>
+<summary><strong>Oraxen Block Break</strong></summary>
 
 Called when a player breaks an Oraxen custom block (NoteBlock or StringBlock).
 
@@ -167,7 +169,6 @@ on oraxen block break [of %string%]
 
 **Event values:** `event-player`, `event-block`, `event-string` (the Oraxen ID)
 
-**Examples:**
 ```vb
 on oraxen block break:
     broadcast "%player% broke an Oraxen block: %event-string%"
@@ -176,8 +177,10 @@ on oraxen block break of "ruby_ore":
     cancel event
     send "You need a special pickaxe to mine this!" to player
 ```
+</details>
 
-#### Oraxen Block Place
+<details>
+<summary><strong>Oraxen Block Place</strong></summary>
 
 Called when a player places an Oraxen custom block.
 
@@ -187,7 +190,6 @@ on oraxen block place [of %string%]
 
 **Event values:** `event-player`, `event-block`, `event-item`, `event-string`
 
-**Examples:**
 ```vb
 on oraxen block place:
     broadcast "%player% placed an Oraxen block!"
@@ -196,8 +198,10 @@ on oraxen block place of "tnt_block":
     cancel event
     send "TNT blocks are disabled!" to player
 ```
+</details>
 
-#### Oraxen Block Interact
+<details>
+<summary><strong>Oraxen Block Interact</strong></summary>
 
 Called when a player interacts with an Oraxen custom block.
 
@@ -207,13 +211,14 @@ on oraxen block interact [of %string%]
 
 **Event values:** `event-player`, `event-block`, `event-item`, `event-string`
 
-**Examples:**
 ```vb
 on oraxen block interact of "magic_chest":
     open virtual chest inventory to player
 ```
+</details>
 
-#### Oraxen Furniture Break
+<details>
+<summary><strong>Oraxen Furniture Break</strong></summary>
 
 Called when a player breaks Oraxen furniture.
 
@@ -223,7 +228,6 @@ on oraxen furniture break [of %string%]
 
 **Event values:** `event-player`, `event-block`, `event-entity`, `event-string`
 
-**Examples:**
 ```vb
 on oraxen furniture break:
     broadcast "%player% broke furniture: %event-string%"
@@ -232,8 +236,10 @@ on oraxen furniture break of "expensive_chair":
     cancel event
     send "You can't break this!" to player
 ```
+</details>
 
-#### Oraxen Furniture Place
+<details>
+<summary><strong>Oraxen Furniture Place</strong></summary>
 
 Called when a player places Oraxen furniture.
 
@@ -243,13 +249,14 @@ on oraxen furniture place [of %string%]
 
 **Event values:** `event-player`, `event-block`, `event-entity`, `event-item`, `event-string`
 
-**Examples:**
 ```vb
 on oraxen furniture place of "lamp":
     broadcast "A lamp was placed!"
 ```
+</details>
 
-#### Oraxen Furniture Interact
+<details>
+<summary><strong>Oraxen Furniture Interact</strong></summary>
 
 Called when a player interacts with Oraxen furniture.
 
@@ -259,7 +266,6 @@ on oraxen furniture interact [of %string%]
 
 **Event values:** `event-player`, `event-block`, `event-entity`, `event-item`, `event-string`
 
-**Examples:**
 ```vb
 on oraxen furniture interact:
     broadcast "%player% interacted with furniture!"
@@ -268,12 +274,14 @@ on oraxen furniture interact of "treasure_chest":
     give player diamond
     send "You found treasure!" to player
 ```
+</details>
 
 ---
 
-### Effects
+### 🔧 Effects
 
-#### Place Oraxen Block
+<details>
+<summary><strong>Place Oraxen Block</strong></summary>
 
 Place an Oraxen custom block at a location.
 
@@ -282,13 +290,14 @@ place oraxen block %string% at %locations%
 set oraxen block at %locations% to %string%
 ```
 
-**Examples:**
 ```vb
 place oraxen block "ruby_ore" at player's location
 place oraxen block "custom_stone" at {_locations::*}
 ```
+</details>
 
-#### Place Oraxen Furniture
+<details>
+<summary><strong>Place Oraxen Furniture</strong></summary>
 
 Place Oraxen furniture at a location.
 
@@ -297,13 +306,14 @@ place oraxen furniture %string% at %locations%
 spawn oraxen furniture %string% at %locations%
 ```
 
-**Examples:**
 ```vb
 place oraxen furniture "wooden_chair" at player's location
 spawn oraxen furniture "lamp" at {_location}
 ```
+</details>
 
-#### Remove Oraxen Block
+<details>
+<summary><strong>Remove Oraxen Block</strong></summary>
 
 Remove an Oraxen block at a location (without drops).
 
@@ -312,13 +322,14 @@ remove oraxen block at %locations/blocks%
 delete oraxen block at %locations/blocks%
 ```
 
-**Examples:**
 ```vb
 remove oraxen block at player's location
 remove oraxen block at clicked block
 ```
+</details>
 
-#### Remove Oraxen Furniture
+<details>
+<summary><strong>Remove Oraxen Furniture</strong></summary>
 
 Remove Oraxen furniture at a location or entity (without drops).
 
@@ -327,17 +338,15 @@ remove oraxen furniture at %locations/entities%
 delete oraxen furniture at %locations/entities%
 ```
 
-**Examples:**
 ```vb
 remove oraxen furniture at target entity
 remove oraxen furniture at player's location
 ```
+</details>
 
 ---
 
-## Complete Example Script
-
-Here's a complete example script demonstrating various Oraxen features:
+## Example
 
 ```vb
 # Welcome players with a custom item
@@ -388,24 +397,22 @@ command /placefurniture <text>:
 ## Troubleshooting
 
 <Callout type="warning">
-  If Skript syntax doesn't work, ensure:
+  If Skript syntax doesn't work, ensure...
   - Skript is properly installed and enabled
   - You see the "Skript compatibility enabled" message in console
   - You're using Skript 2.9 or newer
 </Callout>
 
-### Common Issues
-
-**Syntax not recognized:**
+**Syntax not recognized**
 - Reload Skript with `/skript reload all`
 - Check console for parsing errors
 - Verify Oraxen loaded successfully
 
-**Item ID not found:**
+**Item ID not found**
 - Ensure the Oraxen item exists in your configuration
 - Check for typos in the item ID
 - Item IDs are case-sensitive
 
-**Events not triggering:**
+**Events not triggering**
 - Verify the specific event exists (not all vanilla events trigger Oraxen events)
 - Check if the block/furniture is actually from Oraxen

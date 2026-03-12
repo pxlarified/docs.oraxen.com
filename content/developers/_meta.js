@@ -1,6 +1,7 @@
 export default {
-  mechanics: 'Create your own Mechanic',
-  'create-your-own-compatibility': 'Add Compatibility with a plugin',
-  'custom-hosting-service': 'Custom hosting service',
-  api: 'API'
+  addmechanic: '🧩 Mechanics',
+  addcompatibility: '🤝 Compatibility',
+  addpackhosting: '📦 Pack Hosting',
+  contributing: '➕ Contributing',
+  api: '🔗 API'
 }

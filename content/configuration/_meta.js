@@ -1,4 +1,4 @@
 export default {
-  "sound-yml": "sound.yml",
-  "branding-customization": "Branding & Customization"
+    glyphs: '🖼️ Glyphs',
+    texteffects: '✨ Text Effects',
 }

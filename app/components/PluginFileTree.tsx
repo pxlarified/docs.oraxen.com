@@ -307,7 +307,8 @@ export default function PluginFileTree({ initialTreeData }: PluginFileTreeProps)
     return () => observer.disconnect();
   }, []);
 
-  const [containerStyle, setContainerStyle] = useState({ height: 200 });
+  const ROW_HEIGHT = 28;
+  const [treeHeight, setTreeHeight] = useState(ROW_HEIGHT);
 
   useEffect(() => {
     const handleResize = () => {
@@ -329,24 +330,20 @@ export default function PluginFileTree({ initialTreeData }: PluginFileTreeProps)
   const updateLayout = useCallback(() => {
     if (!treeApiRef.current) return;
 
-    const ROW_HEIGHT = 28;
-    const MIN_HEIGHT = 28;
-    const MAX_HEIGHT = 500;
-
     const visibleNodesCount = treeApiRef.current.visibleNodes.length;
     const nodesHeight = visibleNodesCount * ROW_HEIGHT;
-    let totalHeight = nodesHeight + (PADDING_VERTICAL * 2);
-    totalHeight = Math.min(Math.max(totalHeight, MIN_HEIGHT), MAX_HEIGHT);
-
-    setContainerStyle((prevStyle) => ({
-      ...prevStyle,
-      height: totalHeight,
-    }));
-  }, []);
+    const nextTreeHeight = Math.max(nodesHeight, ROW_HEIGHT);
+    setTreeHeight(nextTreeHeight);
+  }, [ROW_HEIGHT]);
 
   useLayoutEffect(() => {
     updateLayout();
   }, [containerWidth, updateLayout]);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(updateLayout);
+    return () => cancelAnimationFrame(id);
+  }, [initialTreeData, updateLayout]);
 
   const isDark = mounted && currentTheme === 'dark';
 
@@ -366,7 +363,7 @@ export default function PluginFileTree({ initialTreeData }: PluginFileTreeProps)
         padding: `${PADDING_VERTICAL}px ${PADDING}px`,
         overflow: 'hidden',
         transition: 'background-color 0.2s ease, border-color 0.2s ease',
-        height: `${containerStyle.height}px`,
+        height: `${treeHeight + (PADDING_VERTICAL * 2)}px`,
         backgroundColor: containerBgColor,
         border: `1px solid ${containerBorderColor}`,
         marginTop: '1rem',
@@ -377,7 +374,8 @@ export default function PluginFileTree({ initialTreeData }: PluginFileTreeProps)
         ref={treeApiRef}
         initialData={initialTreeData}
         indent={24}
-        rowHeight={28}
+        rowHeight={ROW_HEIGHT}
+        height={treeHeight}
         width={containerWidth - (PADDING * 2)}
         className="file-tree"
         onToggle={() => requestAnimationFrame(updateLayout)}
