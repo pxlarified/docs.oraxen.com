@@ -1,7 +1,7 @@
 export default {
+  tutorials: '📖 Tutorials',
   commands: '⌨️ Commands',
   recipes: '👨‍🍳 Recipes',
   merging: '📥 Pack Merging',
-  hosting: '📦 Pack Hosting',
-  tutorials: '📖 Tutorials'
+  hosting: '📦 Pack Hosting'
 }
