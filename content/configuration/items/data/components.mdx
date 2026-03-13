@@ -1,0 +1,385 @@
+---
+title: "🧩 Components"
+description: "Adding components to custom items in Oraxen."
+---
+
+import Highlight from '../../../../components/Highlight.js'
+import { Callout, Details } from 'nextra/components'
+
+# 🧩 Components
+
+## Overview
+Components define modern vanilla item behavior in Oraxen, such as food values, durability, equipping, stack size, cooldowns, and custom tooltip or model settings.
+
+## Configuration
+Components are configured per item in `.yml` files inside the `plugins/Oraxen/items` directory.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/items",
+              name: "items",
+              children: [
+                {
+                  id: "plugins/Oraxen/items/weapons.yml",
+                  name: "weapons.yml",
+                },
+                {
+                  id: "plugins/Oraxen/items/foods.yml",
+                  name: "foods.yml",
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]}
+/>
+
+## Components
+
+<Details>
+    <summary><h4>📦 `max_stack_size`</h4></summary>
+Sets the maximum stack size of the item.<br />
+
+```yaml
+myitem:
+  components:
+    max_stack_size: 64
+```
+
+- **Type -** `integer`
+- **Minimum -** `1`
+- **Maximum -** `99`
+- **Minecraft version -** `1.20.5+`
+</Details>
+
+<Details>
+    <summary><h4>🔥 `fire_resistant`</h4></summary>
+Makes the item immune to fire and lava damage when dropped.<br />
+
+```yaml
+myitem:
+  components:
+    fire_resistant: true
+```
+
+- **Type -** `boolean`
+- **Minecraft version -** `1.20.5+`
+</Details>
+
+<Details>
+    <summary><h4>🙈 `hide_tooltip`</h4></summary>
+Hides the item's tooltip entirely.<br />
+
+```yaml
+myitem:
+  components:
+    hide_tooltip: true
+```
+
+- **Type -** `boolean`
+- **Minecraft version -** `1.20.5+`
+</Details>
+
+<Details>
+    <summary><h4>🔨 `durability`</h4></summary>
+Defines custom durability behavior for the item.<br />
+
+```yaml
+myitem:
+  components:
+    durability:
+      value: 250
+      damage_block_break: true
+      damage_entity_hit: true
+```
+
+- **Type -** `object`
+- **Minecraft version -** `1.20.5+`<br />
+<br />
+- **Fields**
+  - `value` - `integer`, minimum `1`
+  - `damage_block_break` - `boolean`, default `true`
+  - `damage_entity_hit` - `boolean`, default `true`
+
+<Callout type="info">
+    On modern versions, this replaces the legacy `durability` mechanic for item durability configuration.
+</Callout>
+</Details>
+
+<Details>
+    <summary><h4>🍖 `food`</h4></summary>
+Makes the item behave like food and defines how much hunger and saturation it restores.<br />
+
+```yaml
+myitem:
+  components:
+    food:
+      nutrition: 6
+      saturation: 7.2
+      can_always_eat: false
+```
+
+- **Type -** `object`
+- **Minecraft version -** `1.20.5+`<br />
+<br />
+- **Fields**
+  - `nutrition` - `integer`, minimum `0`
+  - `saturation` - `number`, minimum `0`
+  - `can_always_eat` - `boolean`, default `false`
+
+<Callout type="info">
+    On `1.20.5+`, prefer this component over the legacy `food` mechanic.
+</Callout>
+</Details>
+
+<Details>
+    <summary><h4>🥤 `consumable`</h4></summary>
+Controls how the item is consumed, including timing, animation, particles, and sound.<br />
+
+```yaml
+myitem:
+  components:
+    consumable:
+      consume_seconds: 1.6
+      animation: "eat"
+      sound: "entity.generic.eat"
+      has_consume_particles: true
+```
+
+- **Type -** `object`
+- **Minecraft version -** `1.21.2+`<br />
+<br />
+- **Fields**
+  - `consume_seconds` - `number`, minimum `0`, default `1.6`
+  - `animation` - `string`
+  - `sound` - `string`
+  - `has_consume_particles` - `boolean`, default `true`
+
+<Callout type="info">
+    Valid sound keys use Minecraft sound resource locations, such as `entity.generic.eat` or `item.honey_bottle.drink`.
+</Callout>
+</Details>
+
+<Details>
+    <summary><h4>🛡️ `equippable`</h4></summary>
+Makes the item equippable and defines slot-related behavior.<br />
+
+```yaml
+myitem:
+  components:
+    equippable:
+      slot: HEAD
+      model: "oraxen:my_helmet"
+      equip_sound: "item.armor.equip_diamond"
+      dispensable: true
+      swappable: true
+      damage_on_hurt: true
+      camera_overlay: "oraxen:textures/misc/pumpkinblur.png"
+```
+
+- **Type -** `object`
+- **Minecraft version -** `1.21.2+`<br />
+<br />
+- **Fields**
+  - `slot` - `EquipmentSlot`, required
+  - `model` - `string`
+  - `equip_sound` - `string`
+  - `dispensable` - `boolean`, default `true`
+  - `swappable` - `boolean`, default `true`
+  - `damage_on_hurt` - `boolean`, default `true`
+  - `camera_overlay` - `string`
+<br />
+- **Supported `slot` values**
+  - `HAND`
+  - `OFF_HAND`
+  - `FEET`
+  - `LEGS`
+  - `CHEST`
+  - `HEAD`
+  - `BODY`
+  - `SADDLE`
+
+<Callout type="info">
+    On `1.21.2+`, this replaces older behaviors such as the legacy `hat` mechanic for wearable items.
+</Callout>
+</Details>
+
+<Details>
+    <summary><h4>⛏️ `tool`</h4></summary>
+Defines tool mining behavior, including default speed and optional mining rules.<br />
+
+```yaml
+myitem:
+  components:
+    tool:
+      damage_per_block: 1
+      default_mining_speed: 4.0
+      rules:
+        - blocks: "minecraft:mineable/pickaxe"
+          speed: 8.0
+          correct_for_drops: true
+```
+
+- **Type -** `object`
+- **Minecraft version -** `1.20.5+`<br />
+<br />
+- **Fields**
+  - `damage_per_block` - `integer`, minimum `0`, default `1`
+  - `default_mining_speed` - `number`, minimum `0`, default `1.0`
+  - `rules` - `array`
+</Details>
+
+<Details>
+    <summary><h4>⏱️ `use_cooldown`</h4></summary>
+Adds a cooldown after using the item.<br />
+
+```yaml
+myitem:
+  components:
+    use_cooldown:
+      seconds: 2.5
+      group: "magic_wands"
+```
+
+- **Type -** `object`
+- **Minecraft version -** `1.21.2+`<br />
+<br />
+- **Fields**
+  - `seconds` - `number`, minimum `0`
+  - `group` - `string`
+</Details>
+
+<Details>
+    <summary><h4>🪣 `use_remainder`</h4></summary>
+Defines which item remains after the item is consumed or used up.<br />
+
+```yaml
+myitem:
+  components:
+    use_remainder:
+      minecraft_type: "BOWL"
+      amount: 1
+```
+
+or
+
+```yaml
+myitem:
+  components:
+    use_remainder:
+      oraxen_item: "empty_bottle"
+      amount: 1
+```
+
+- **Type -** `object`
+- **Minecraft version -** `1.21.2+`<br />
+<br />
+- **Fields**
+- `oraxen_item` - `string`
+- `minecraft_type` - `string`
+- `crucible_item` - `string`
+- `mmoitems_id` - `string`
+- `mmoitems_type` - `string`
+- `ecoitem_id` - `string`
+- `amount` - `integer`, minimum `1`, default `1`
+</Details>
+
+<Details>
+    <summary><h4>🎵 `jukebox_playable`</h4></summary>
+Makes the item playable in jukeboxes.<br />
+
+```yaml
+myitem:
+  components:
+    jukebox_playable:
+      show_in_tooltip: true
+      song_key: "oraxen:my_song"
+```
+
+- **Type -** `object`
+- **Minecraft version -** `1.21+`<br />
+<br />
+- **Fields**
+  - `show_in_tooltip` - `boolean`, default `true`
+  - `song_key` - `string`
+
+- **Format -** `song_key` should be a namespaced key such as `minecraft:cat` or `oraxen:my_song`
+
+<Callout type="info">
+    On `1.21+`, prefer this component over the deprecated legacy `music_disc` mechanic.
+</Callout>
+</Details>
+
+<Details>
+    <summary><h4>💬 `tooltip_style`</h4></summary>
+Sets a custom tooltip style resource location.<br />
+
+```yaml
+myitem:
+  components:
+    tooltip_style: "oraxen:epic_tooltip"
+```
+
+- **Type -** `string`
+- **Minecraft version -** `1.21.2+`
+</Details>
+
+<Details>
+    <summary><h4>🖼️ `item_model`</h4></summary>
+Sets a custom item model resource location through the component system.<br />
+
+```yaml
+myitem:
+  components:
+    item_model: "oraxen:weapons/flame_blade"
+```
+
+- **Type -** `string`
+- **Minecraft version -** `1.21.2+`
+</Details>
+
+## Example
+
+```yaml
+myitem:
+  itemname: "<gold>Traveler's Meal"
+  material: BREAD
+  components:
+    max_stack_size: 16
+    fire_resistant: false
+    food:
+      nutrition: 8
+      saturation: 9.6
+      can_always_eat: true
+    consumable:
+      consume_seconds: 1.6
+      animation: "eat"
+      sound: "entity.generic.eat"
+      has_consume_particles: true
+    use_remainder:
+      minecraft_type: "BOWL"
+      amount: 1
+    use_cooldown:
+      seconds: 1.0
+      group: "food_items"
+    tooltip_style: "oraxen:food/meal"
+    item_model: "oraxen:food/travelers_meal"
+```
+
+## Notes
+- Components are configured inside the item's `components:` section.
+- Most components listed here are intended for modern Minecraft item data on `1.20.5+` or newer.
+- Some components, such as `consumable`, `equippable`, `use_cooldown`, `use_remainder`, `tooltip_style`, and `item_model`, require `1.21.2+`.
+- This page intentionally excludes item properties and mechanics.
+- Where the schema does not fully describe nested array entries, the examples above show the expected practical layout rather than a fully schema-defined structure.

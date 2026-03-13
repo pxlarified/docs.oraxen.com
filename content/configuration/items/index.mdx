@@ -1,0 +1,61 @@
+---
+title: "🗡️ Items"
+description: "Creating custom items using Oraxen."
+asIndexPage: true
+---
+
+import Highlight from '../../../components/Highlight.js'
+import { Callout } from 'nextra/components'
+
+# 🗡️ Items
+
+## Overview
+Items in Oraxen start with a vanilla Minecraft base material and are extended with custom components, properties, behaviors, and custom models or textures. Oraxen builds on top of Minecraft's existing system.
+Oraxen handles the lifting in the backend, including resource pack generation, model assignment, and linking your configured item data to the correct in-game material. In practice, this means you define how an item should look and behave, and Oraxen takes care of making it work in Minecraft.
+
+## Configuration
+Items are configured in `.yml` files in the `plugins/Oraxen/items` directory.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/items",
+              name: "items",
+              children: [
+                {
+                  id: "plugins/Oraxen/glyphs/weapons.yml",
+                  name: "weapons.yml",
+                },
+                {
+                  id: "plugins/Oraxen/glyphs/food.yml",
+                  name: "food.yml",
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]}
+/>
+
+### Properties
+Properties define an item’s built-in metadata in Oraxen, such as its material, display name, lore, flags, enchantments, and other vanilla item data.
+
+### Components
+Components define modern vanilla item behavior in Oraxen, such as food values, durability, equipping, stack size, cooldowns, and custom tooltip or model settings.
+
+<Callout type="note">
+  Even though Components are used in the backend along with resource pack generation, item appearance is mostly controlled through the `Pack` section instead of the `Components` section.
+</Callout>
+
+### Mechanics
+Mechanics are "abilities" that allow items to perform actions or have special effects when used.

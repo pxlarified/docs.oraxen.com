@@ -1,0 +1,417 @@
+---
+title: "🔢 Properties"
+description: "Adding properties to custom items in Oraxen."
+---
+
+import Highlight from '../../../../components/Highlight.js'
+import { Callout, Details } from 'nextra/components'
+
+# 🔢 Properties
+
+## Overview
+Properties define an item's built-in metadata in Oraxen, such as its material, display name, lore, flags, enchantments, and other vanilla item data.
+
+## Configuration
+Properties are configured per item in `.yml` files inside the `plugins/Oraxen/items` directory.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/items",
+              name: "items",
+              children: [
+                {
+                  id: "plugins/Oraxen/items/weapons.yml",
+                  name: "weapons.yml",
+                },
+                {
+                  id: "plugins/Oraxen/items/furniture.yml",
+                  name: "furniture.yml",
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]}
+/>
+
+## Properties
+
+<Details>
+    <summary><h4>🪨 `material`</h4></summary>
+Sets the base material of the item.<br />
+```yaml
+myitem:
+  material: PAPER
+```
+
+- **Type -** `Material`
+- **Default -** `PAPER`
+
+<Callout type="info">
+    A full list of materials can be found <Highlight to="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html" color="#FFA500"><strong>here</strong></Highlight>.
+</Callout>
+</Details>
+
+<Details>
+    <summary><h4>🏷️ `itemname`</h4></summary>
+Sets the item's modern display name using MiniMessage formatting.<br />
+```yaml
+myitem:
+  itemname: "<red>My Cool Item"
+```
+
+- **Type -** `string`
+- **Required -** Yes
+- **Format -** MiniMessage
+- **Minecraft version -** `1.20.5+`
+
+<Callout type="info">
+    `itemname` is the recommended property for modern versions.
+</Callout>
+</Details>
+
+<Details>
+    <summary><h4>🏷️ `displayname`</h4></summary>
+Sets the legacy display name.<br />
+```yaml
+myitem:
+  displayname: "<red>My Cool Item"
+```
+
+- **Type -** `string`
+- **Format -** MiniMessage
+- **Deprecated -** Yes
+
+<Callout type="warning">
+    `displayname` is deprecated. Prefer using `itemname` instead.
+</Callout>
+</Details>
+
+<Details>
+    <summary><h4>📜 `lore`</h4></summary>
+Sets the item's lore lines using MiniMessage formatting.<br />
+```yaml
+myitem:
+  lore:
+    - "<gold>My Cool Item"
+    - "<gray>Some extra description"
+```
+
+- **Type -** `array`
+- **Format -** MiniMessage
+</Details>
+
+<Details>
+    <summary><h4>🔨 `unbreakable`</h4></summary>
+Makes the item unbreakable.<br />
+```yaml
+myitem:
+  unbreakable: true
+```
+
+- **Type -** `boolean`
+- **Default -** `false`
+</Details>
+
+<Details>
+    <summary><h4>📦 `unstackable`</h4></summary>
+Makes the item impossible to stack with identical copies.<br />
+```yaml
+myitem:
+  unstackable: true
+```
+
+- **Type -** `boolean`
+- **Default -** `false`
+</Details>
+
+<Details>
+    <summary><h4>🆔 `injectId`</h4></summary>
+Controls whether Oraxen injects the item ID into NBT.<br />
+```yaml
+myitem:
+  injectId: true
+```
+
+- **Type -** `boolean`
+- **Default -** `true`
+</Details>
+
+<Details>
+    <summary><h4>🎨 `color`</h4></summary>
+Sets an RGB color for supported items such as leather armor, potions, or maps.<br />
+```yaml
+myitem:
+  color: "#FF8000"
+```
+
+or
+
+```yaml
+myitem:
+  color: "255, 128, 0"
+```
+
+- **Type -** `string`
+- **Format -** color
+- **Accepted formats -** `#RRGGBB` or `R, G, B`
+</Details>
+
+<Details>
+    <summary><h4>🛡️ `trim_pattern`</h4></summary>
+Sets the armor trim pattern key.<br />
+```yaml
+myitem:
+  trim_pattern: "minecraft:coast"
+```
+
+- **Type -** `string`
+- **Format -** namespaced key
+- **Minecraft version -** `1.20+`
+</Details>
+
+<Details>
+    <summary><h4>🧬 `template`</h4></summary>
+Makes the item inherit from another item template.<br />
+```yaml
+myitem:
+  template: base_sword
+```
+
+- **Type -** `string`
+</Details>
+
+<Details>
+    <summary><h4>🙈 `excludeFromInventory`</h4></summary>
+Excludes the item from the `/oraxen inventory` menu.<br />
+```yaml
+myitem:
+  excludeFromInventory: true
+```
+
+- **Type -** `boolean`
+</Details>
+
+<Details>
+    <summary><h4>⌨️ `excludeFromCommands`</h4></summary>
+Excludes the item from `/oraxen give` autocomplete and similar command suggestions.<br />
+```yaml
+myitem:
+  excludeFromCommands: true
+```
+
+- **Type -** `boolean`
+</Details>
+
+<Details>
+    <summary><h4>🔄 `no_auto_update`</h4></summary>
+Disables automatic updating for the item.<br />
+```yaml
+myitem:
+  no_auto_update: true
+```
+
+- **Type -** `boolean`
+</Details>
+
+<Details>
+    <summary><h4>✨ `disable_enchanting`</h4></summary>
+Prevents the item from being enchanted.<br />
+```yaml
+myitem:
+  disable_enchanting: true
+```
+
+- **Type -** `boolean`
+</Details>
+
+<Details>
+    <summary><h4>🚩 `ItemFlags`</h4></summary>
+Applies item flags to hide parts of the tooltip.<br />
+```yaml
+myitem:
+  ItemFlags:
+    - HIDE_ENCHANTS
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+```
+
+- **Type -** `array`<br />
+<br />
+- **Supported values**
+  - `HIDE_ENCHANTS`
+  - `HIDE_ATTRIBUTES`
+  - `HIDE_UNBREAKABLE`
+  - `HIDE_DESTROYS`
+  - `HIDE_PLACED_ON`
+  - `HIDE_ADDITIONAL_TOOLTIP`
+  - `HIDE_DYE`
+  - `HIDE_ARMOR_TRIM`
+  - `HIDE_STORED_ENCHANTS`
+</Details>
+
+<Details>
+    <summary><h4>✨ `Enchantments`</h4></summary>
+Adds enchantments directly to the item.<br />
+```yaml
+myitem:
+  Enchantments:
+    sharpness: 5
+    unbreaking: 3
+```
+
+- **Type -** `object`
+- **Format -** map of enchantment key to level
+- **Minimum level -** `1`<br />
+<br />
+- **Examples of valid enchantment keys**
+  - `sharpness`
+  - `efficiency`
+  - `unbreaking`
+  - `mending`
+  - `protection`
+  - `power`
+
+<Callout type="info">
+    Enchantment keys use the schema's lowercase names such as `sharpness`, `fire_aspect`, or `fortune`.
+</Callout>
+</Details>
+
+<Details>
+    <summary><h4>📈 `AttributeModifiers`</h4></summary>
+Adds attribute modifiers to the item.<br />
+```yaml
+myitem:
+  AttributeModifiers:
+    - attribute: attack_damage
+      amount: 5
+      operation: ADD_NUMBER
+      slot: HAND
+      uuid: "2c7b6d2d-8ef8-4a6f-9cb9-6de3c0a6f1d2"
+      name: "custom_damage"
+```
+
+- **Type -** `array`<br />
+<br />
+- **Common attribute names**<br />
+  - `attack_damage`
+  - `attack_speed`
+  - `max_health`
+  - `armor`
+  - `armor_toughness`
+  - `movement_speed`
+  - `luck`
+  - `knockback_resistance`<br />
+<br />
+- **Supported operations**<br />
+  - `ADD_NUMBER`
+  - `ADD_SCALAR`
+  - `MULTIPLY_SCALAR_1`<br />
+<br />
+- **Supported equipment slots**<br />
+  - `HAND`
+  - `OFF_HAND`
+  - `FEET`
+  - `LEGS`
+  - `CHEST`
+  - `HEAD`
+  - `BODY`
+  - `SADDLE`
+
+<Callout type="warning">
+    The schema only declares `AttributeModifiers` as an array at the property level. The exact entry structure is not described there, so the example above shows the typical shape you should expect to use.
+</Callout>
+</Details>
+
+<Details>
+    <summary><h4>🧪 `PotionEffects`</h4></summary>
+Adds potion effects to potion-like items.<br />
+```yaml
+myitem:
+  PotionEffects:
+    - Type: speed
+      duration: 200
+      amplifier: 1
+      ambient: false
+      particles: true
+      icon: true
+```
+
+- **Type -** `array`<br />
+<br />
+- **Examples of valid potion effect types**
+  - `speed`
+  - `strength`
+  - `jump_boost`
+  - `regeneration`
+  - `fire_resistance`
+  - `night_vision`
+  - `water_breathing`
+  - `invisibility`
+
+<Callout type="warning">
+    The schema declares `PotionEffects` as an array, but does not fully describe each field inside an entry. The example above reflects the standard fields typically used for potion effects.
+</Callout>
+</Details>
+
+<Details>
+    <summary><h4>🏷️ `PersistentData`</h4></summary>
+Stores custom persistent data on the item.<br />
+```yaml
+myitem:
+  PersistentData:
+    - key: "myplugin:custom_value"
+      type: STRING
+      value: "hello"
+```
+
+- **Type -** `array`
+</Details>
+
+## Example
+
+```yaml
+myitem:
+  material: DIAMOND_SWORD
+  itemname: "<gradient:red:gold>Flame Blade"
+  lore:
+    - "<gray>A weapon forged in heat"
+    - "<red>Very dangerous"
+  unbreakable: true
+  unstackable: true
+  injectId: true
+  excludeFromInventory: false
+  excludeFromCommands: false
+  no_auto_update: false
+  disable_enchanting: false
+  ItemFlags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+  Enchantments:
+    sharpness: 5
+    fire_aspect: 2
+    unbreaking: 3
+  AttributeModifiers:
+    - attribute: attack_damage
+      amount: 7
+      operation: ADD_NUMBER
+      slot: HAND
+      name: "flame_blade_damage"
+```
+
+## Notes
+- `itemname` is the recommended name property on `1.20.5+`.
+- `displayname` still exists, but is considered legacy.
+- Advanced entries such as `AttributeModifiers`, `PotionEffects`, and `PersistentData` may vary slightly depending on your Oraxen version.
+- This page intentionally excludes mechanics and components.
