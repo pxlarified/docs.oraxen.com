@@ -1,0 +1,91 @@
+---
+title: "🪟 Creating a GUI"
+description: "Create a glyph-based GUI title and fine-tune it with ascent, height, and shift tags."
+asIndexPage: true
+---
+
+import Highlight from '../../../components/Highlight.js'
+import { Callout, Steps } from 'nextra/components'
+
+# 🪟 Creating a GUI
+
+## Overview
+You can create custom GUI layouts by using Oraxen glyphs in inventory titles. By shifting a large glyph backwards, you can overlay the vanilla inventory slots with your own custom texture.
+
+## Tutorial
+
+<Steps>
+
+### Create a Glyph
+First, create a new glyph for your GUI texture. It is recommended to keep your GUI glyphs organized in a separate file, for example `plugins/Oraxen/glyphs/guis.yml`.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/glyphs",
+              name: "glyphs",
+              children: [
+                {
+                  id: "plugins/Oraxen/glyphs/guis.yml",
+                  name: "guis.yml",
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]}
+/>
+
+Configure your glyph with an initial `ascent` and `height`.
+
+```yaml
+my_custom_gui:
+  texture: gui/my_menu_texture
+  ascent: 8
+  height: 256
+  char: 'uE001'
+```
+
+*   `texture` - The path to your texture file.
+*   `ascent` - Controls the vertical position of the glyph.
+*   `height` - Controls the scale/height of the glyph.
+
+### Add to GUI Title
+Open your inventory plugin's configuration (e.g., DeluxeMenus) and add the glyph to the menu title.
+
+To make the image act as a background overlay, you usually need to shift the text cursor backwards using a negative shift tag so the image starts at the beginning of the screen.
+
+```
+<white><shift:-8><glyph:my_custom_gui>
+```
+
+<Callout type="note">
+  The `<shift:-8>` tag moves the cursor 8 pixels to the left. You will likely need to adjust this value significantly to align the image correctly over the slots.
+</Callout>
+
+### Adjust Position
+Positioning the GUI correctly is mostly **trial and error**. You will need to tweak the values until the GUI looks perfect.
+
+1.  **Horizontal Alignment** - Adjust the `<shift:N>` value in the title.
+    *   Use negative values to move left.
+    *   Use positive values to move right.
+2.  **Vertical Alignment** - Adjust the `ascent` in the glyph configuration.
+    *   Increase `ascent` to move the image **up**.
+    *   Decrease `ascent` to move the image **down**.
+3.  **Scaling** - Adjust the `height` in the glyph configuration if the image size is incorrect.
+
+<Callout type="tip">
+  Reload Oraxen (`/o reload`) and reopen the GUI after every change to see the effect of your adjustments.
+</Callout>
+
+</Steps>
