@@ -287,3 +287,9 @@ html.dark .nextra-callout.x\:border-green-700 {
   --callout-bg: #0f2f1d;
   --callout-text: rgba(236, 253, 245, 0.92);
 }
+
+/* Make the docs sidebar wider on desktop */
+.nextra-sidebar.x\:w-64,
+.x\:max-xl\:hidden.x\:h-0.x\:w-64.x\:shrink-0 {
+  width: 21rem;
+}
