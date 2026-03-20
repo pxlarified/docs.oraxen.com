@@ -1,0 +1,134 @@
+---
+title: "🌆 Branding removal..."
+description: "Remove the default Oraxen logo and banner text from pack/lang files."
+---
+
+import { Callout, Steps } from 'nextra/components'
+
+# 🌆 Removing Oraxen branding...
+
+## Overview
+Oraxen ships with default language entries in `pack/lang` that show the Oraxen logo, banner, and a few branded text lines.
+If you want a cleaner or fully white-label pack, you can replace those entries with your own text or remove them entirely.
+On a fresh install, those language files are extracted from Oraxen's default pack assets, while the matching glyphs come from the default glyph configs.
+
+## Tutorial
+
+<Steps>
+
+### Disable default asset generation
+Open `plugins/Oraxen/settings.yml` and disable the default asset generation first.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/settings.yml",
+              name: "settings.yml",
+            },
+          ],
+        },
+      ],
+    },
+  ]}
+/>
+
+```yaml
+Plugin:
+  generation:
+    default_assets: false
+```
+
+<Callout type="note">
+  `pack/lang` is extracted from Oraxen's default pack assets, so disabling `default_assets` before the first pack generation prevents Oraxen from recreating the default language files.
+</Callout>
+
+### Open the language files
+Then open the generated pack language files in your Oraxen data folder.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/pack",
+              name: "pack",
+              children: [
+                {
+                  id: "plugins/Oraxen/pack/lang",
+                  name: "lang",
+                  children: [
+                    {
+                      id: "plugins/Oraxen/pack/lang/global.json",
+                      name: "global.json",
+                    },
+                    {
+                      id: "plugins/Oraxen/pack/lang/en_us.json",
+                      name: "en_us.json",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ]}
+/>
+
+`global.json` applies to all languages, while files like `en_us.json` can override it for a specific locale.
+
+In practice, edit `pack/lang/global.json` first, then mirror the same changes in `pack/lang/en_us.json` if you use the default English locale.
+
+### Remove the branded entries
+Open `pack/lang/global.json` and remove or replace the branded strings.
+
+The default file usually contains entries like these:
+
+```json
+{
+  "menu.game": "<glyph:logo>",
+  "menu.disconnect": "<shift:-256><gray>See you soon!<shift:-142><glyph:menu_banner><shift:-327>",
+  "menu.returnToGame": "Back to the Oraxen experience",
+  "resourcePack.server.name": "Vanilla Mod"
+}
+```
+
+Replace them with your own text, or clear them if you want no branding at all.
+
+```json
+{
+  "menu.game": "",
+  "menu.disconnect": "<gray>See you soon!",
+  "menu.returnToGame": "Back to the server",
+  "resourcePack.server.name": "Resource Pack"
+}
+```
+
+If you prefer to keep a custom welcome screen, you can also replace the glyphs with your own icons instead of deleting the line.
+
+### Check language-specific overrides
+If you use language files besides `global.json`, make the same changes there too.
+
+For example, `pack/lang/en_us.json` can still reintroduce the branding if it keeps the default values.
+If you disabled default generation, make sure your custom language files still define the entries you want to keep.
+
+<Callout type="tip">
+  After editing the files, run `/o pack` or `/o reload` and regenerate the resource pack so the updated language files are included.
+</Callout>
+
+</Steps>
