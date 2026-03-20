@@ -1,0 +1,100 @@
+---
+title: "🔇 Disabling the welcome sound..."
+description: "Stop Oraxen from playing the default welcome sound when the resource pack loads."
+---
+
+import { Callout, Steps } from 'nextra/components'
+
+# 🔇 Disabling the welcome sound...
+
+## Overview
+Oraxen can play a sound after a player's resource pack finishes loading. This is configured in `settings.yml` under the pack receive actions.
+
+If you want to stop that sound completely, disable the sound action. If you still want a sound but prefer a different one, change the sound `type` instead.
+
+## Tutorial
+
+<Steps>
+
+### Open `settings.yml`
+Go to your Oraxen plugin folder and open `plugins/Oraxen/settings.yml`.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/settings.yml",
+              name: "settings.yml",
+            },
+          ],
+        },
+      ],
+    },
+  ]}
+/>
+
+### Find the welcome sound section
+In the default config from `plugin.oraxen.com`, the welcome sound is located in the `Pack.receive.loaded.actions.sound` section.
+
+```yaml
+receive:
+  enabled: true
+  loaded:
+    actions:
+      sound:
+        enabled: true
+        type: minecraft:welcome
+        volume: 1.0
+        pitch: 1.0
+```
+
+### Disable the sound
+To stop the welcome sound from playing, change `enabled: true` to `enabled: false`.
+
+```yaml
+receive:
+  enabled: true
+  loaded:
+    actions:
+      sound:
+        enabled: false
+        type: minecraft:welcome
+        volume: 1.0
+        pitch: 1.0
+```
+
+<Callout>
+  Disabling only `sound.enabled` keeps the rest of the resource-pack loaded actions active.
+</Callout>
+
+<Callout type="tip">
+If you want to keep the effect but use another sound, leave `enabled: true` and replace `type` with a valid Minecraft sound key.
+
+```yaml
+receive:
+  enabled: true
+  loaded:
+    actions:
+      sound:
+        enabled: true
+        type: minecraft:block.note_block.pling
+        volume: 1.0
+        pitch: 1.0
+```
+</Callout>
+
+### Reload Oraxen
+Save the file, then reload or restart your server so Oraxen applies the updated setting.
+
+<Callout type="note">
+  The sound is played when the pack is marked as loaded, so test by re-sending the pack after reloading the plugin.
+</Callout>
+
+</Steps>

@@ -97,7 +97,7 @@ In practice, edit `pack/lang/global.json` first, then mirror the same changes in
 ### Remove the branded entries
 Open `pack/lang/global.json` and remove or replace the branded strings.
 
-The default file usually contains entries like these:
+The default file usually contains entries like these.
 
 ```json
 {
@@ -127,8 +127,8 @@ If you use language files besides `global.json`, make the same changes there too
 For example, `pack/lang/en_us.json` can still reintroduce the branding if it keeps the default values.
 If you disabled default generation, make sure your custom language files still define the entries you want to keep.
 
-<Callout type="tip">
-  After editing the files, run `/o pack` or `/o reload` and regenerate the resource pack so the updated language files are included.
+<Callout>
+  After editing the files, run `/o reload` and regenerate the resource pack so the updated language files are included.
 </Callout>
 
 </Steps>
