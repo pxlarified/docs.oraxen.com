@@ -1,0 +1,73 @@
+---
+title: "🔊 Creating a custom sound..."
+description: "Add a custom sound file to Oraxen and make it available in-game."
+---
+
+import { Callout, Steps } from 'nextra/components'
+
+# 🔊 Creating a custom sound...
+
+## Overview
+Custom sounds are configured in `sound.yml`. Oraxen reads this file and generates `assets/minecraft/sounds.json`.
+
+Use it to add brand new sound events, override existing vanilla sounds, or package longer audio tracks for music discs and other custom content.
+
+## Tutorial
+
+<Steps>
+
+### Open `sound.yml`
+Go to `plugins/Oraxen/sound.yml`.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/sound.yml",
+              name: "sound.yml",
+            },
+          ],
+        },
+      ],
+    },
+  ]}
+/>
+
+<Callout type="note">
+  `settings.automatically_generate` must stay enabled if you want Oraxen to build `sounds.json` from this file.
+</Callout>
+
+### Add a sound entry
+Each entry under `sounds:` becomes one sound event.
+
+```yaml
+sounds:
+  welcome:
+    category: records
+    sound: welcome.ogg
+```
+
+### Point to your audio file
+Sound files live in `plugins/Oraxen/pack/sounds/`. Oraxen then exports them to `assets/minecraft/sounds/` in the generated resource pack.
+
+`sound: welcome.ogg` points to `plugins/Oraxen/pack/sounds/welcome.ogg`.<br />
+`sound: music/welcome` points to `plugins/Oraxen/pack/sounds/music/welcome.ogg`.<br />
+
+The `.ogg` extension is optional.
+
+<Callout type="info">
+  If `sounds` is empty, Oraxen falls back to `sound` when it is present.
+</Callout>
+
+<Callout>
+  After generation, the sound can be used as `minecraft:welcome`.
+</Callout>
+
+</Steps>

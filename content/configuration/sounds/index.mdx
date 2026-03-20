@@ -1,0 +1,193 @@
+---
+title: "🔊 Sounds"
+description: "Creating custom sounds using Oraxen."
+asIndexPage: true
+---
+
+import { Callout, Details } from 'nextra/components'
+
+# 🔊 Sounds
+
+## Overview
+Custom sounds are configured in `sound.yml`. Oraxen reads this file, generates `assets/minecraft/sounds.json`, and can also generate a datapack for custom jukebox songs.
+
+Use this file to add brand new sound events, override existing vanilla sounds, or package longer audio tracks for music discs and other custom content.
+
+## Configuration
+Sounds are configured in `plugins/Oraxen/sound.yml`.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/sound.yml",
+              name: "sound.yml",
+            }
+          ]
+        }
+      ]
+    }
+  ]}
+/>
+
+<Callout type="note">
+  `settings.automatically_generate` must stay enabled if you want Oraxen to build `sounds.json` from this file.
+</Callout>
+
+<Callout type="info">
+Sound files live in `plugins/Oraxen/pack/sounds/`. Oraxen then exports them to `assets/minecraft/sounds/` in the generated resource pack.
+
+`sound: welcome.ogg` points to `plugins/Oraxen/pack/sounds/welcome.ogg`.<br />
+`sound: music/welcome` points to `plugins/Oraxen/pack/sounds/music/welcome.ogg`.<br />
+
+The `.ogg` extension is optional.
+</Callout>
+
+## Sound Entry
+
+Each entry under `sounds:` becomes one sound event.
+
+<Details>
+  <summary><h4>🎵 `category`</h4></summary>
+Sets the sound category used when the sound plays.<br />
+
+```yaml
+sounds:
+  welcome:
+    category: records
+```
+
+- **Type -** `string`
+- **Default -** `master`
+- **Format -** Bukkit `SoundCategory`
+
+<Callout type="info">
+  Common values include `master`, `music`, `records`, `block`, `hostile`, `neutral`, `players`, `ambient`, `voice`, and `weather`.
+</Callout>
+</Details>
+
+<Details>
+  <summary><h4>🎧 `sound` / `sounds`</h4></summary>
+Defines the audio file or files used by the sound event.<br />
+
+```yaml
+sounds:
+  welcome:
+    sound: welcome.ogg
+```
+
+or
+
+```yaml
+sounds:
+  welcome:
+    sounds:
+      - welcome_1
+      - welcome_2
+      - welcome_3
+```
+
+- **Type -** `string` or `array`
+- **Format -** file path relative to `plugins/Oraxen/pack/sounds/`
+
+<Callout type="info">
+  If `sounds` is empty, Oraxen falls back to `sound` when it is present.
+</Callout>
+</Details>
+
+<Details>
+  <summary><h4>📝 `subtitle`</h4></summary>
+Sets the subtitle shown when the sound plays.<br />
+
+```yaml
+sounds:
+  welcome:
+    subtitle: "Welcome Song"
+```
+
+- **Type -** `string`
+</Details>
+
+<Details>
+  <summary><h4>🔁 `replace`</h4></summary>
+Marks the sound event as a replacement for an existing vanilla entry.<br />
+
+```yaml
+sounds:
+  block.wood.place:
+    replace: true
+```
+
+- **Type -** `boolean`
+- **Default -** `false`
+</Details>
+
+<Details>
+  <summary><h4>📡 `stream`</h4></summary>
+Tells Minecraft to stream the audio instead of loading it like a short sound effect.<br />
+
+```yaml
+sounds:
+  welcome:
+    stream: true
+```
+
+- **Type -** `boolean`
+- **Default -** `false`
+</Details>
+
+<Details>
+  <summary><h4>💿 `jukebox_song`</h4></summary>
+Generates a custom jukebox song datapack entry for this sound.<br />
+
+```yaml
+sounds:
+  welcome:
+    jukebox_song:
+      description: "<gold>Welcome <yellow>Song</yellow></gold>"
+      length_in_seconds: 180
+      comparator_output: 12
+```
+
+- **Type -** `object`
+
+- **Fields**
+  - `description` - `string`, MiniMessage formatted, default `<white>Music Disc</white>`
+  - `length_in_seconds` - `integer`, default `120`
+  - `comparator_output` - `integer`, default `15`
+
+<Callout type="info">
+  When this section is present, Oraxen also generates the jukebox datapack automatically.
+</Callout>
+</Details>
+
+## Example
+
+```yaml
+settings:
+  automatically_generate: true
+
+sounds:
+  welcome:
+    category: records
+    sound: welcome.ogg
+    stream: true
+    subtitle: "Welcome Song"
+    jukebox_song:
+      description: "<gold>Welcome <yellow>Song</yellow></gold>"
+      length_in_seconds: 180
+      comparator_output: 12
+
+  block.wood.place:
+    replace: true
+
+  block.wood.break:
+    replace: true
+```
