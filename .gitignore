@@ -132,3 +132,5 @@ $RECYCLE.BIN/
 *.lnk
 
 pnpm-lock.yaml
+bun.lock
+package-lock.json
