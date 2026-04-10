@@ -20,7 +20,7 @@ Oraxen includes built-in Skript compatibility that loads automatically when [Skr
 ### ⚡️ Expressions
 
 <details>
-<summary><strong>Get Oraxen Item</strong></summary>
+<summary id="get-oraxen-item"><strong>Get Oraxen Item</strong></summary>
 
 Get an ItemStack from an Oraxen item ID.
 
@@ -37,7 +37,7 @@ drop oraxen item "custom_helmet" at player's location
 </details>
 
 <details>
-<summary><strong>Get Oraxen ID</strong></summary>
+<summary id="get-oraxen-id"><strong>Get Oraxen ID</strong></summary>
 
 Get the Oraxen ID from an ItemStack, Block, Entity, or Location.
 
@@ -55,7 +55,7 @@ if oraxen id of target entity is "treasure_chest":
 </details>
 
 <details>
-<summary><strong>Get Oraxen Block</strong></summary>
+<summary id="get-oraxen-block"><strong>Get Oraxen Block</strong></summary>
 
 Get the Oraxen block ID at a location or block.
 
@@ -72,7 +72,7 @@ if oraxen block at clicked block exists:
 </details>
 
 <details>
-<summary><strong>Get Oraxen Furniture</strong></summary>
+<summary id="get-oraxen-furniture"><strong>Get Oraxen Furniture</strong></summary>
 
 Get the Oraxen furniture ID at a location, block, or from an entity.
 
@@ -93,7 +93,7 @@ if oraxen furniture at clicked entity is "wooden_chair":
 ### ❔ Conditions
 
 <details>
-<summary><strong>Is Oraxen Item</strong></summary>
+<summary id="is-oraxen-item"><strong>Is Oraxen Item</strong></summary>
 
 Check if an item is an Oraxen item.
 
@@ -113,7 +113,7 @@ if player's tool is oraxen item "ruby_sword":
 </details>
 
 <details>
-<summary><strong>Is Oraxen Block</strong></summary>
+<summary id="is-oraxen-block"><strong>Is Oraxen Block</strong></summary>
 
 Check if a block is an Oraxen custom block.
 
@@ -133,7 +133,7 @@ if block at player's location is oraxen block "ruby_ore":
 </details>
 
 <details>
-<summary><strong>Is Oraxen Furniture</strong></summary>
+<summary id="is-oraxen-furniture"><strong>Is Oraxen Furniture</strong></summary>
 
 Check if an entity, block, or location is Oraxen furniture.
 
@@ -159,7 +159,7 @@ if clicked entity is oraxen furniture "wooden_chair":
 All events support filtering by a specific Oraxen item ID using `of "item_id"`.
 
 <details>
-<summary><strong>Oraxen Block Break</strong></summary>
+<summary id="oraxen-block-break"><strong>Oraxen Block Break</strong></summary>
 
 Called when a player breaks an Oraxen custom block (NoteBlock or StringBlock).
 
@@ -180,7 +180,7 @@ on oraxen block break of "ruby_ore":
 </details>
 
 <details>
-<summary><strong>Oraxen Block Place</strong></summary>
+<summary id="oraxen-block-place"><strong>Oraxen Block Place</strong></summary>
 
 Called when a player places an Oraxen custom block.
 
@@ -201,7 +201,7 @@ on oraxen block place of "tnt_block":
 </details>
 
 <details>
-<summary><strong>Oraxen Block Interact</strong></summary>
+<summary id="oraxen-block-interact"><strong>Oraxen Block Interact</strong></summary>
 
 Called when a player interacts with an Oraxen custom block.
 
@@ -218,7 +218,7 @@ on oraxen block interact of "magic_chest":
 </details>
 
 <details>
-<summary><strong>Oraxen Furniture Break</strong></summary>
+<summary id="oraxen-furniture-break"><strong>Oraxen Furniture Break</strong></summary>
 
 Called when a player breaks Oraxen furniture.
 
@@ -239,7 +239,7 @@ on oraxen furniture break of "expensive_chair":
 </details>
 
 <details>
-<summary><strong>Oraxen Furniture Place</strong></summary>
+<summary id="oraxen-furniture-place"><strong>Oraxen Furniture Place</strong></summary>
 
 Called when a player places Oraxen furniture.
 
@@ -256,7 +256,7 @@ on oraxen furniture place of "lamp":
 </details>
 
 <details>
-<summary><strong>Oraxen Furniture Interact</strong></summary>
+<summary id="oraxen-furniture-interact"><strong>Oraxen Furniture Interact</strong></summary>
 
 Called when a player interacts with Oraxen furniture.
 
@@ -281,7 +281,7 @@ on oraxen furniture interact of "treasure_chest":
 ### 🔧 Effects
 
 <details>
-<summary><strong>Place Oraxen Block</strong></summary>
+<summary id="place-oraxen-block"><strong>Place Oraxen Block</strong></summary>
 
 Place an Oraxen custom block at a location.
 
@@ -297,7 +297,7 @@ place oraxen block "custom_stone" at {_locations::*}
 </details>
 
 <details>
-<summary><strong>Place Oraxen Furniture</strong></summary>
+<summary id="place-oraxen-furniture"><strong>Place Oraxen Furniture</strong></summary>
 
 Place Oraxen furniture at a location.
 
@@ -313,7 +313,7 @@ spawn oraxen furniture "lamp" at {_location}
 </details>
 
 <details>
-<summary><strong>Remove Oraxen Block</strong></summary>
+<summary id="remove-oraxen-block"><strong>Remove Oraxen Block</strong></summary>
 
 Remove an Oraxen block at a location (without drops).
 
@@ -329,7 +329,7 @@ remove oraxen block at clicked block
 </details>
 
 <details>
-<summary><strong>Remove Oraxen Furniture</strong></summary>
+<summary id="remove-oraxen-furniture"><strong>Remove Oraxen Furniture</strong></summary>
 
 Remove Oraxen furniture at a location or entity (without drops).
 

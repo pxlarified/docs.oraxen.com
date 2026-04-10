@@ -1,0 +1,85 @@
+---
+title: "🪽 Creating an Elytra..."
+description: "Creating an elytra."
+---
+
+import { Callout, Steps } from 'nextra/components'
+import Highlight from '../../../components/Highlight.js'
+
+# 🪽 Creating an Elytra...
+
+## Overview
+Elytras & Armor is controlled via the <Highlight color="#1877F2">**Equippable**</Highlight> Component. Elytras are made out of 2 assets, an "icon" model / texture and a wing texture. 
+
+## Tutorial
+
+<Steps>
+
+### Create the Elytra item
+Create a new item in the items directory (or edit an existing `.yml` file).
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/items",
+              name: "items",
+              children: [
+                {
+                  id: "plugins/Oraxen/items/elytras.yml",
+                  name: "elytras.yml",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ]}
+/>
+
+```yaml
+magic_elytra:
+  itemname: "<gradient:#9B59B6:#5B6BBF:#1A237E>Magic Elytra</gradient>"
+  material: ELYTRA
+  Components:
+    max_stack_size: 1
+    equippable:
+      slot: CHEST
+      model: oraxen:magic_elytra
+  Pack:
+    generate_model: true
+    parent_model: item/generated
+    textures:
+      - default/armors/magic_elytra_icon
+```
+
+`itemname` - The display name shown for the item.<br />
+`material` - The base Minecraft material used for the item.<br />
+
+`Components` - Vanilla item component settings for the item.<br />
+`max_stack_size` - Limits the item to a stack size of `1`.<br />
+`equippable` - Makes the item wearable in the chest slot.<br />
+`slot` - The equipment slot used by the item.<br />
+
+### Adding the textures / models
+Place your icon at `plugins/Oraxen/pack/textures/default/armors/magic_elytra_icon.png`.
+
+Place your Elytra texture at `plugins/Oraxen/pack/textures/default/armors/magic_elytra.png`.
+
+
+### Reload and regenerate pack
+Run `/oraxen reload all` and then give yourself the item via `/oraxen give <youritemname>` (or get it from `/oraxen inv`).
+</Steps>
+
+## Troubleshooting
+- Missing texture in inventory - check `Pack.textures` and icon file path.
+- Texture in inventory works, but worn Elytra is wrong - check `equippable.model` and `magic_elytra.png` file path.
+- No visible changes - reload Oraxen and re-apply the generated resource pack.

@@ -15,16 +15,20 @@ Oraxen allows you to configure MythicHUD and Oraxen to work fully compatible tog
   HappyHUD has been rebranded to **MythicHUD** and is now part of the MythicCraft ecosystem. If you're migrating from HappyHUD, MythicHUD includes automatic migration support.
 </Callout>
 
+<Callout type="important">
+    Steps marked with <Highlight color="#e74c3c">**Optional**</Highlight> mean that these steps are not necessarily required and you should only follow them if the pack fails to download / you are having issues. 
+</Callout>
+
 ## Merging
 Merging a pack into Oraxen is simple and we have a dedicated documentation page for it [here](./usage/merging).
 
 1. Go to Oraxens settings.yml (`plugins/Oraxen/settings.yml`)
 2. Ensure `hide_scoreboard_numbers` is set to `false`. (`plugins/Oraxen/settings.yml`)
-3. Ensure `TextEffects` is set to `Enabled: false`. (`plugins/Oraxen/settings.yml`)
-4. Ensure you have no animated glyphs configured. (No glyphs of the <Highlight color="#1877F2" to="./configuration/glyphs/animations">**Animation**</Highlight> type)
+3. Ensure `TextEffects` is set to `Enabled: false`. (`plugins/Oraxen/settings.yml`) <Highlight color="#e74c3c">**Optional**</Highlight>
+4. Ensure you have no animated glyphs configured. (No glyphs of the <Highlight color="#1877F2">**Animation**</Highlight> type) <Highlight color="#e74c3c">**Optional**</Highlight>
 5. Edit your MythicHUD configuration to have the `copy_path` set to `Oraxen/pack/uploads/MythicHUD.zip`.
 <details>
-<summary>Config</summary>
+<summary id="config"><strong>Config</strong></summary>
 ```yml
 copy-pack:
   enabled: true

@@ -11,6 +11,10 @@ import { Callout, Details } from 'nextra/components'
 ## Overview
 Components define modern vanilla item behavior in Oraxen, such as food values, durability, equipping, stack size, cooldowns, and custom tooltip or model settings.
 
+<Callout>
+    Didn't found the component you need? Oraxen supports all vanilla (and custom) components. See more <Highlight color="#FFA500" to="#generic">**here**</Highlight>.
+</Callout>
+
 ## Configuration
 Components are configured per item in `.yml` files inside the `plugins/Oraxen/items` directory.
 
@@ -48,7 +52,7 @@ Components are configured per item in `.yml` files inside the `plugins/Oraxen/it
 ## Components
 
 <Details>
-    <summary><h4>📦 `max_stack_size`</h4></summary>
+<summary id="max_stack_size"><strong>📦 `max_stack_size`</strong></summary>
 Sets the maximum stack size of the item.<br />
 
 ```yaml
@@ -57,14 +61,15 @@ myitem:
     max_stack_size: 64
 ```
 
-- **Type -** `integer`
-- **Minimum -** `1`
-- **Maximum -** `99`
-- **Minecraft version -** `1.20.5+`
+**Range**<br />
+`1` to `99`
+
+**Minecraft version**<br />
+`1.20.5+`
 </Details>
 
 <Details>
-    <summary><h4>🔥 `fire_resistant`</h4></summary>
+<summary id="fire_resistant"><strong>🔥 `fire_resistant`</strong></summary>
 Makes the item immune to fire and lava damage when dropped.<br />
 
 ```yaml
@@ -73,12 +78,12 @@ myitem:
     fire_resistant: true
 ```
 
-- **Type -** `boolean`
-- **Minecraft version -** `1.20.5+`
+**Minecraft version**<br />
+`1.20.5+`
 </Details>
 
 <Details>
-    <summary><h4>🙈 `hide_tooltip`</h4></summary>
+<summary id="hide_tooltip"><strong>🙈 `hide_tooltip`</strong></summary>
 Hides the item's tooltip entirely.<br />
 
 ```yaml
@@ -87,12 +92,12 @@ myitem:
     hide_tooltip: true
 ```
 
-- **Type -** `boolean`
-- **Minecraft version -** `1.20.5+`
+**Minecraft version**<br />
+`1.20.5+`
 </Details>
 
 <Details>
-    <summary><h4>🔨 `durability`</h4></summary>
+<summary id="durability"><strong>🔨 `durability`</strong></summary>
 Defines custom durability behavior for the item.<br />
 
 ```yaml
@@ -104,21 +109,20 @@ myitem:
       damage_entity_hit: true
 ```
 
-- **Type -** `object`
-- **Minecraft version -** `1.20.5+`<br />
-<br />
-- **Fields**
-  - `value` - `integer`, minimum `1`
-  - `damage_block_break` - `boolean`, default `true`
-  - `damage_entity_hit` - `boolean`, default `true`
+**Minecraft version**<br />
+`1.20.5+`
+
+**Fields**<br />
+`value` sets the durability value and must be at least `1`.<br />
+`damage_block_break` and `damage_entity_hit` are booleans and default to `true`.
 
 <Callout type="info">
-    On modern versions, this replaces the legacy `durability` mechanic for item durability configuration.
+  On modern versions, this replaces the legacy `durability` mechanic for item durability configuration.
 </Callout>
 </Details>
 
 <Details>
-    <summary><h4>🍖 `food`</h4></summary>
+<summary id="food"><strong>🍖 `food`</strong></summary>
 Makes the item behave like food and defines how much hunger and saturation it restores.<br />
 
 ```yaml
@@ -130,21 +134,21 @@ myitem:
       can_always_eat: false
 ```
 
-- **Type -** `object`
-- **Minecraft version -** `1.20.5+`<br />
-<br />
-- **Fields**
-  - `nutrition` - `integer`, minimum `0`
-  - `saturation` - `number`, minimum `0`
-  - `can_always_eat` - `boolean`, default `false`
+**Minecraft version**<br />
+`1.20.5+`
+
+**Fields**<br />
+`nutrition` sets the hunger restored and must be at least `0`.<br />
+`saturation` sets the saturation restored and must be at least `0`.<br />
+`can_always_eat` allows the item to be consumed even when the player is full and defaults to `false`.
 
 <Callout type="info">
-    On `1.20.5+`, prefer this component over the legacy `food` mechanic.
+  On `1.20.5+`, prefer this component over the legacy `food` mechanic.
 </Callout>
 </Details>
 
 <Details>
-    <summary><h4>🥤 `consumable`</h4></summary>
+<summary id="consumable"><strong>🥤 `consumable`</strong></summary>
 Controls how the item is consumed, including timing, animation, particles, and sound.<br />
 
 ```yaml
@@ -157,22 +161,22 @@ myitem:
       has_consume_particles: true
 ```
 
-- **Type -** `object`
-- **Minecraft version -** `1.21.2+`<br />
-<br />
-- **Fields**
-  - `consume_seconds` - `number`, minimum `0`, default `1.6`
-  - `animation` - `string`
-  - `sound` - `string`
-  - `has_consume_particles` - `boolean`, default `true`
+**Minecraft version**<br />
+`1.21.2+`
+
+**Fields**<br />
+`consume_seconds` is the consumption time in seconds and defaults to `1.6`.<br />
+`animation` defines the use animation.<br />
+`sound` defines the consume sound.<br />
+`has_consume_particles` controls whether consume particles are shown and defaults to `true`.
 
 <Callout type="info">
-    Valid sound keys use Minecraft sound resource locations, such as `entity.generic.eat` or `item.honey_bottle.drink`.
+  Valid sound keys use Minecraft sound resource locations, such as `entity.generic.eat` or `item.honey_bottle.drink`.
 </Callout>
 </Details>
 
 <Details>
-    <summary><h4>🛡️ `equippable`</h4></summary>
+<summary id="equippable"><strong>🛡️ `equippable`</strong></summary>
 Makes the item equippable and defines slot-related behavior.<br />
 
 ```yaml
@@ -188,35 +192,33 @@ myitem:
       camera_overlay: "oraxen:textures/misc/pumpkinblur.png"
 ```
 
-- **Type -** `object`
-- **Minecraft version -** `1.21.2+`<br />
-<br />
-- **Fields**
-  - `slot` - `EquipmentSlot`, required
-  - `model` - `string`
-  - `equip_sound` - `string`
-  - `dispensable` - `boolean`, default `true`
-  - `swappable` - `boolean`, default `true`
-  - `damage_on_hurt` - `boolean`, default `true`
-  - `camera_overlay` - `string`
-<br />
-- **Supported `slot` values**
-  - `HAND`
-  - `OFF_HAND`
-  - `FEET`
-  - `LEGS`
-  - `CHEST`
-  - `HEAD`
-  - `BODY`
-  - `SADDLE`
+**Minecraft version**<br />
+`1.21.2+`
+
+**Fields**<br />
+`slot` is required and defines the equipment slot.<br />
+`model` defines the model resource location.<br />
+`equip_sound` defines the equip sound.<br />
+`dispensable`, `swappable`, and `damage_on_hurt` default to `true`.<br />
+`camera_overlay` defines the overlay texture.
+
+**Slot groups**<br />
+- `HAND`
+- `OFF_HAND`
+- `FEET`
+- `LEGS`
+- `CHEST`
+- `HEAD`
+- `BODY`
+- `SADDLE`
 
 <Callout type="info">
-    On `1.21.2+`, this replaces older behaviors such as the legacy `hat` mechanic for wearable items.
+  On `1.21.2+`, this replaces older behaviors such as the legacy `hat` mechanic for wearable items.
 </Callout>
 </Details>
 
 <Details>
-    <summary><h4>⛏️ `tool`</h4></summary>
+<summary id="tool"><strong>⛏️ `tool`</strong></summary>
 Defines tool mining behavior, including default speed and optional mining rules.<br />
 
 ```yaml
@@ -231,17 +233,17 @@ myitem:
           correct_for_drops: true
 ```
 
-- **Type -** `object`
-- **Minecraft version -** `1.20.5+`<br />
-<br />
-- **Fields**
-  - `damage_per_block` - `integer`, minimum `0`, default `1`
-  - `default_mining_speed` - `number`, minimum `0`, default `1.0`
-  - `rules` - `array`
+**Minecraft version**<br />
+`1.20.5+`
+
+**Fields**<br />
+`damage_per_block` sets the durability damage dealt per block and defaults to `1`.<br />
+`default_mining_speed` sets the mining speed and defaults to `1.0`.<br />
+`rules` defines optional mining rules for specific block tags or blocks.
 </Details>
 
 <Details>
-    <summary><h4>⏱️ `use_cooldown`</h4></summary>
+<summary id="use_cooldown"><strong>⏱️ `use_cooldown`</strong></summary>
 Adds a cooldown after using the item.<br />
 
 ```yaml
@@ -252,16 +254,16 @@ myitem:
       group: "magic_wands"
 ```
 
-- **Type -** `object`
-- **Minecraft version -** `1.21.2+`<br />
-<br />
-- **Fields**
-  - `seconds` - `number`, minimum `0`
-  - `group` - `string`
+**Minecraft version**<br />
+`1.21.2+`
+
+**Fields**<br />
+`seconds` sets the cooldown duration in seconds and must be at least `0`.<br />
+`group` defines the shared cooldown group.
 </Details>
 
 <Details>
-    <summary><h4>🪣 `use_remainder`</h4></summary>
+<summary id="use_remainder"><strong>🪣 `use_remainder`</strong></summary>
 Defines which item remains after the item is consumed or used up.<br />
 
 ```yaml
@@ -272,8 +274,6 @@ myitem:
       amount: 1
 ```
 
-or
-
 ```yaml
 myitem:
   components:
@@ -282,21 +282,16 @@ myitem:
       amount: 1
 ```
 
-- **Type -** `object`
-- **Minecraft version -** `1.21.2+`<br />
-<br />
-- **Fields**
-- `oraxen_item` - `string`
-- `minecraft_type` - `string`
-- `crucible_item` - `string`
-- `mmoitems_id` - `string`
-- `mmoitems_type` - `string`
-- `ecoitem_id` - `string`
-- `amount` - `integer`, minimum `1`, default `1`
+**Minecraft version**<br />
+`1.21.2+`
+
+**Fields**<br />
+`oraxen_item`, `minecraft_type`, `crucible_item`, `mmoitems_id`, `mmoitems_type`, and `ecoitem_id` define the item that is returned.<br />
+`amount` sets how many of that item remain and defaults to `1`.
 </Details>
 
 <Details>
-    <summary><h4>🎵 `jukebox_playable`</h4></summary>
+<summary id="jukebox_playable"><strong>🎵 `jukebox_playable`</strong></summary>
 Makes the item playable in jukeboxes.<br />
 
 ```yaml
@@ -307,22 +302,23 @@ myitem:
       song_key: "oraxen:my_song"
 ```
 
-- **Type -** `object`
-- **Minecraft version -** `1.21+`<br />
-<br />
-- **Fields**
-  - `show_in_tooltip` - `boolean`, default `true`
-  - `song_key` - `string`
+**Minecraft version**<br />
+`1.21+`
 
-- **Format -** `song_key` should be a namespaced key such as `minecraft:cat` or `oraxen:my_song`
+**Fields**<br />
+`show_in_tooltip` controls whether the song appears in the tooltip and defaults to `true`.<br />
+`song_key` is the namespaced song key.
+
+**Format**<br />
+`song_key` should be a namespaced key such as `minecraft:cat` or `oraxen:my_song`.
 
 <Callout type="info">
-    On `1.21+`, prefer this component over the deprecated legacy `music_disc` mechanic.
+  On `1.21+`, prefer this component over the deprecated legacy `music_disc` mechanic.
 </Callout>
 </Details>
 
 <Details>
-    <summary><h4>💬 `tooltip_style`</h4></summary>
+<summary id="tooltip_style"><strong>💬 `tooltip_style`</strong></summary>
 Sets a custom tooltip style resource location.<br />
 
 ```yaml
@@ -331,12 +327,12 @@ myitem:
     tooltip_style: "oraxen:epic_tooltip"
 ```
 
-- **Type -** `string`
-- **Minecraft version -** `1.21.2+`
+**Minecraft version**<br />
+`1.21.2+`
 </Details>
 
 <Details>
-    <summary><h4>🖼️ `item_model`</h4></summary>
+<summary id="item_model"><strong>🖼️ `item_model`</strong></summary>
 Sets a custom item model resource location through the component system.<br />
 
 ```yaml
@@ -345,9 +341,35 @@ myitem:
     item_model: "oraxen:weapons/flame_blade"
 ```
 
-- **Type -** `string`
-- **Minecraft version -** `1.21.2+`
+**Minecraft version**<br />
+`1.21.2+`
 </Details>
+
+<Details>
+<summary id="generic"><strong>➕ `generic`</strong></summary>
+Allows you to use any minecraft component, even if they are not specifically handled by Oraxen.<br />
+
+```yaml
+myitem:
+  components:
+    repairable:
+      items:
+        - minecraft:diamond
+```
+
+```yaml
+myitem:
+  components:
+    custom_component:
+      some_property: value
+      another_property: 123
+```
+
+**Minecraft version**<br />
+`1.21.3+`
+</Details>
+
+
 
 ## Example
 
@@ -376,10 +398,3 @@ myitem:
     tooltip_style: "oraxen:food/meal"
     item_model: "oraxen:food/travelers_meal"
 ```
-
-## Notes
-- Components are configured inside the item's `components:` section.
-- Most components listed here are intended for modern Minecraft item data on `1.20.5+` or newer.
-- Some components, such as `consumable`, `equippable`, `use_cooldown`, `use_remainder`, `tooltip_style`, and `item_model`, require `1.21.2+`.
-- This page intentionally excludes item properties and mechanics.
-- Where the schema does not fully describe nested array entries, the examples above show the expected practical layout rather than a fully schema-defined structure.

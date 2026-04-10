@@ -1,5 +1,5 @@
 import { useMDXComponents as getDocsMDXComponents } from "nextra-theme-docs";
-import PluginFileTree from "./app/components/PluginFileTree";
+import PluginFileTree from "./components/PluginFileTree";
 
 const docsComponents = getDocsMDXComponents();
 
