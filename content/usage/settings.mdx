@@ -1,0 +1,371 @@
+---
+title: "⚙️ Settings"
+description: "All available Oraxen settings."
+asIndexPage: true
+---
+
+import Highlight from '../../components/Highlight.js'
+import { Callout, Details } from 'nextra/components'
+
+# ⚙️ Settings
+
+## Overview
+Oraxen is managed through the `/oraxen` root command. It also includes the `/o` and `/oxn` aliases. Most subcommands are intended for administrators, while a few are player-facing tools such as item browsing, emoji browsing, and HUD toggling.
+
+## Settings
+The examples below show the most important parts of `settings.yml`. Each section is collapsed into a `Details` block so you can quickly scan what a setting group does before opening the sample config.
+
+<Details>
+<summary id="debug"><strong>🚩 `debug`</strong></summary>
+
+Toggles debug mode, which will output detailed additional informational messages to the console. This option can also be toggled via the `/oraxen debug` command.
+
+```yaml
+debug: false
+```
+
+`debug` - Enables verbose console logging for Oraxen diagnostics. Use this when you need extra information while troubleshooting.<br />
+
+</Details>
+
+<Details>
+<summary id="plugin"><strong>🧩 `Plugin`</strong></summary>
+
+Controls Oraxen's global behavior. This includes config housekeeping, language selection, repair-command behavior, Paper config tweaks for custom blocks, default asset/config generation, and which UI surfaces use MiniMessage formatting.
+
+```yaml
+Plugin:
+  keep_this_up_to_date: true
+  language: "english"
+  commands:
+    repair:
+      oraxen_durability_only: false
+  auto_update_paper_config: true
+  generation:
+    default_assets: true
+    default_configs: true
+  formatting:
+    inventory_titles: true
+    titles: true
+    subtitles: true
+    action_bar: true
+    anvil: true
+    signs: true
+    chat: true
+    books: true
+```
+
+`keep_this_up_to_date` - Automatically updates the config when new settings are added by an update.<br />
+`language` - Selects the language file Oraxen uses for messages.<br />
+`commands.repair.oraxen_durability_only` - Makes `/oraxen repair` skip vanilla item durability if enabled.<br />
+`auto_update_paper_config` - Updates `paper-global.yml` to disable block updates for custom blocks.<br />
+`generation.default_assets` - Generates the default resource-pack assets that ship with Oraxen.<br />
+`generation.default_configs` - Generates the default config files that Oraxen provides.<br />
+`formatting.inventory_titles` - Formats inventory titles with MiniMessage.<br />
+`formatting.titles` - Formats title packets with MiniMessage.<br />
+`formatting.subtitles` - Formats subtitle packets with MiniMessage.<br />
+`formatting.action_bar` - Formats action bar messages with MiniMessage.<br />
+`formatting.anvil` - Formats anvil result text sent by plugins.<br />
+`formatting.signs` - Formats sign text when placed or edited.<br />
+`formatting.chat` - Formats chat messages and glyphs in chat.<br />
+`formatting.books` - Formats glyphs shown in written books.<br />
+
+</Details>
+
+<Details>
+<summary id="worldedit"><strong>🧱 `WorldEdit`</strong></summary>
+
+Experimental clipboard support for note blocks, string blocks, and furniture when copying and pasting with WorldEdit.
+
+```yaml
+WorldEdit:
+  noteblock_mechanic: false
+  stringblock_mechanic: false
+  furniture_mechanic: false
+```
+
+`noteblock_mechanic` - Enables WorldEdit support for copying and pasting note blocks.<br />
+`stringblock_mechanic` - Enables WorldEdit support for copying and pasting string blocks.<br />
+`furniture_mechanic` - Enables WorldEdit support for copying and pasting furniture.<br />
+
+</Details>
+
+<Details>
+<summary id="configstools"><strong>🛠️ `ConfigsTools`</strong></summary>
+
+Controls config migration helpers, model-data skipping, glyph-code generation, and the fallback item shown when a config entry cannot be resolved.
+
+```yaml
+ConfigsTools:
+  skipped_model_data_numbers: []
+  disable_automatic_model_data: false
+  disable_automatic_glyph_code: false
+  enable_configs_updater: true
+  error_item:
+    material: PODZOL
+    excludeFromInventory: false
+    injectID: false
+```
+
+`skipped_model_data_numbers` - Reserves specific CustomModelData values so Oraxen will not assign them automatically.<br />
+`disable_automatic_model_data` - Stops Oraxen from assigning model data values on its own.<br />
+`disable_automatic_glyph_code` - Stops Oraxen from auto-generating glyph codes.<br />
+`enable_configs_updater` - Enables the config updater that migrates older configs to newer formats.<br />
+`error_item.material` - Material used for the fallback item shown when a config entry fails.<br />
+`error_item.excludeFromInventory` - Hides the fallback item from inventories when enabled.<br />
+`error_item.injectID` - Injects the invalid entry's ID into the fallback item for easier debugging.<br />
+
+</Details>
+
+<Details>
+<summary id="glyphs"><strong>✦ `Glyphs`</strong></summary>
+
+Configures the glyph backend, whether emojis are hidden behind permissions, how Unicode completions behave, and the hover text shown when a glyph is displayed in chat.
+
+```yaml
+Glyphs:
+  glyph_handler: VANILLA
+  emoji_list_permission_only: true
+  unicode_completions: true
+  chat_hover_text: "<glyph_placeholder>"
+```
+
+`glyph_handler` - Chooses the backend Oraxen uses to render glyphs.<br />
+`emoji_list_permission_only` - Shows only emojis the player has permission to use.<br />
+`unicode_completions` - Makes glyph tab completion show Unicode values instead of placeholders.<br />
+`chat_hover_text` - Sets the hover text shown for glyphs in chat.<br />
+
+</Details>
+
+<Details>
+<summary id="texteffects"><strong>✨ `TextEffects`</strong></summary>
+
+Enables shader-driven animated text effects and controls which shader template and encoding strategy Oraxen uses when rendering them.
+
+```yaml
+TextEffects:
+  enabled: true
+  shader:
+    template: auto
+    encoding: alpha_lsb
+```
+
+`enabled` - Master toggle for all shader-based text effects.<br />
+`shader.template` - Chooses which shader template Oraxen uses for text effects.<br />
+`shader.encoding` - Chooses how text color information is encoded for shader effects.<br />
+
+</Details>
+
+<Details>
+<summary id="chat"><strong>💬 `Chat`</strong></summary>
+
+Controls how glyphs are rendered in chat. `MODERN` is the default for current servers, while `LEGACY` is the fallback when another chat pipeline interferes with glyph rendering.
+
+```yaml
+Chat:
+  chat_handler: MODERN
+```
+
+`chat_handler` - Chooses the chat rendering mode used for glyphs in chat. Use `LEGACY` only if `MODERN` causes display issues.<br />
+
+</Details>
+
+<Details>
+<summary id="customarmor"><strong>🛡️ `CustomArmor`</strong></summary>
+
+Controls which custom armor system Oraxen uses, whether leather repair is allowed, and how component, trim, or shader-based armor assets are generated.
+
+```yaml
+CustomArmor:
+  type: COMPONENT
+  disable_leather_repair: true
+  component_settings:
+    auto_assign_component: true
+  trims_settings:
+    material_replacement: CHAINMAIL
+    auto_assign_settings: true
+  shader_settings:
+    type: FANCY
+    armor_resolution: 16
+    animated_armor_framerate: 24
+    generate_shader_compatible_armor: true
+    generate_armor_shader_files: true
+    generate_custom_armor_textures: true
+```
+
+`type` - Selects the custom armor system Oraxen should use.<br />
+`disable_leather_repair` - Prevents custom armor from being repaired with leather.<br />
+`component_settings.auto_assign_component` - Automatically adds the equippable component unless you set it manually.<br />
+`trims_settings.material_replacement` - Chooses the vanilla material used to represent trim-based armor.<br />
+`trims_settings.auto_assign_settings` - Automatically applies trim and item-flag settings for custom armor.<br />
+`shader_settings.type` - Chooses the shader armor style.<br />
+`shader_settings.armor_resolution` - Sets the source armor texture resolution used for shader generation.<br />
+`shader_settings.animated_armor_framerate` - Controls the framerate used for animated armor textures.<br />
+`shader_settings.generate_shader_compatible_armor` - Generates armor output compatible with the shader armor pipeline.<br />
+`shader_settings.generate_armor_shader_files` - Generates the shader files needed for custom armor.<br />
+`shader_settings.generate_custom_armor_textures` - Generates the custom armor textures themselves.<br />
+
+</Details>
+
+<Details>
+<summary id="customblocks"><strong>🧱 `CustomBlocks`</strong></summary>
+
+Handles block correction and note-block compatibility behavior for custom blocks.
+
+```yaml
+CustomBlocks:
+  block_correction: NMS
+  use_legacy_noteblocks: true
+```
+
+`block_correction` - Chooses how Oraxen corrects custom blocks after placement or load.<br />
+`use_legacy_noteblocks` - Keeps legacy note-block behavior enabled for compatibility.<br />
+
+</Details>
+
+<Details>
+<summary id="itemupdater"><strong>🔁 `ItemUpdater`</strong></summary>
+
+Keeps player inventories synced to the latest Oraxen item definitions on join and on reload.
+
+```yaml
+ItemUpdater:
+  update_items: true
+  override_renamed_items: false
+  override_item_lore: false
+  update_items_on_reload: true
+```
+
+`update_items` - Updates player inventories to the current item config when they join.<br />
+`override_renamed_items` - Replaces items even if they were renamed by a player.<br />
+`override_item_lore` - Forces item lore to match the Oraxen item definition.<br />
+`update_items_on_reload` - Re-applies item updates to online players after `/oraxen reload`.<br />
+
+</Details>
+
+<Details>
+<summary id="furnitureupdater"><strong>🪑 `FurnitureUpdater`</strong></summary>
+
+Keeps placed furniture synced when players join, reload items, or load entities and chunks, and can try to repair broken furniture.
+
+```yaml
+FurnitureUpdater:
+  update_furniture: true
+  update_on_reload: false
+  update_on_load: false
+  experimental_furniture_type_update: false
+  experimental_fix_broken_furniture: false
+```
+
+`update_furniture` - Keeps placed furniture synced with the current config.<br />
+`update_on_reload` - Updates furniture after an Oraxen reload.<br />
+`update_on_load` - Updates furniture when an entity is loaded.<br />
+`experimental_furniture_type_update` - Enables experimental furniture type migration.<br />
+`experimental_fix_broken_furniture` - Tries to repair furniture that is not placed or broken correctly.<br />
+
+</Details>
+
+<Details>
+<summary id="pack"><strong>📦 `Pack`</strong></summary>
+
+Controls the resource-pack pipeline: generation, importing external pack content, uploading, dispatching to players, and handling pack-status feedback.
+
+```yaml
+Pack:
+  generation:
+    generate: true
+    multi_version_packs: false
+  import:
+    merge_duplicate_fonts: true
+    merge_duplicates: true
+    remove_core_shaders_from_imported_packs: false
+  upload:
+    enabled: true
+    type: polymath
+  dispatch:
+    send_pre_join: false
+    send_on_join: true
+    send_on_reload: true
+    delay: -1
+    mandatory: true
+    disable_movement_on_load: true
+    disable_damage_on_load: true
+  receive:
+    enabled: true
+```
+
+`generation.generate` - Enables or disables all resource-pack generation.<br />
+`generation.multi_version_packs` - Generates separate packs for different client versions.<br />
+`import.merge_duplicate_fonts` - Merges duplicate font files from imported packs.<br />
+`import.merge_duplicates` - Merges duplicate imported resources when possible.<br />
+`import.remove_core_shaders_from_imported_packs` - Removes imported core shader files that would override Oraxen shaders.<br />
+`upload.enabled` - Enables uploading the generated resource pack to the selected host.<br />
+`upload.type` - Chooses the upload backend.<br />
+`dispatch.send_pre_join` - Sends the pack before join on supported Paper versions.<br />
+`dispatch.send_on_join` - Sends the pack after the player fully joins.<br />
+`dispatch.send_on_reload` - Resends the pack when Oraxen reloads.<br />
+`dispatch.delay` - Delays pack sending by the configured number of ticks.<br />
+`dispatch.mandatory` - Makes the pack required instead of optional.<br />
+`dispatch.disable_movement_on_load` - Freezes player movement while the pack loads.<br />
+`dispatch.disable_damage_on_load` - Prevents damage while the pack loads.<br />
+`receive.enabled` - Enables pack status feedback handling.<br />
+
+`generation` also covers item appearance systems, atlas generation, compression, pack protection, and file validation.
+
+</Details>
+
+<Details>
+<summary id="misc"><strong>⚙️ `Misc`</strong></summary>
+
+Contains the smaller global toggles that do not fit elsewhere, including recipes, scoreboard and tablist visuals, armor-equip bypasses, and vanilla item display overrides.
+
+```yaml
+Misc:
+  reset_recipes: true
+  add_recipes_to_book: true
+  hide_scoreboard_numbers: false
+  hide_scoreboard_background: false
+  hide_tablist_background: false
+  armor_equip_event_bypass:
+    - FURNACE
+    - CHEST
+    - TRAPPED_CHEST
+```
+
+`reset_recipes` - Resets Oraxen recipes on reload.<br />
+`add_recipes_to_book` - Adds unlocked Oraxen recipes to the player recipe book.<br />
+`hide_scoreboard_numbers` - Hides scoreboard numbers on the sidebar.<br />
+`hide_scoreboard_background` - Hides the scoreboard background.<br />
+`hide_tablist_background` - Hides the tablist background on 1.21+.<br />
+`armor_equip_event_bypass` - Lists blocks that should not trigger armor equip behavior when right-clicked.<br />
+
+</Details>
+
+<Details>
+<summary id="oraxen_inventory"><strong>🗂️ `oraxen_inventory`</strong></summary>
+
+Configures the built-in browser GUI that players open with Oraxen commands. It controls the menu title, pagination, and the category buttons shown in the item browser.
+
+```yaml
+oraxen_inventory:
+  main_menu_title: "<shift:-18><glyph:menu_items><shift:-193>"
+  menu_rows: 6
+  menu_size: 45
+  menu_layout:
+    armors:
+      slot: 1
+      icon: emerald_chestplate
+      displayname: "<green>Armors"
+      title: "<main_menu_title><#362753><glyph:menu_items_overlay:colorable>"
+```
+
+`main_menu_title` - Sets the title used for the main browser GUI.<br />
+`menu_rows` - Sets how many rows the GUI uses.<br />
+`menu_size` - Sets how many item slots are shown per page.<br />
+`menu_layout` - Defines the category buttons shown in the browser.<br />
+`menu_layout.armors.slot` - Chooses the slot used for the Armors category button.<br />
+`menu_layout.armors.icon` - Chooses the icon item shown for the Armors category.<br />
+`menu_layout.armors.displayname` - Sets the visible name of the Armors category button.<br />
+`menu_layout.armors.title` - Sets the GUI title shown when opening the Armors category.<br />
+
+</Details>

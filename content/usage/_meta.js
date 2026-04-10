@@ -3,5 +3,6 @@ export default {
   commands: '⌨️ Commands',
   recipes: '👨‍🍳 Recipes',
   merging: '📥 Pack Merging',
-  hosting: '📦 Pack Hosting'
+  hosting: '📦 Pack Hosting',
+  settings: '⚙️ Settings'
 }
