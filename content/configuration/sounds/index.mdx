@@ -64,9 +64,11 @@ sounds:
     category: records
 ```
 
-- **Type -** `string`
-- **Default -** `master`
-- **Format -** Bukkit `SoundCategory`
+**Default**
+`master`
+
+**Categories**<br />
+A full list of supported sound categories can be found <Highlight color="#1877F2" to="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/SoundCategory.html#enum-constant-summary">**here**</Highlight>.
 
 <Callout type="info">
   Common values include `master`, `music`, `records`, `block`, `hostile`, `neutral`, `players`, `ambient`, `voice`, and `weather`.
@@ -82,9 +84,6 @@ sounds:
   welcome:
     sound: welcome.ogg
 ```
-
-or
-
 ```yaml
 sounds:
   welcome:
@@ -94,8 +93,8 @@ sounds:
       - welcome_3
 ```
 
-- **Type -** `string` or `array`
-- **Format -** file path relative to `plugins/Oraxen/pack/sounds/`
+**Sounds**<br />
+Path to an existing sound file (relative to `pack/sounds/`, without `.ogg`).
 
 <Callout type="info">
   If `sounds` is empty, Oraxen falls back to `sound` when it is present.
@@ -111,8 +110,6 @@ sounds:
   welcome:
     subtitle: "Welcome Song"
 ```
-
-- **Type -** `string`
 </Details>
 
 <Details>
@@ -124,9 +121,6 @@ sounds:
   block.wood.place:
     replace: true
 ```
-
-- **Type -** `boolean`
-- **Default -** `false`
 </Details>
 
 <Details>
@@ -138,9 +132,6 @@ sounds:
   welcome:
     stream: true
 ```
-
-- **Type -** `boolean`
-- **Default -** `false`
 </Details>
 
 <Details>
@@ -156,12 +147,10 @@ sounds:
       comparator_output: 12
 ```
 
-- **Type -** `object`
-
-- **Fields**
-  - `description` - `string`, MiniMessage formatted, default `<white>Music Disc</white>`
-  - `length_in_seconds` - `integer`, default `120`
-  - `comparator_output` - `integer`, default `15`
+**Fields**<br />
+`description` - `string`, MiniMessage formatted, default `<white>Music Disc</white>`<br />
+`length_in_seconds` - `integer`, default `120`<br />
+`comparator_output` - `integer`, default `15`<br />
 
 <Callout type="info">
   When this section is present, Oraxen also generates the jukebox datapack automatically.

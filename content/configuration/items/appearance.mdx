@@ -103,36 +103,24 @@ Pack:
     <summary id="item_properties"><strong>🧩 `item_properties`</strong></summary>
 Uses the `minecraft:item_model` component (1.21.4+) with keys like `oraxen:<item_id>`.
 Oraxen generates item definition files at `assets/oraxen/items/<item_id>.json` that point to your model.
-
-- **Type -** `boolean`
-- **Default -** `true` on `1.21.4+`
 </Details>
 
 <Details>
     <summary id="model_data_ids"><strong>🏷️ `model_data_ids`</strong></summary>
 Uses `custom_model_data.strings[0] = "oraxen:<item_id>"` and generates `assets/minecraft/items/<material>.json`
 with `minecraft:select` dispatchers.
-
-- **Type -** `boolean`
-- **Default -** `false`
 </Details>
 
 <Details>
     <summary id="model_data_float"><strong>🔢 `model_data_float`</strong></summary>
 Uses `custom_model_data.floats[0] = <custom_model_data>` and generates `assets/minecraft/items/<material>.json`
 with `minecraft:range_dispatch`. Oraxen also sets integer CustomModelData on the item for compatibility.
-
-- **Type -** `boolean`
-- **Default -** `false`
 </Details>
 
 <Details>
     <summary id="generate_predicates"><strong>🧱 `generate_predicates`</strong></summary>
 Generates legacy predicate overrides in `assets/minecraft/models/item/*.json`. Not required on `1.21.4+`,
 but useful when external tools still read legacy predicate models.
-
-- **Type -** `boolean`
-- **Default -** `false`
 </Details>
 
 <Callout type="info">
