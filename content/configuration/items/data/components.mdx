@@ -56,7 +56,7 @@ Sets the maximum stack size of the item.<br />
 
 ```yaml
 myitem:
-  components:
+  Components:
     max_stack_size: 64
 ```
 
@@ -73,7 +73,7 @@ Overrides the enchantment glint of an item.<br />
 
 ```yaml
 myitem:
-  components:
+  Components:
     enchantment_glint_override: true
 ```
 	
@@ -91,7 +91,7 @@ Makes the item immune to fire and lava damage when dropped.<br />
 
 ```yaml
 myitem:
-  components:
+  Components:
     fire_resistant: true
 ```
 
@@ -105,7 +105,7 @@ Hides the item's tooltip entirely.<br />
 
 ```yaml
 myitem:
-  components:
+  Components:
     hide_tooltip: true
 ```
 
@@ -119,7 +119,7 @@ Defines custom durability behavior for the item.<br />
 
 ```yaml
 myitem:
-  components:
+  Components:
     durability:
       value: 250
       damage_block_break: true
@@ -144,7 +144,7 @@ Makes the item behave like food and defines how much hunger and saturation it re
 
 ```yaml
 myitem:
-  components:
+  Components:
     food:
       nutrition: 6
       saturation: 7.2
@@ -170,7 +170,7 @@ Controls how the item is consumed, including timing, animation, particles, and s
 
 ```yaml
 myitem:
-  components:
+  Components:
     consumable:
       consume_seconds: 1.6
       animation: "eat"
@@ -198,7 +198,7 @@ Makes the item equippable and defines slot-related behavior.<br />
 
 ```yaml
 myitem:
-  components:
+  Components:
     equippable:
       slot: HEAD
       model: "oraxen:my_helmet"
@@ -240,7 +240,7 @@ Defines tool mining behavior, including default speed and optional mining rules.
 
 ```yaml
 myitem:
-  components:
+  Components:
     tool:
       damage_per_block: 1
       default_mining_speed: 4.0
@@ -265,7 +265,7 @@ Adds a cooldown after using the item.<br />
 
 ```yaml
 myitem:
-  components:
+  Components:
     use_cooldown:
       seconds: 2.5
       group: "magic_wands"
@@ -285,7 +285,7 @@ Defines which item remains after the item is consumed or used up.<br />
 
 ```yaml
 myitem:
-  components:
+  Components:
     use_remainder:
       minecraft_type: "BOWL"
       amount: 1
@@ -293,7 +293,7 @@ myitem:
 
 ```yaml
 myitem:
-  components:
+  Components:
     use_remainder:
       oraxen_item: "empty_bottle"
       amount: 1
@@ -313,7 +313,7 @@ Makes the item playable in jukeboxes.<br />
 
 ```yaml
 myitem:
-  components:
+  Components:
     jukebox_playable:
       show_in_tooltip: true
       song_key: "oraxen:my_song"
@@ -340,7 +340,7 @@ Sets a custom tooltip style resource location.<br />
 
 ```yaml
 myitem:
-  components:
+  Components:
     tooltip_style: "oraxen:epic_tooltip"
 ```
 
@@ -354,7 +354,7 @@ Sets a custom item model resource location through the component system.<br />
 
 ```yaml
 myitem:
-  components:
+  Components:
     item_model: "oraxen:weapons/flame_blade"
 ```
 
@@ -368,7 +368,7 @@ Allows you to use any minecraft component, even if they are not specifically han
 
 ```yaml
 myitem:
-  components:
+  Components:
     repairable:
       items:
         - minecraft:diamond
@@ -376,7 +376,7 @@ myitem:
 
 ```yaml
 myitem:
-  components:
+  Components:
     custom_component:
       some_property: value
       another_property: 123
@@ -396,7 +396,7 @@ A full list of all supported components can be found <Highlight color="#1877F2" 
 myitem:
   itemname: "<gold>Traveler's Meal"
   material: BREAD
-  components:
+  Components:
     max_stack_size: 16
     fire_resistant: false
     food:
