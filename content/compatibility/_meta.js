@@ -1,5 +1,6 @@
 export default {
   skript: '⌨️ Skript',
+  viaversion: '🌐 ViaVersion',
   packlayer: '✂️ PackLayer',
   modelengine: '🔧 ModelEngine',
   mythichud: '🖥️ MythicHUD',

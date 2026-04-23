@@ -1,0 +1,44 @@
+---
+title: "🌐 ViaVersion"
+description: "ViaVersion compatibility for Oraxen."
+---
+
+import { Callout, Tabs, Tab, Steps } from 'nextra/components'
+
+# 🌐 ViaVersion
+
+## Overview
+Oraxen has **full ViaVersion support**, which can work in two ways. When `MultiVersionPacks` is not enabled, Oraxen supports versions 1.21.4–26.1 by using overlays (version-specific directories) for its core shaders. When `MultiVersionPacks` is enabled, Oraxen provides full support for versions 1.19–26.1. This works by generating a resource pack for each version, detecting the version of the player joining, and sending them the correct pack.
+
+<Callout>
+  `MultiVersionPacks` are not enabled by default.
+</Callout>
+
+## Usage
+On a `1.21.4+` server, ViaVersion support for `1.21.4–26.1` works out of the box. If you want to support additional versions, enable `MultiVersionPacks` in `settings.yml`. You can find the exact settings <Highlight to="usage/settings#pack" color="#1877F2">**here**</Highlight>.
+
+<Callout type="important">
+    It is recommended to read the text below to better understand how everything works. It will only take a short amount of time and will be well worth it.
+</Callout>
+
+<Callout type="info">
+    Resource packs are divided into several categories.
+
+    **Shaders** - Used for features such as TextEffects and animated glyphs.
+    **Item Models / Model Definitions** - The modern system introduced in Minecraft `1.21.4+` for assigning item models and handling states such as pulling models.
+    **Predicates / Custom Model Data** - The legacy system used in Minecraft `1.21.3` and below for assigning item models and handling states such as pulling models.
+
+    Item Models are a major improvement over Predicates. They offer better performance and support features that Predicates do not. Because of this, some features cannot be supported across all versions. For example, TextEffects do not exist on `1.21.3` and below, and some conditions from Model Properties are only available through Item Model Definitions.
+
+    **If you are running a `1.21.4+` server...**
+    By default, Oraxen generates a single pack that supports `1.21.4–26.1`. Since shaders differ between versions, Oraxen places them in version-specific folders inside that pack.
+
+    If you enable `MultiVersionPacks`, Oraxen also generates separate packs for older versions using Predicates and Custom Model Data. Features that depend on newer shader support, such as TextEffects, are not generated for those versions and will not work there.
+
+    **If you are running a `1.21.3` or lower server...**
+    By default, Oraxen generates a single pack for that server version and other compatible older versions. However, this pack will not work for `1.21.4+` clients because those versions use a different resource pack format and rely on Item Models instead of Predicates.
+
+    If you enable `MultiVersionPacks`, Oraxen will additionally generate `1.21.4+` packs and send the correct one to players depending on their client version.
+</Callout>
+
+Please note that some features cannot be supported across all versions due to Minecraft's version differences. This mainly affects features that rely on Item Model Definitions, which were introduced in `1.21.4`, as well as TextEffects, which are unavailable on `1.21.3` and below.
