@@ -141,42 +141,26 @@ animation:
 <details>
 <summary id="bitmaps"><strong>🧿 Bitmaps</strong></summary>
 
-Multi-bitmap glyphs allow you to display multiple custom textures from a single image file.
+Multi-bitmap glyphs allow you to display multiple custom textures from a single image file by splitting it into a grid.
 
-<Callout type="important">
-  You will first need to define your bitmap in the `fonts.yml` file.<br />
-
-  `texture` - Path to your bitmap image (relative to `pack/textures/`)<br />
-  `rows` - Number of rows in your bitmap grid.<br />
-  `columns` - Number of columns in your bitmap grid.<br />
-  `ascent` - Vertical offset applied to all glyphs in this bitmap.<br />
-  `height` - Scale/height applied to all glyphs in this bitmap.<br />
-
-  ```yml
-  bitmaps:
-    yourbitmap:
-      texture: example/example_bitmap
-      rows: 4
-      columns: 9
-      ascent: 8
-      height: 8
-  ```
-</Callout>
-
-`id` - The unique identifier of the bitmap (defined in `fonts.yml`).<br />
-`row` - The row index of the glyph within the bitmap.<br />
-`column` - The column index of the glyph within the bitmap.<br />
-
-<Callout type="warning">
-  Row and column positions are 1-indexed, meaning the first row/column is 1, not 0.
-</Callout>
+`cols` - The number of columns in the image.<br />
+`rows` - The number of rows in the image.<br />
 
 ```vb
-bitmap:
-  id: yourbitmap
-  row: 1
-  column: 1
+myglyph:
+  texture: edna
+  ascent: 8
+  height: 8
+  cols: 1
+  rows: 5
 ```
+
+<Callout type="info">
+  In this example, the texture is split into 1 column and 5 rows, creating 5 glyph entries from a single file.
+</Callout>
+
+![Bitmap Glyphs](/assets/584337616-f468612f-38db-4e42-a90b-e25ce1a5fb1d.png)
+
 </details>
 
 <details>
