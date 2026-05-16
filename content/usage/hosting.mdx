@@ -13,7 +13,7 @@ After Oraxen builds the pack, it uploads the file and serves it through your sel
 
 ## Configuration
 <details>
-<summary><strong>🧿 Oraxen Atlas</strong></summary>
+<summary id="oraxen-atlas"><strong>🧿 Oraxen Atlas</strong></summary>
 
 Oraxen Atlas is a managed Polymath service run by the Oraxen team.  
 It works out of the box, needs almost no setup, and avoids extra port work.
@@ -25,7 +25,7 @@ It works out of the box, needs almost no setup, and avoids extra port work.
   Oraxen Atlas may only be used for Oraxen.
 </Callout>
 
-```vb
+```yaml
 upload:
   enabled: true
   type: polymath
@@ -45,13 +45,13 @@ upload:
 
 </details>
 <details>
-<summary><strong>📦 Polymath</strong></summary>
+<summary id="polymath"><strong>📦 Polymath</strong></summary>
 You can run your own Polymath service and point Oraxen to it.  
 This removes dependency on Atlas and helps in regions where external access is limited.
 
 Set up Polymath first from the <Highlight color="#2E8B57" to="https://github.com/oraxen/polymath/">**official repository**</Highlight>, then update Oraxen upload settings.
 
-```vb
+```yaml
 upload:
   enabled: true
   type: polymath
@@ -71,14 +71,18 @@ upload:
 </details>
 
 <details>
-<summary><strong>💻 Self Host</strong></summary>
+<summary id="self-host"><strong>💻 Self Host</strong></summary>
 Oraxen can serve the resource pack directly from your Minecraft server machine through Java HTTP support.
 
 <Callout type="warning">
   Your selected port must be reachable from outside your local network.
 </Callout>
 
-```vb
+<Callout type="important">
+  Multi Version packs are unsupported with this pack hosting type.
+</Callout>
+
+```yaml
 upload:
   enabled: true
   type: self-host
@@ -97,18 +101,50 @@ upload:
 - Slight extra server resource usage may occur (unlikely though). 
 </details>
 
+<details>
+<summary id="lobfile"><strong>📤 Lobfile</strong></summary>
+
+Lobfile is a free file sharing / hosting service.
+
+```yaml
+upload:
+  enabled: true
+  type: lobfile
+  lobfile:
+    api-key: ""
+    pack-name: "Oraxen"
+```
+
+You can find / change the API key in your lobfile settings (after creating an account) <Highlight color="#2E8B57" to="https://lobfile.com/">**here**</Highlight>.
+
+<Callout type="note">
+  When Multi Version packs are enabled the pack will be uploaded for each version with the format `<pack-name>_<version>`.
+</Callout>
+
+**➕ Pros**
+- Free to use.
+- Fast setup. 
+- No extra ports required.
+- Supports multi-version packs.
+
+**➖ Tradeoffs**
+</details>
+
 ## Example
 
-```vb
+```yaml
 Pack:
   upload:
     enabled: true
-    type: polymath
+    type: polymath #lobfile, polymath, self-host, or external
     polymath:
-      server: atlas.oraxen.com
-      secret: "oraxen"
+      server: atlas.oraxen.com # you can also host your own polymath instance
+      secret: "oraxen" # change this if you host your own polymath to limit access to resource pack uploading
+    lobfile:
+      api-key: ""
+      pack-name: Oraxen # Will use <pack-name>_<version> when using multi version packs
     self-host:
-      host: "0.0.0.0"
-      port: 8080
-      domain: "localhost:8080"
+      host: "0.0.0.0" # The IP address to bind the HTTP server to (0.0.0.0 = listen on all interfaces)
+      port: 8080 # The port the HTTP server will listen on
+      domain: "localhost:8080" # The domain/IP:port that players will use to download the pack (e.g., "my-server.com:8080" or "192.168.1.100:8080")
 ```
