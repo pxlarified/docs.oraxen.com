@@ -16,6 +16,10 @@ Oraxen includes built-in Skript compatibility that loads automatically when [Skr
 
 ## Syntax
 
+### Oraxen Item ID type
+
+The `Oraxen Item ID` Skript type represents an Oraxen item identifier and can be used by the item expressions and conditions below. Event syntax also accepts alternate phrasings such as `on oraxen block break of <id>` and `on break of oraxen block <id>` where supported.
+
 ### ⚡️ Expressions
 
 <details>
@@ -314,7 +318,7 @@ spawn oraxen furniture "lamp" at {_location}
 <details>
 <summary id="remove-oraxen-block"><strong>Remove Oraxen Block</strong></summary>
 
-Remove an Oraxen block at a location (without drops).
+Remove an Oraxen block at a location. For block types, this normally spawns the block's default drop; it does not guarantee a no-drop removal.
 
 ```
 remove oraxen block at %locations/blocks%
@@ -330,7 +334,7 @@ remove oraxen block at clicked block
 <details>
 <summary id="remove-oraxen-furniture"><strong>Remove Oraxen Furniture</strong></summary>
 
-Remove Oraxen furniture at a location or entity (without drops).
+Remove Oraxen furniture at a location or entity without drops.
 
 ```
 remove oraxen furniture at %locations/entities%

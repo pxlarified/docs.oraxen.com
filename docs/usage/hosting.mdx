@@ -26,12 +26,13 @@ It works out of the box, needs almost no setup, and avoids extra port work.
 </Callout>
 
 ```yaml
-upload:
-  enabled: true
-  type: polymath
-  polymath:
-    server: atlas.oraxen.com
-    secret: "oraxen"
+Pack:
+  upload:
+    enabled: true
+    type: polymath
+    polymath:
+      server: atlas.oraxen.com
+      secret: "oraxen"
 ```
 
 **➕ Pros**
@@ -53,12 +54,13 @@ This removes dependency on Atlas and helps in regions where external access is l
 Set up Polymath first from the <Highlight color="#2E8B57" to="https://github.com/oraxen/polymath/">**official repository**</Highlight>, then update Oraxen upload settings.
 
 ```yaml
-upload:
-  enabled: true
-  type: polymath
-  polymath:
-    server: your-domain.example
-    secret: "your-secret"
+Pack:
+  upload:
+    enabled: true
+    type: polymath
+    polymath:
+      server: your-domain.example
+      secret: "your-secret"
 ```
 
 **➕ Pros**
@@ -85,13 +87,14 @@ Oraxen can serve the resource pack directly from your Minecraft server machine t
 </Callout>
 
 ```yaml
-upload:
-  enabled: true
-  type: self-host
-  self-host:
-    host: "0.0.0.0"
-    port: 8080
-    domain: "your-domain.example:8080"
+Pack:
+  upload:
+    enabled: true
+    type: self-host
+    self-host:
+      host: "0.0.0.0"
+      port: 8080
+      domain: "your-domain.example:8080"
 ```
 
 **➕ Pros**
@@ -109,12 +112,13 @@ upload:
 Lobfile is a free file sharing / hosting service.
 
 ```yaml
-upload:
-  enabled: true
-  type: lobfile
-  lobfile:
-    api-key: ""
-    pack-name: "Oraxen"
+Pack:
+  upload:
+    enabled: true
+    type: lobfile
+    lobfile:
+      api-key: ""
+      pack-name: "Oraxen"
 ```
 
 You can find / change the API key in your lobfile settings (after creating an account) <Highlight color="#2E8B57" to="https://lobfile.com/">**here**</Highlight>.
@@ -130,6 +134,24 @@ You can find / change the API key in your lobfile settings (after creating an ac
 - Supports multi-version packs.
 
 **➖ Tradeoffs**
+</details>
+
+<details>
+<summary id="external"><strong>🧩 External</strong></summary>
+
+Use a custom `HostingProvider` implementation with `type: external`.
+
+```yaml
+Pack:
+  upload:
+    enabled: true
+    type: external
+    options:
+      class: "com.example.MyHostingProvider"
+      endpoint: "https://example.com/upload"
+```
+
+`options.class` must name a `HostingProvider` implementation with a public no-argument or `ConfigurationSection` constructor. The whole `options` section is passed to that provider. Unknown types fall back to Polymath.
 </details>
 
 ## Example

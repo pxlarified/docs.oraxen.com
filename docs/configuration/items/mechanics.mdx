@@ -67,6 +67,9 @@ soulbound:
 backpack:
   enabled: true
 
+custom:
+  enabled: true
+
 music_disc:
   enabled: true
 ```
@@ -126,6 +129,29 @@ my_spear:
 </Details>
 
 <Details>
+    <summary id="custom"><strong>🧩 `custom`</strong></summary>
+
+Runs configured actions when a selected event occurs for the item. The mechanic is enabled by default globally.
+
+```yaml
+Mechanics:
+  custom:
+    test:
+      event: "CLICK:right:all"
+      one_usage: true
+      cooldown: 200
+      conditions:
+        - "#player.hasPermission('example.permission')"
+      actions:
+        - "[console] give <player> cooked_beef 1"
+```
+
+Each child under `custom` is a variant. `event` uses `BREAK`, `CLICK`, `INV_CLICK`, `DROP`, `PICKUP`, `EQUIP`, `UNEQUIP`, or `DEATH`; click events accept `right`, `left`, or `all`, followed by `air`, `block`, or `all` where applicable.<br />
+`one_usage` consumes one item after a successful action. `cooldown` is measured in ticks. `conditions` are optional Spring expressions, and `actions` are the click-action commands/messages executed when the event matches.
+
+</Details>
+
+<Details>
     <summary id="thor"><strong>⚡ `thor`</strong></summary>
 
 Spawns lightning bolts when the item is used.<br />
@@ -141,7 +167,7 @@ Mechanics:
 
 **Options**<br />
 `lightning_bolts_amount` defines how many bolts are spawned.<br />
-`random_location_variation` defines the random spread in blocks.<br />
+`random_location_variation` varies the bolt's X and Y coordinates (including height) by the configured amount; it does not vary Z.<br />
 `delay` defines the cooldown in milliseconds.<br />
 `charges` defines how many uses the item has before being consumed. Use `-1` for unlimited uses.
 </Details>
@@ -325,13 +351,11 @@ Automatically smelts supported mined blocks.<br />
 ```yaml
 Mechanics:
   smelting:
-    enabled: true
     play_sound: true
 ```
 
 **Options**<br />
-`enabled` toggles the mechanic for the item.<br />
-`play_sound` controls whether a sound is played during smelting.
+`play_sound` controls whether a sound is played during smelting. Enable or disable `smelting` globally in `mechanics.yml`; there is no per-item `enabled` option.
 </Details>
 
 <Details>
@@ -352,7 +376,7 @@ Mechanics:
 ```yaml
 bottledexp:
   enabled: true
-  durability_cost: 1
+  durability_cost: 10
 ```
 </Details>
 
@@ -674,7 +698,7 @@ Runs configured commands as console, player, or opped player.<br />
 ```yaml
 Mechanics:
   commands:
-    cooldown: 5
+    cooldown: 5000
     permission: "my.awesome.perm"
     one_usage: true
     console:
@@ -686,7 +710,7 @@ Mechanics:
 ```
 
 **Options**<br />
-`cooldown` defines the delay between uses in seconds.<br />
+`cooldown` defines the delay between uses in milliseconds; for example, `5000` is 5 seconds.<br />
 `permission` defines a required permission node.<br />
 `one_usage` consumes one item on use.<br />
 `console`, `player`, and `opped_player` define command lists for each sender type.
@@ -743,12 +767,11 @@ Mechanics:
 <Details>
     <summary id="hat"><strong>🎩 `hat`</strong></summary>
 
-Lets the item be worn on the player's head.<br />
+Lets the item be worn on the player's head. The presence of the `hat` section activates it; it has no per-item `enabled` option.<br />
 
 ```yaml
 Mechanics:
-  hat:
-    enabled: true
+  hat: {}
 ```
 
 <Callout type="info">

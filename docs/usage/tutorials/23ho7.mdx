@@ -88,6 +88,7 @@ moonlight_disc:
   itemname: "<gold>Moonlight Disc"
   Pack:
     model: discs/moonlight_disc
+    # Provide plugins/Oraxen/pack/models/discs/moonlight_disc.json, or set generate_model: true with textures.
   Components:
     jukebox_playable:
       show_in_tooltip: true
@@ -101,8 +102,7 @@ moonlight_disc:
 </Callout>
 
 ### Reload and test
-Save both files, then run `/o reload` and regenerate the resource pack if needed.
-You also have to restart your server for the datapack changes to take effect.
+Save both files, then run `/o reload all` and regenerate the resource pack if needed. On Paper `1.21.6+`, jukebox songs use the bootstrap registry and do not require a restart for a legacy datapack; below `1.21.6`, restart after the generated datapack is first created.
 
 Insert the disc into a jukebox to confirm that the song plays and the datapack entry was created.
 

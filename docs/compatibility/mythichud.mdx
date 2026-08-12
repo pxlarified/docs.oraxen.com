@@ -23,7 +23,7 @@ Merging a pack into Oraxen is simple and we have a dedicated documentation page 
 
 1. Go to Oraxen's settings.yml (`plugins/Oraxen/settings.yml`)
 2. Ensure `hide_scoreboard_numbers` is set to `false`. (`plugins/Oraxen/settings.yml`)
-3. Ensure `TextEffects` is set to `Enabled: false`. (`plugins/Oraxen/settings.yml`) <Highlight color="#e74c3c">**Optional**</Highlight>
+3. If the external HUD pack uses conflicting text shaders, remove or disable that external shader configuration. Oraxen no longer provides a `TextEffects` setting. <Highlight color="#e74c3c">**Optional**</Highlight>
 4. Ensure you have no animated glyphs configured. (No glyphs of the <Highlight color="#1877F2">**Animation**</Highlight> type) <Highlight color="#e74c3c">**Optional**</Highlight>
 5. Edit your MythicHUD configuration to have the `copy_path` set to `Oraxen/pack/uploads/MythicHUD.zip`.
 <details>

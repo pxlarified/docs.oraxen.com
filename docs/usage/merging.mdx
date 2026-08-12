@@ -8,25 +8,24 @@ import { Callout, Steps } from '@site/src/components/Compat'
 # 📥 Pack Merging / Importing
 
 ## Overview
-Oraxen provides a powerful system to merge multiple resource packs into a single cohesive pack. You can merge packs using two methods: ZIP file uploads or direct folder structure. Both methods are processed automatically during pack generation.
+Oraxen merges resource-pack ZIP files and plain folders placed in `pack/uploads/`. ZIPs and folders are sorted together alphabetically and processed automatically during pack generation.
 
 ## Configuration
 
 ### 📦 ZIP Upload
 <Steps>
-#### 1. Place your resource pack ZIP files in `Oraxen/pack/uploads/`.
+#### 1. Place resource-pack ZIP files or plain resource-pack folders in `Oraxen/pack/uploads/`.
 #### 2. Reload or restart the server.
 #### 3. Files are automatically merged into the final pack.
 </Steps>
 
 <Callout type="info">
-  ZIP files are processed alphabetically by filename. The last file processed wins in case of conflicts.
-  Merge conflicts are shown in the console.
+  ZIP files and folders are processed alphabetically by name. The last source processed wins in case of conflicts. Merge conflicts are shown in the console.
 </Callout>
 
 ### 📂 Direct Folder
 <Steps>
 #### 1. Place your resource pack files directly in `Oraxen/pack/assets/` or `Oraxen/pack/` folders.
 #### 2. Reload or restart the server.
-#### 3. Files are automatically merged into the final pack.
+#### 3. Only `assets/**`, overlay `assets/**`, `pack.mcmeta`, and `pack.png` are considered. Imported `pack.mcmeta` files are not copied; only their `overlays.entries` are merged. Other files are dropped.
 </Steps>

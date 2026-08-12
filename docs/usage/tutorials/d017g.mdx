@@ -15,7 +15,7 @@ On a fresh install, those language files are extracted from Oraxen's default pac
 ## Tutorial
 
 <Callout type="tip">
-    You can remove the default "branding" automatically via the `/oraxen remove-branding` command.
+    You can remove the default "branding" automatically via `/oraxen remove-branding confirm`; this also disables default asset generation and the welcome sound.
 </Callout>
 
 <Steps>
@@ -51,7 +51,7 @@ Plugin:
 ```
 
 <Callout type="note">
-  `pack/lang` files are extracted from Oraxen's default pack assets. If `default_assets` stays enabled, Oraxen will restore the default logo entries on every pack generation.
+  Oraxen extracts default language folders only when they are entirely missing, so edits to an existing `pack/lang` folder survive regeneration. `pack/lang/global.json` is re-extracted if it is deleted, regardless of this setting.
 </Callout>
 
 ### Open the language files
@@ -132,7 +132,7 @@ For example, `pack/lang/en_us.json` can still reintroduce the branding if it kee
 If you disabled default generation, make sure your custom language files still define the entries you want to keep.
 
 <Callout>
-  After editing the files, run `/o reload` and regenerate the resource pack so the updated language files are included.
+  After editing the files, run `/o reload all` and regenerate the resource pack so the updated language files are included.
 </Callout>
 
 </Steps>

@@ -17,7 +17,10 @@ mymmoitem:
   mmoitem:
     type: SWORD
     id: FALCON_BLADE
-    level: 10 # Optional
-    tier: RARE # Optional
-    match_level: true # Optional
+    level: 10 # Parsed but currently not applied
+    tier: RARE # Parsed but currently not applied
 ```
+
+<Callout type="warning">
+  `level` and `tier` are currently non-functional in the imported item build. The removed `match_level` key is not parsed.
+</Callout>

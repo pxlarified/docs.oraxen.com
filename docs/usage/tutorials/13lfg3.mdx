@@ -16,7 +16,7 @@ If you want to stop that sound completely, disable the sound action. If you stil
 
 
 <Callout type="tip">
-    You can remove the default sound automatically via the `/oraxen remove-branding` command.
+    You can remove the default sound automatically via `/oraxen remove-branding confirm`; the command also disables default asset generation.
 </Callout>
 
 
@@ -56,7 +56,7 @@ receive:
     actions:
       sound:
         enabled: true
-        type: minecraft:welcome
+        type: oraxen:welcome
         volume: 1.0
         pitch: 1.0
 ```
@@ -71,7 +71,7 @@ receive:
     actions:
       sound:
         enabled: false
-        type: minecraft:welcome
+        type: oraxen:welcome
         volume: 1.0
         pitch: 1.0
 ```
@@ -97,7 +97,7 @@ receive:
 </Callout>
 
 ### Reload Oraxen
-Save the file, then reload or restart your server so Oraxen applies the updated setting.
+Save the file, then run `/oraxen reload all` or restart your server so Oraxen applies the updated setting.
 
 <Callout type="note">
   The sound is played when the pack is marked as loaded, so test by re-sending the pack after reloading the plugin.

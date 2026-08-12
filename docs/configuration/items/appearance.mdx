@@ -159,13 +159,13 @@ my_item:
 ```
 
 **Minecraft version**<br />
-`1.21.2+`
+`1.21.4+`
 </Details>
 
 <Details>
 <summary id="generate_model"><strong>⚙️ `generate_model`</strong></summary>
 
-Automatically generates a model JSON from `textures`. Defaults to `true` when `model` is not set.
+Automatically generates a model JSON from `textures`. This is an explicit opt-in; it defaults to `false`. If enabled, Oraxen derives a model path from the texture or item ID when no model path is provided.
 
 ```yaml
 my_item:
@@ -217,12 +217,12 @@ my_item:
 <Details>
     <summary id="generated_model_path"><strong>🧭 `generated_model_path`</strong></summary>
 
-Custom output path for generated model files. Supports namespaced paths like `oraxen:models/weapons`.
+Custom output path for generated model files. Oraxen inserts the `models/` directory automatically, so use a path such as `oraxen:weapons` rather than including `models/`.
 
 ```yaml
 my_item:
   Pack:
-    generated_model_path: oraxen:models/weapons
+    generated_model_path: oraxen:weapons
 ```
 </Details>
 
@@ -342,8 +342,7 @@ my_item:
     exclude_from_predicates: true
 ```
 
-**Minecraft version**<br />
-`1.21.4+`
+This key works on all supported Minecraft versions; it is not limited to `1.21.4+`.
 </Details>
 
 <Details>
@@ -434,4 +433,6 @@ ice_sword:
 - Pack model paths are relative to `plugins/Oraxen/pack/models` and omit the `.json` extension.
 - Pack texture paths are relative to `plugins/Oraxen/pack/textures` and omit the `.png` extension.
 - `custom_model_data` is optional; Oraxen will auto-generate it unless automatic model data is disabled.
+- `generate_model` must be set to `true` when you want Oraxen to generate a model from textures; it is not enabled merely because `model` is omitted.
+- Deprecated appearance settings such as `mode`, `item_model`, `predicates`, `force_predicates`, and `model_data_float_legacy` remain honored as fallbacks. Prefer the current settings keys.
 - This page focuses on appearance; properties and components are documented separately.

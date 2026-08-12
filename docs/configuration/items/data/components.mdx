@@ -11,7 +11,7 @@ import { Callout, Details } from '@site/src/components/Compat'
 Components define modern vanilla item behavior in Oraxen, such as food values, durability, equipping, stack size, cooldowns, and custom tooltip or model settings.
 
 <Callout type="tip">
-  Couldn't find the component you need? Oraxen supports all vanilla and custom components. Learn more <Highlight color="#FFA500" to="#generic">**here**</Highlight>.
+  Couldn't find the component you need? Oraxen can pass through generic component maps on `1.21.3+`. Scalar and list-only forms are not passed through; see <Highlight color="#FFA500" to="#generic">**generic**</Highlight> for the supported shape.
 </Callout>
 
 ## Configuration
@@ -142,8 +142,8 @@ myitem:
 `1.20.5+`
 
 **Fields**<br />
-`value` sets the durability value and must be at least `1`.<br />
-`damage_block_break` and `damage_entity_hit` are booleans and default to `true`.
+`value` sets the durability value and must be at least `1`. The section may also be an integer shorthand, such as `durability: 250`.<br />
+`damage_block_break` and `damage_entity_hit` are booleans and default to `false`. Set them to `true` to damage the item for those actions.
 
 <Callout type="info">
   On modern versions, this replaces the legacy `durability` mechanic for item durability configuration.
@@ -199,7 +199,8 @@ myitem:
 `consume_seconds` is the consumption time in seconds and defaults to `1.6`.<br />
 `animation` defines the use animation.<br />
 `sound` defines the consume sound.<br />
-`has_consume_particles` controls whether consume particles are shown and defaults to `true`.
+`has_consume_particles` controls whether consume particles are shown and defaults to `true`.<br />
+`on_consume_effects` defines effects such as `apply_effects` or `play_sound` to run after consumption, with each effect supporting its own `probability` and effect-specific fields.
 
 <Callout type="info">
   Valid sound keys use Minecraft sound resource locations, such as `entity.generic.eat` or `item.honey_bottle.drink`.
@@ -232,10 +233,11 @@ myitem:
 `model` defines the model resource location.<br />
 `equip_sound` defines the equip sound.<br />
 `dispensable`, `swappable`, and `damage_on_hurt` default to `true`.<br />
-`camera_overlay` defines the overlay texture.
+`camera_overlay` defines the overlay texture.<br />
+`allowed_entity_types` restricts which entity types can equip the item.
 
 **Slot groups**<br />
-- `HAND`
+- `HAND` (mapped to `MAINHAND`)
 - `OFF_HAND`
 - `FEET`
 - `LEGS`
@@ -261,18 +263,18 @@ myitem:
       damage_per_block: 1
       default_mining_speed: 4.0
       rules:
-        - blocks: "minecraft:mineable/pickaxe"
+        - tag: "minecraft:mineable/pickaxe"
           speed: 8.0
           correct_for_drops: true
 ```
 
 **Minecraft version**<br />
-`1.20.5+`
+`1.20.6+`
 
 **Fields**<br />
 `damage_per_block` sets the durability damage dealt per block and defaults to `1`.<br />
 `default_mining_speed` sets the mining speed and defaults to `1.0`.<br />
-`rules` defines optional mining rules for specific block tags or blocks.
+`rules` defines optional mining rules. Each rule accepts `material` or `materials` for block materials, or `tag` or `tags` for block tags. A rule can use one of these keys to select its blocks.
 </Details>
 
 <Details>
@@ -292,14 +294,14 @@ myitem:
 `1.21.2+`
 
 **Fields**<br />
-`seconds` sets the cooldown duration in seconds and must be at least `0`.<br />
-`group` defines the shared cooldown group.
+`seconds` sets the cooldown duration in seconds and must be at least `0`; it defaults to `1.0`.<br />
+`group` defines the shared cooldown group and defaults to `oraxen:<item_id>`.
 </Details>
 
 <Details>
 <summary id="use_remainder"><strong>🪣 `use_remainder`</strong></summary>
 
-Defines which item remains after the item is consumed or used up.<br />
+Defines which item remains after the item is consumed or used up. It can use `minecraft_item` for a serialized Bukkit item stack in addition to the named item forms.<br />
 
 ```yaml
 myitem:
@@ -321,7 +323,7 @@ myitem:
 `1.21.2+`
 
 **Fields**<br />
-`oraxen_item`, `minecraft_type`, `crucible_item`, `mmoitems_id`, `mmoitems_type`, and `ecoitem_id` define the item that is returned.<br />
+`oraxen_item`, `minecraft_type`, `minecraft_item`, `crucible_item`, `mmoitems_id`, `mmoitems_type`, and `ecoitem_id` define the item that is returned.<br />
 `amount` sets how many of that item remain and defaults to `1`.
 </Details>
 
@@ -342,7 +344,7 @@ myitem:
 `1.21+`
 
 **Fields**<br />
-`show_in_tooltip` controls whether the song appears in the tooltip and defaults to `true`.<br />
+`show_in_tooltip` controls whether the song appears in the tooltip and defaults to `false` when the section exists.<br />
 `song_key` is the namespaced song key.
 
 **Format**<br />
@@ -386,7 +388,7 @@ myitem:
 <Details>
 <summary id="generic"><strong>➕ `generic`</strong></summary>
 
-Allows you to use any Minecraft component, even if it is not specifically handled by Oraxen.<br />
+Passes through generic Minecraft components that Oraxen does not handle specially. The value must be a YAML map/section (or another map-shaped value); scalar and list-only forms such as `enchantable: 15` and `glider: true` are skipped.<br />
 
 ```yaml
 myitem:

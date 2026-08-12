@@ -12,7 +12,7 @@ Custom paintings are configured in `paintings.yml`. Oraxen reads this file and t
 Use this file to register new paintings.
 
 <Callout type="important">
-	Paintings require Paper 1.21.5+.
+	Painting registration requires Paper `1.21.3+`. The `painting_variant` item component additionally requires `1.21.5+`.
 </Callout>
 <Callout type="note">
 	Paintings are hot-reloadable, meaning that your server doesn't require a restart for your changes to apply.
@@ -57,12 +57,12 @@ Painting texture files live in `plugins/Oraxen/pack/assets/oraxen/textures/paint
 
 ## Painting Entry
 
-Each entry under `paintings:` becomes one painting.
+Each entry under `paintings:` becomes one painting. Set `enabled: false` to disable an entry; it defaults to `true`. The legacy `random_place` key is accepted as an alias for `include_in_random`.
 
 <Details>
   <summary id="author"><strong>👤 `author`</strong></summary>
 
-Sets the author of the painting.<br />
+Sets the author of the painting. Defaults to `Oraxen`; MiniMessage formatting is supported.<br />
 
 ```yaml
 paintings:
@@ -74,7 +74,7 @@ paintings:
 <Details>
   <summary id="title"><strong>🎨 `title`</strong></summary>
 
-Defines the title of the painting.<br />
+Defines the title of the painting. Defaults to `Oraxen`; MiniMessage formatting is supported.<br />
 
 ```yaml
 paintings:
@@ -86,7 +86,7 @@ paintings:
 <Details>
   <summary id="asset-id"><strong>📝 `asset_id`</strong></summary>
 
-Sets the asset ID of the painting.<br />
+Sets the asset ID of the painting. Bare IDs default to the `oraxen:` namespace.<br />
 
 ```yaml
 paintings:
@@ -98,7 +98,7 @@ paintings:
 <Details>
   <summary id="size"><strong>📏 `width` & `height`</strong></summary>
 
-Sets the width and height (in blocks) of the painting when placed.<br />
+Sets the width and height (in blocks) of the painting when placed. Both default to `1` and are clamped to `1..16`.<br />
 
 ```yaml
 paintings:
@@ -111,7 +111,7 @@ paintings:
 <Details>
   <summary id="include_in_random"><strong>📡 `include_in_random`</strong></summary>
 
-  Whether this painting can be randomly selected when a player places a painting.<br />
+  Whether this painting can be randomly selected when a player places a painting. Defaults to `false`.<br />
 
 ```yaml
 paintings:

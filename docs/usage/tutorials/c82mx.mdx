@@ -46,7 +46,7 @@ Plugin:
 ```
 
 <Callout type="note">
-  `pack/lang` files are extracted from Oraxen's default pack assets. If `default_assets` stays enabled, Oraxen will restore the default logo entries on every pack generation.
+  Oraxen extracts default language folders only when they are entirely missing, so edits to an existing `pack/lang` folder survive regeneration. `pack/lang/global.json` is re-extracted if it is deleted, regardless of this setting.
 </Callout>
 
 ### Create the logo glyph
@@ -166,7 +166,7 @@ If you use locale files such as `pack/lang/en_us.json`, mirror the same changes 
 Locale files can override `global.json`, so if `en_us.json` still contains the old `menu.game` value, your custom logo will not appear for players using that locale.
 
 <Callout type="tip">
-  After editing the glyph and language files, run `/o reload` and regenerate the resource pack to see the updated pause menu logo in game.
+  After editing the glyph and language files, run `/o reload all` and regenerate the resource pack to see the updated pause menu logo in game.
 </Callout>
 
 </Steps>

@@ -81,6 +81,17 @@ myitem:
 </Details>
 
 <Details>
+<summary id="customname"><strong>🏷️ `customname`</strong></summary>
+
+Sets the raw legacy display name string when the compatibility property is needed.
+
+```yaml
+myitem:
+  customname: "Legacy Name"
+```
+</Details>
+
+<Details>
 <summary id="displayname"><strong>🏷️ `displayname`</strong></summary>
 
 Sets the legacy display name.<br />
@@ -133,11 +144,13 @@ myitem:
 <Details>
 <summary id="injectId"><strong>🆔 `injectId`</strong></summary>
 
-Controls whether Oraxen injects the item ID into NBT.<br />
+Controls whether Oraxen injects the Oraxen item-ID NBT tag. This lets Oraxen recognize the configured item, including when the item uses a fallback/error representation; it is not an invalid-entry debugging label.<br />
 ```yaml
 myitem:
   injectId: true
 ```
+
+The key is case-sensitive. Use `injectId`, not the bundled legacy spelling `injectID`; the latter is ignored and the code default (`true`) wins.
 </Details>
 
 <Details>
@@ -175,9 +188,13 @@ A full list of supported trim patterns can be found <Highlight to="https://hub.s
 <Details>
 <summary id="template"><strong>🧬 `template`</strong></summary>
 
-Makes the item inherit from another item template.<br />
+Makes the item inherit from another item template. A separate item can be marked with `template: true` to define a reusable template.<br />
 
 ```yaml
+base_sword:
+  template: true
+  material: IRON_SWORD
+
 myitem:
   template: base_sword
 ```
@@ -301,21 +318,25 @@ A full list of supported attributes can be found <Highlight color="#1877F2" to="
  - `MULTIPLY_SCALAR_1`<br />
 
 **Slot groups**
- - `HAND`
+ - `HAND` (remapped to `MAINHAND`)
  - `OFFHAND`
  - `HEAD`
  - `CHEST`
  - `LEGS`
  - `FEET`
  - `ARMOR`
+ - `BODY`
+ - `SADDLE`
  - `ANY`
+
+Unknown values fall back to `ANY`.
  
  <Callout type="important">
   Requires `Minecraft 1.20.5+` and `Oraxen v1.212.0+` for "modern" format attributes. 
  </Callout>
  
  <Callout type="info">
-  The legacy list format (`AttributeModifiers: [{...}]`) still works. If Oraxen detects a section format, it uses the modern parser. If it finds a list, it falls back to the legacy format. Both formats can coexist across different items.
+  The legacy list format (`AttributeModifiers: [{...}]`) still works. If Oraxen detects a section format, it uses the modern parser. If it finds a list, it falls back to the legacy format. Both formats can coexist across different items. Use numeric Bukkit operation values in the list format (for example `0`); names such as `ADD_NUMBER` are not portable in that format.
  </Callout>
  
  <Details>
@@ -330,16 +351,20 @@ A full list of supported attributes can be found <Highlight color="#1877F2" to="
        operation: ADD_NUMBER
        slot: CHEST
        display:
-         type: hidden  # Completely hide from tooltip
-         custom_text:
-           attribute: ATTACK_DAMAGE
-           amount: 10
-           operation: ADD_NUMBER
-           slot: HAND
-           display:
-             type: override
-             text: "<red>+10 Fire Damage"  # Custom MiniMessage tooltip text
-             ```
+         type: hidden
+   ```
+
+   ```yaml
+   AttributeModifiers:
+     custom_armor:
+       attribute: ARMOR
+       amount: 5
+       operation: ADD_NUMBER
+       slot: CHEST
+       display:
+         type: override
+         text: "<red>+5 Armor"
+   ```
              
    **Display types**<br />
    - `hidden` (hide tooltip line)
@@ -360,7 +385,7 @@ Adds potion effects to potion-like items.<br />
 ```yaml
 myitem:
   PotionEffects:
-    - Type: speed
+    - type: speed
       duration: 200
       amplifier: 1
       ambient: false
@@ -368,6 +393,7 @@ myitem:
       icon: true
 ```
 **Potion Effects**<br />
+The key must be lowercase `type`. If an entry has an invalid or mis-cased type, potion parsing aborts for that item and later vanilla sections such as `PersistentData`, `AttributeModifiers`, and `Enchantments` are skipped.<br />
 A full list of supported potion effects can be found <Highlight color="#1877F2" to="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html#field-summary">**here**</Highlight>.
 
 </Details>
@@ -412,7 +438,7 @@ myitem:
   AttributeModifiers:
     - attribute: attack_damage
       amount: 7
-      operation: ADD_NUMBER
+      operation: 0
       slot: HAND
       name: "flame_blade_damage"
 ```

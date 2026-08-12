@@ -8,7 +8,7 @@ import { Callout, Steps } from '@site/src/components/Compat'
 # 🔊 Creating a custom sound
 
 ## Overview
-Custom sounds are configured in `sounds.yml`. Oraxen reads this file and generates `assets/<namespace>/sounds.json`.
+Custom sounds are configured in `sounds.yml`. Oraxen generates `sounds.json` in the namespace of each sound event; for example, `oraxen:welcome` is written to `assets/oraxen/sounds.json`.
 
 Use it to add brand new sound events, override existing vanilla sounds, or package longer audio tracks for music discs and other custom content.
 
@@ -54,10 +54,10 @@ sounds:
     sound: welcome.ogg
 ```
 
-If no namespace is specified, Minecraft's namespace is used. For example, `id: welcome` becomes `minecraft:welcome`.
+If no namespace is specified, Minecraft's namespace is used. For example, `id: welcome` becomes `minecraft:welcome`. Use `category: blocks`, not `block`; `record` is accepted as an alias for `records`.
 
 ### Point to your audio file
-Sound files live in `plugins/Oraxen/pack/sounds/`. Oraxen then exports them to `assets/<namespace>/sounds/` in the generated resource pack.
+Sound files live in `plugins/Oraxen/pack/sounds/` and are exported to `assets/minecraft/sounds/`. Namespaced files belong under `plugins/Oraxen/pack/assets/<namespace>/sounds/`.
 
 `sound: welcome.ogg` points to `plugins/Oraxen/pack/sounds/welcome.ogg`.<br />
 `sound: music/welcome` points to `plugins/Oraxen/pack/sounds/music/welcome.ogg`.<br />
