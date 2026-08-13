@@ -99,7 +99,7 @@ ConfigsTools:
 `error_item.injectId` - Controls whether the Oraxen item-ID NBT tag is injected into the fallback item. This lets Oraxen recognize the fallback as the configured item when an item definition is invalid; it is not only a debugging label.<br />
 
 <Callout type="warning">
-  The key is case-sensitive. The bundled `settings.yml` and item examples currently use `injectID`, which does not match the code's `injectId` lookup, so the default `true` is used. This is a plugin configuration bug.
+  The key is case-sensitive.
 </Callout>
 
 </Details>
@@ -303,7 +303,7 @@ Pack:
 `upload.self-host.port` - Sets the port the self-hosted HTTP server listens on.<br />
 `upload.self-host.domain` - Sets the domain or IP and port players use to download the self-hosted pack.<br />
 `upload.options` - Configuration passed to an `external` hosting provider.<br />
-`upload.options.class` - Fully qualified class name of a `HostingProvider` implementation. Oraxen constructs it using a public no-argument constructor or a public `ConfigurationSection` constructor; the complete `options` section is passed to the latter. For example:
+`upload.options.class` - Fully qualified class name of a `HostingProvider` implementation. Oraxen constructs it using a public no-argument constructor or a public `ConfigurationSection` constructor; the complete `options` section is passed to the latter.
 
 ```yaml
 Pack:

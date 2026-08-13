@@ -46,7 +46,6 @@ Glyphs are configured in `.yml` files in the `plugins/Oraxen/glyphs` directory.
 />
 
 ### Properties
-Glyphs also share the generated-font settings in `plugins/Oraxen/font.yml`: `settings.automatically_generate` controls default font generation, `settings.perms_chatcolor` can add a PlaceholderAPI-provided chat color, `bitmaps` defines reusable bitmap grids, and `fonts` defines TTF providers with `type`, `file`, `shift_x`, `shift_y`, `size`, and `oversample`.
 
 `texture` - The path to your texture file (relative to `pack/textures/`).<br />
 `ascent` - The vertical offset of the glyph.<br />
@@ -59,7 +58,7 @@ Glyphs also share the generated-font settings in `plugins/Oraxen/font.yml`: `set
   The height value must always be greater than or equal to the ascent value. This is a strict requirement enforced by Minecraft.
 </Callout>
 <Callout type="info">
-    Glyphs in chat, signs, and books are rendered with the glyph's own font and do not require `minecraft:default`. Anvil renames are an exception: the rename path substitutes raw characters, so glyphs there effectively require the default font.
+    Glyphs in chat, signs, and books are rendered with the glyph's own font and do not require `minecraft:default`. Please avoid using that font unless you have to.
 </Callout>
 
 ### Additional Properties
@@ -212,7 +211,7 @@ farmer:
 <details>
 <summary id="shifts"><strong>➡️ Shifts</strong></summary>
 
-Shifts are generated space-provider characters in the `oraxen:shift` font, not pre-made glyphs. The legacy `shifts.yml` file is deprecated and migrated.
+Shifts are generated space-provider characters in the `oraxen:shift` font that allow you to move glyphs and text to the left or right by a specific number of pixels. The legacy `shifts.yml` file is deprecated and migrated.
 
 <Callout type="info">
   Shifts can be used in MiniMessage and PlaceholderAPI.<br />
