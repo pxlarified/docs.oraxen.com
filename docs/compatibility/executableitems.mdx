@@ -1,0 +1,20 @@
+---
+title: "⚔️ ExecutableItems"
+description: "ExecutableItems integration for Oraxen."
+---
+
+import { Callout, Tabs, Tab, Steps } from '@site/src/components/Compat'
+
+# ⚔️ ExecutableItems
+
+## Overview
+Oraxen includes built-in ExecutableItems (SCore) compatibility. This allows you to drop ExecutableItems from your custom blocks and furniture by referencing them in loot entries.
+
+## Usage
+Loot entries in drop mechanics support an `executableitem` key.
+
+```yaml
+drop:
+  loots:
+    - { executableitem: my_executableitem_id, probability: 1.0 }
+```

@@ -37,5 +37,5 @@ Pack:
 See [Pack Merging / Importing](/usage/merging) for the complete pack merging guide.
 
 <Callout type="warning">
-  Text effect packs commonly replace Minecraft's `rendertype_text` core shader. They can conflict with Oraxen features or other packs that modify the same shader. Core shader files cannot be merged automatically; if multiple packs provide the same shader, you must resolve the conflict manually or choose which pack's shader to use.
+  Text effect packs commonly replace Minecraft's `rendertype_text` core shader. Oraxen's animated glyphs use the same shader, so a merged text effect pack can break them. They can also conflict with other packs that modify the same shader. Core shader files cannot be merged automatically; if multiple packs provide the same shader, you must resolve the conflict manually or choose which pack's shader to use.
 </Callout>

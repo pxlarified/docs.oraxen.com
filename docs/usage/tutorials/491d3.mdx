@@ -8,7 +8,7 @@ import { Callout, Steps } from '@site/src/components/Compat'
 # 🎨 Creating a custom painting
 
 ## Overview
-On `1.21.5`, custom paintings are built from two parts.
+On `1.21.5+`, custom paintings are built from two parts. Paintings themselves register from `1.21.3+`, but the `painting_variant` item component needs `1.21.5+`.
 
 1. a custom painting entry in `paintings.yml`
 2. a custom item with the `painting_variant` component
@@ -85,7 +85,7 @@ edna_painting:
 
 ### Reload and test
 Save both files, then run `/oraxen reload paintings` to re-register the painting.
-If you changed the item file too, run `/oraxen reload items` (or `/oraxen reload`) so the item is updated.
+If you changed the item file too, run `/oraxen reload items` (or `/oraxen reload all`) so the item is updated.
 Regenerate and resend the resource pack if you added or changed the painting texture.
 
 Paintings are hot-reloadable, so you do not have to restart your server.

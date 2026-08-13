@@ -157,6 +157,8 @@ if clicked entity is oraxen furniture "wooden_chair":
 
 All events support filtering by a specific Oraxen item ID using `of "item_id"`.
 
+Alternate phrasings are also registered, e.g. `on break of oraxen block` and `on place of oraxen furniture`. An "Oraxen Item ID" Skript type is registered as well.
+
 <details>
 <summary id="oraxen-block-break"><strong>Oraxen Block Break</strong></summary>
 
@@ -314,7 +316,7 @@ spawn oraxen furniture "lamp" at {_location}
 <details>
 <summary id="remove-oraxen-block"><strong>Remove Oraxen Block</strong></summary>
 
-Remove an Oraxen block at a location (without drops).
+Remove an Oraxen block at a location. The block's default drop is spawned unless a tool requirement prevents it.
 
 ```
 remove oraxen block at %locations/blocks%

@@ -57,7 +57,7 @@ sounds:
 If no namespace is specified, Minecraft's namespace is used. For example, `id: welcome` becomes `minecraft:welcome`.
 
 ### Point to your audio file
-Sound files live in `plugins/Oraxen/pack/sounds/`. Oraxen then exports them to `assets/<namespace>/sounds/` in the generated resource pack.
+Sound files live in `plugins/Oraxen/pack/sounds/`. Oraxen then exports them to `assets/minecraft/sounds/` in the generated resource pack. Only the generated `sounds.json` is placed per event namespace. Namespaced sound files belong under `plugins/Oraxen/pack/assets/<namespace>/sounds/`.
 
 `sound: welcome.ogg` points to `plugins/Oraxen/pack/sounds/welcome.ogg`.<br />
 `sound: music/welcome` points to `plugins/Oraxen/pack/sounds/music/welcome.ogg`.<br />

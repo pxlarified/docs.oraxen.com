@@ -52,6 +52,11 @@ import java.util.UUID;
 
 public class MyCustomHostingProvider implements HostingProvider {
     
+    // Set these during uploadPack
+    private byte[] sha1Bytes;
+    private String sha1String;
+    private UUID packUUID;
+    
     // Option 1: No-args constructor
     public MyCustomHostingProvider() {
         // Initialize with default settings
@@ -141,6 +146,7 @@ Place your compiled class in the server's classpath or create a plugin that incl
 import io.th0rgal.oraxen.pack.upload.hosts.HostingProvider;
 import org.bukkit.configuration.ConfigurationSection;
 import java.io.*;
+import java.net.URI;
 import java.net.http.*;
 import java.nio.file.Files;
 import java.security.MessageDigest;

@@ -77,11 +77,11 @@ Recipe inputs and results support several item formats.
 `permission` - Require a permission to use a shaped, shapeless, smithing, cauldron, anvil, or grindstone recipe. <Highlight color="#2E8B57">**Optional**</Highlight><br />
 
 <Callout type="info">
-  Oraxen creates the recipe files automatically on first load. You can add entries manually or generate them ingame with the recipe builder.
+  Oraxen creates the recipe files automatically on first load, except `disabled.yml`. You can add entries manually or generate them ingame with the recipe builder.
 </Callout>
 
 <Callout type="note">
-  Existing installations may need to create the new `smithing.yml`, `cauldron.yml`, `anvil.yml`, and `grindstone.yml` files manually before adding recipes.
+  Existing installations may need to create the new `smithing.yml`, `cauldron.yml`, `anvil.yml`, and `grindstone.yml` files manually before adding recipes. `disabled.yml` must also be created manually in `plugins/Oraxen/recipes/`; it is only auto-created when `Plugin.generation.default_configs` is `false`.
 </Callout>
 
 ## Recipe Groups

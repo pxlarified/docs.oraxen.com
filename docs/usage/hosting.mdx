@@ -26,12 +26,13 @@ It works out of the box, needs almost no setup, and avoids extra port work.
 </Callout>
 
 ```yaml
-upload:
-  enabled: true
-  type: polymath
-  polymath:
-    server: atlas.oraxen.com
-    secret: "oraxen"
+Pack:
+  upload:
+    enabled: true
+    type: polymath
+    polymath:
+      server: atlas.oraxen.com
+      secret: "oraxen"
 ```
 
 **➕ Pros**
@@ -53,12 +54,13 @@ This removes dependency on Atlas and helps in regions where external access is l
 Set up Polymath first from the <Highlight color="#2E8B57" to="https://github.com/oraxen/polymath/">**official repository**</Highlight>, then update Oraxen upload settings.
 
 ```yaml
-upload:
-  enabled: true
-  type: polymath
-  polymath:
-    server: your-domain.example
-    secret: "your-secret"
+Pack:
+  upload:
+    enabled: true
+    type: polymath
+    polymath:
+      server: your-domain.example
+      secret: "your-secret"
 ```
 
 **➕ Pros**
@@ -85,13 +87,14 @@ Oraxen can serve the resource pack directly from your Minecraft server machine t
 </Callout>
 
 ```yaml
-upload:
-  enabled: true
-  type: self-host
-  self-host:
-    host: "0.0.0.0"
-    port: 8080
-    domain: "your-domain.example:8080"
+Pack:
+  upload:
+    enabled: true
+    type: self-host
+    self-host:
+      host: "0.0.0.0"
+      port: 8080
+      domain: "your-domain.example:8080"
 ```
 
 **➕ Pros**
@@ -109,12 +112,13 @@ upload:
 Lobfile is a free file sharing / hosting service.
 
 ```yaml
-upload:
-  enabled: true
-  type: lobfile
-  lobfile:
-    api-key: ""
-    pack-name: "Oraxen"
+Pack:
+  upload:
+    enabled: true
+    type: lobfile
+    lobfile:
+      api-key: ""
+      pack-name: "Oraxen"
 ```
 
 You can find / change the API key in your lobfile settings (after creating an account) <Highlight color="#2E8B57" to="https://lobfile.com/">**here**</Highlight>.
@@ -131,6 +135,34 @@ You can find / change the API key in your lobfile settings (after creating an ac
 
 **➖ Tradeoffs**
 </details>
+
+<details>
+<summary id="external"><strong>🔌 External</strong></summary>
+
+`type: external` loads a custom hosting provider from another plugin or library.
+
+`Pack.upload.options.class` must name a fully qualified class implementing `HostingProvider` with a no-arg constructor or one taking a `ConfigurationSection`. The whole `options` section is passed to the provider.
+
+```yaml
+Pack:
+  upload:
+    enabled: true
+    type: external
+    options:
+      class: "com.example.MyHostingProvider"
+```
+
+**➕ Pros**
+- Full control over upload behavior.
+- Supports multi-version packs.
+
+**➖ Tradeoffs**
+- Requires a custom `HostingProvider` implementation.
+</details>
+
+<Callout type="note">
+  An unknown or invalid `type` value falls back to Polymath.
+</Callout>
 
 ## Example
 

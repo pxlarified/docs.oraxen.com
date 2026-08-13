@@ -12,7 +12,7 @@ Custom paintings are configured in `paintings.yml`. Oraxen reads this file and t
 Use this file to register new paintings.
 
 <Callout type="important">
-	Paintings require Paper 1.21.5+.
+	Paintings require Paper 1.21.3+. The `painting_variant` item component used to give paintings as items requires Paper 1.21.5+.
 </Callout>
 <Callout type="note">
 	Paintings are hot-reloadable, meaning that your server doesn't require a restart for your changes to apply.
@@ -53,6 +53,7 @@ Painting texture files live in `plugins/Oraxen/pack/assets/oraxen/textures/paint
 `asset_id: oraxen:edna` points to `plugins/Oraxen/pack/assets/oraxen/textures/painting/edna.png`.<br />
 `asset_id: minecraft:ball` points to `plugins/Oraxen/pack/assets/minecraft/textures/painting/ball.png`.<br />
 
+A key without a namespace, for example `edna`, becomes `oraxen:edna`. Its texture is then looked up at `assets/oraxen/textures/painting/edna.png`.
 </Callout>
 
 ## Painting Entry
@@ -60,9 +61,21 @@ Painting texture files live in `plugins/Oraxen/pack/assets/oraxen/textures/paint
 Each entry under `paintings:` becomes one painting.
 
 <Details>
+  <summary id="enabled"><strong>✅ `enabled`</strong></summary>
+
+Disables a painting without deleting it. Defaults to `true`.<br />
+
+```yaml
+paintings:
+  oraxen:edna:
+    enabled: false
+```
+</Details>
+
+<Details>
   <summary id="author"><strong>👤 `author`</strong></summary>
 
-Sets the author of the painting.<br />
+Sets the author of the painting. Supports MiniMessage formatting. Defaults to `Oraxen`.<br />
 
 ```yaml
 paintings:
@@ -74,7 +87,7 @@ paintings:
 <Details>
   <summary id="title"><strong>🎨 `title`</strong></summary>
 
-Defines the title of the painting.<br />
+Defines the title of the painting. Supports MiniMessage formatting. Defaults to the key path.<br />
 
 ```yaml
 paintings:
@@ -86,7 +99,7 @@ paintings:
 <Details>
   <summary id="asset-id"><strong>📝 `asset_id`</strong></summary>
 
-Sets the asset ID of the painting.<br />
+Sets the asset ID of the painting. Defaults to the painting key.<br />
 
 ```yaml
 paintings:
@@ -98,7 +111,7 @@ paintings:
 <Details>
   <summary id="size"><strong>📏 `width` & `height`</strong></summary>
 
-Sets the width and height (in blocks) of the painting when placed.<br />
+Sets the width and height (in blocks) of the painting when placed. Both default to `1` and are clamped to `1` to `16`.<br />
 
 ```yaml
 paintings:
@@ -111,7 +124,7 @@ paintings:
 <Details>
   <summary id="include_in_random"><strong>📡 `include_in_random`</strong></summary>
 
-  Whether this painting can be randomly selected when a player places a painting.<br />
+  Whether this painting can be randomly selected when a player places a painting. Defaults to `false`. The legacy `random_place` key is honored when `include_in_random` is absent.<br />
 
 ```yaml
 paintings:

@@ -1,0 +1,29 @@
+---
+title: "🌱 EcoItems"
+description: "EcoItems integration for Oraxen."
+---
+
+import { Callout, Tabs, Tab, Steps } from '@site/src/components/Compat'
+
+# 🌱 EcoItems
+
+## Overview
+Oraxen includes built-in EcoItems compatibility. This allows you to import items created with EcoItems and use them as a base for your Oraxen items, just like MMOItems and MythicCrucible.
+
+## Usage
+```yaml
+myecoitem:
+  displayname: "<gradient:#59A7EA:#F1D2FF>Test"
+  ecoitem:
+    id: my_ecoitem_id
+```
+
+You can also use `ecoitem_id: my_ecoitem_id` as a string shorthand for the `ecoitem` section.
+
+Loot entries in drop mechanics support an `ecoitem` key.
+
+```yaml
+drop:
+  loots:
+    - { ecoitem: my_ecoitem_id, probability: 1.0 }
+```

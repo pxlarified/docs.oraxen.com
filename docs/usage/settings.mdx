@@ -54,7 +54,7 @@ Plugin:
 ```
 
 `keep_this_up_to_date` - Automatically updates the config when settings change between Oraxen versions. Oraxen may delete obsolete settings when this is enabled.<br />
-`language` - Selects the language file Oraxen uses for messages. Valid options include `czech`, `english`, `french`, `german`, `jpn_JP`, `korean`, `ru-RU`, `zh-CN`, and `zh-TW`.<br />
+`language` - Selects the language file Oraxen uses for messages. Valid options include `czech`, `english`, `french`, `german`, `jpn_JP`, `korean`, `pt-BR`, `ru-RU`, `zh-CN`, and `zh-TW`.<br />
 `introduction.enabled` - Shows the first-run welcome message. Set this to `false` to suppress it entirely.<br />
 `introduction.console_sent` - Internal flag set after the welcome message has been shown in console.<br />
 `auto_update_paper_config` - Updates `paper-global.yml` to disable block updates for custom blocks.<br />
@@ -88,7 +88,7 @@ ConfigsTools:
   error_item:
     material: PODZOL
     excludeFromInventory: false
-    injectID: false
+    injectId: false
 ```
 
 `skipped_model_data_numbers` - Reserves specific CustomModelData values so Oraxen will not assign them automatically. This list accepts singular numbers and ranges such as `1-4`.<br />
@@ -96,7 +96,7 @@ ConfigsTools:
 `disable_automatic_glyph_code` - Stops Oraxen from auto-generating glyph codes.<br />
 `error_item.material` - Material used for the fallback item shown when a config entry fails.<br />
 `error_item.excludeFromInventory` - Hides the fallback item from inventories when enabled.<br />
-`error_item.injectID` - Injects the invalid entry's ID into the fallback item for easier debugging.<br />
+`error_item.injectId` - Injects the Oraxen item-ID tag into the fallback item so Oraxen recognizes it as an Oraxen item. Defaults to `true` in code. The legacy `injectID` casing shipped in the default `settings.yml` is not read and has no effect.<br />
 
 </Details>
 
@@ -295,6 +295,18 @@ Pack:
 `upload.self-host.port` - Sets the port the self-hosted HTTP server listens on.<br />
 `upload.self-host.domain` - Sets the domain or IP and port players use to download the self-hosted pack.<br />
 
+#### External upload type
+
+When `upload.type` is `external`, `Pack.upload.options.class` must name a fully qualified class implementing `HostingProvider`. The constructor may be no-arg or take a `ConfigurationSection`. The whole `options` section is passed to the provider. This section is not present in the default `settings.yml` and must be added manually.
+
+```yaml
+Pack:
+  upload:
+    type: external
+    options:
+      class: "com.example.MyHostingProvider"
+```
+
 ### Dispatch
 
 ```yaml
@@ -322,7 +334,7 @@ Pack:
 `dispatch.disable.movement` - Freezes player movement while the pack loads.<br />
 `dispatch.disable.damage` - Prevents damage while the pack loads.<br />
 `dispatch.prompt` - Sets the resource-pack prompt shown to players.<br />
-`dispatch.layer` - Sets a resource-pack layer name for BungeeCord or Velocity compatibility. Any non-empty value makes Oraxen use `addResourcePack` instead of `setResourcePack`, allowing multiple packs to coexist on Minecraft 1.20.3+.<br />
+`dispatch.layer` - Currently has no effect. The plugin never reads this setting. On Minecraft 1.20.3+ Oraxen always sends its pack without replacing other packs, so multiple packs already coexist.<br />
 
 ### Receive
 

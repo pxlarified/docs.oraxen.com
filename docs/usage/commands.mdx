@@ -33,7 +33,7 @@ Opens the Oraxen item browser GUI.
 ```
 
 `oraxen.command.inventory.view` - Allows viewing the item browser.<br />
-`oraxen.command.inventory.give` - Allows taking items from the browser. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+Anyone who can open the browser can take items from it. There is no separate permission for this.<br />
 </details>
 
 <details>
@@ -108,8 +108,8 @@ Repairs the item in your hand or all repairable items in your inventory.
 Reloads specific Oraxen systems or everything at once.
 
 ```yml
-/oraxen reload <items|pack|hud|recipes|configs|messages|paintings|all>
-/oraxen rl <items|pack|hud|recipes|configs|messages|paintings|all>
+/oraxen reload <items|pack|hud|recipes|configs|messages|paintings|discs|all>
+/oraxen rl <items|pack|hud|recipes|configs|messages|paintings|discs|all>
 ```
 
 `oraxen.command.reload` - Allows using the reload command.<br />
@@ -118,10 +118,11 @@ Reloads specific Oraxen systems or everything at once.
 `pack` - Regenerate the resource pack.<br />
 `hud` - Reload HUD configuration and restart HUD tasks.<br />
 `recipes` - Reload recipes.<br />
-`configs` - Reload configuration files and custom paintings.<br />
+`configs` - Reload configuration files, custom paintings, and custom jukebox songs.<br />
 `messages` - Reload configuration files/messages.<br />
 `paintings` - Reload custom paintings.<br />
-`all` - Reload messages, paintings, mechanics, items, pack, HUDs, and recipes.<br />
+`discs` - Reload custom jukebox song (music disc) configuration.<br />
+`all` - Reload messages, paintings, jukebox songs, mechanics, items, pack, HUDs, and recipes.<br />
 </details>
 
 <details>
@@ -145,7 +146,6 @@ Handles resource-pack delivery utilities and default asset extraction.
 
 ```yml
 /oraxen pack send [targets]
-/oraxen pack msg [targets]
 /oraxen pack extract_default [all|textures|models|sounds] [override]
 ```
 
@@ -153,11 +153,10 @@ Handles resource-pack delivery utilities and default asset extraction.
 `oraxen.command.pack.send` - Extra permission required for `/oraxen pack send`.<br />
 
 `send` - Sends the configured resource pack to the selected players, or to yourself if no target is provided.<br />
-`msg` - Sends the resource-pack join message with the resolved pack URL.<br />
 `extract_default` - Extracts bundled default assets into the Oraxen data folder.<br />
 
 <Callout type="warning">
-  `pack msg` and `pack extract_default` do not define their own extra permission in code, so access depends on the parent `/oraxen pack` permission.
+  `pack extract_default` does not define its own extra permission in code, so access depends on the parent `/oraxen pack` permission.
 </Callout>
 </details>
 
@@ -221,10 +220,9 @@ Opens the emoji book and shows all configured emoji glyphs the player can access
 ```
 
 `oraxen.command.emojis` - Allows using the emoji command.<br />
-`oraxen.command.emoji` - Also required by the current command registration.<br />
 
 <Callout type="note">
-  Clicking an emoji entry suggests the glyph character in chat, and hovering it shows its placeholders.
+  Clicking an emoji entry copies the glyph character to the clipboard, and hovering it shows its placeholders.
 </Callout>
 </details>
 
@@ -382,8 +380,6 @@ Places or removes Oraxen furniture in a single location or in an area.
 ```
 
 `oraxen.command.admin` - Allows using admin tools.<br />
-
-Use `all` as the furniture ID together with `remove` to clear any Oraxen furniture found in the selected area.
 </details>
 
 <details>
@@ -396,6 +392,10 @@ Plays a totem-resurrection animation for a player using an Oraxen item or vanill
 ```
 
 `oraxen.command.totem-animation` - Allows playing custom totem animations.<br />
+
+<Callout type="note">
+  This command is only available on servers running Minecraft 1.21.2 or newer.
+</Callout>
 
 <Callout type="note">
   Vanilla items can be written as `minecraft:totem_of_undying` or by material name. Oraxen applies Paper death-protection components when supported so custom items can trigger the animation.
@@ -445,33 +445,11 @@ Generates the Oraxen JSON schema file inside the plugin folder.
 `oraxen.command.schema` - Allows generating the schema.<br />
 </details>
 
-### Text Effects
-
-<details>
-<summary id="text-effect-preview"><strong>🌈 Text Effect Preview</strong></summary>
-
-Applies a configured text effect to a message preview in chat and the action bar.
-
-```yml
-/oraxen texteffect <effect> <text>
-```
-
-`oraxen.command.texteffect` - Allows using text effect commands.<br />
-</details>
-
-<details>
-<summary id="text-effects-list"><strong>📝 Text Effects List</strong></summary>
-
-Lists all available text effects, their descriptions, and a live demo for players.
-
-```yml
-/oraxen texteffects
-```
-
-`oraxen.command.texteffect` - Allows using text effect commands.<br />
-</details>
-
 ## Notes
+
+<Callout type="info">
+  The text effect commands were removed from the plugin. An old `text_effects.yml` is migrated to a backup folder automatically.
+</Callout>
 
 <Callout type="info">
   Many utility and admin commands are player-only in practice, even when the syntax looks generic. Commands such as `/oraxen inventory`, `/oraxen repair`, `/oraxen recipes`, `/oraxen emojis`, `/oraxen hud toggle`, `/oraxen totem-animation`, and the admin placement tools should be run by or target an online player ingame.

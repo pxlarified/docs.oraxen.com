@@ -244,4 +244,5 @@ public class MyListener implements Listener {
   - `OraxenPackPreUploadEvent` - cancellable, fired async (avoid unsafe Bukkit calls)
   - `OraxenPackUploadEvent` - pack got uploaded; provides the `HostingProvider` (URL, SHA1, UUID)
   - Block / furniture events: `events.noteblock.*`, `events.stringblock.*`, `events.chorusblock.*`, `events.shapedblock.*`, `events.furniture.*`
+  - Shaped blocks currently only fire a break event (`OraxenShapedBlockBreakEvent`). There are no damage, interact or place variants yet.
 </Callout>

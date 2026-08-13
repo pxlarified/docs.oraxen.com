@@ -9,7 +9,7 @@ import { Callout } from '@site/src/components/Compat'
 
 ### Can I Disable The Default Assets And Configs Oraxen Comes With?
 
-Yes, we have a dedicated tutorial for it <Highlight color="#2E8B57" to="usage\tutorials\d017g">**here**</Highlight>.
+Yes. Default configs are controlled by `Plugin.generation.default_configs` in `settings.yml` and can be removed with `/oraxen remove-defaults`. For the default assets and branding we have a dedicated tutorial <Highlight color="#2E8B57" to="usage/tutorials/d017g">**here**</Highlight>.
 
 ### Can I Use Oraxen Items In Custom Recipes?
 Yes, Oraxen items can be used in both vanilla crafting recipes and custom recipes. You can reference Oraxen items in recipe configurations using their item IDs. Check the recipes documentation for detailed examples.
@@ -30,37 +30,37 @@ Simply back up your entire `/plugins/Oraxen/` folder, which contains all configu
 You can configure this in `settings.yml`. The example below shows where you can disable or change the sound.
 
 ```yaml
+Pack:
   receive:
-    enabled: true
     loaded:
       actions:
         sound:
           enabled: true
-          type: minecraft:welcome
+          type: oraxen:welcome
           volume: 1.0
           pitch: 1.0
 ```
 
 ### How Do I Hide Item Tooltips?
-Use the <Highlight color="#1877F2" to="https://github.com/lolgeny/item-tooltip-remover">**Item Tooltip Remover**</Highlight> resource pack or datapack to hide tooltips for custom items.
+Set `hide_tooltip: true` under the item's `Components` section (1.20.5+). For vanilla items you can use the <Highlight color="#1877F2" to="https://github.com/lolgeny/item-tooltip-remover">**Item Tooltip Remover**</Highlight> resource pack or datapack.
 
 ### How Do I Just Use Oraxen's Mechanics (no resource pack)?
 Go to your `settings.yml` file and set the following options.
 
 ```yaml
-  upload:
-    enabled: false
 Pack:
   generation:
     generate: false
-    compression: BEST_COMPRESSION
-    protection: false
+  upload:
+    enabled: false
   dispatch:
-    send_pack: false
-  enable_configs_updater: false
+    send: false
+Plugin:
+  keep_this_up_to_date: false
 Misc:
   reset_recipes: false
-  auto_update_items: false
+ItemUpdater:
+  update_items: false
 ```
 
 The configurations do not go in that exact order. Once you've changed these lines, delete what is inside the `/Oraxen/pack`, `/Oraxen/items` and `/Oraxen/glyphs` paths and restart the server.
@@ -102,7 +102,7 @@ Yes, you can merge your existing resource pack with Oraxen's generated pack. Mor
 Oraxen supports PNG files for textures and JSON files for models. Textures should be in PNG format with appropriate resolutions (`16x16`, `32x32`, etc.). Models should follow Minecraft's JSON model format. We are restricted by Minecraft's texture limits (e.g. `256x256` for glyphs).
 
 ### Where Do I Suggest New Features Or Report An Issue?
-- For critical issues (e.g. Dupe Glitches) join our <Highlight color="#1877F2" to="https://discord.gg/sstfjsJcQ5">**Discord**</Highlight> and open a support ticket. 
+- For critical issues (e.g. Dupe Glitches) join our <Highlight color="#1877F2" to="https://discord.gg/N7AJFJTgBS">**Discord**</Highlight> and open a support ticket. 
 - For normal suggestions or bug reports use the dedicated `#🐛┃bugs` and `#⭐┃suggestions` channels.
 
 ### Why Do My Textures Work When I Use OptiFine But Not In Vanilla?
@@ -126,4 +126,4 @@ Verify your purchase to access support channels and beta builds on Discord.
   - Your **SpigotMC / Polymart username**  
   - The product resource (e.g., download button or "Purchased Resources" section)  
   - Your **Discord username** (for example, shown in a split view with Discord open)
-- Submit the screenshot in a new ticket on our <Highlight color="#1877F2" to="https://discord.gg/sstfjsJcQ5">**Discord**</Highlight>.
+- Submit the screenshot in a new ticket on our <Highlight color="#1877F2" to="https://discord.gg/N7AJFJTgBS">**Discord**</Highlight>.

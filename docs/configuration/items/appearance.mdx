@@ -159,13 +159,13 @@ my_item:
 ```
 
 **Minecraft version**<br />
-`1.21.2+`
+`1.21.4+`
 </Details>
 
 <Details>
 <summary id="generate_model"><strong>⚙️ `generate_model`</strong></summary>
 
-Automatically generates a model JSON from `textures`. Defaults to `true` when `model` is not set.
+Automatically generates a model JSON from `textures`. Effectively defaults to `false`, so enable it explicitly when generating from `textures`.
 
 ```yaml
 my_item:
@@ -217,12 +217,12 @@ my_item:
 <Details>
     <summary id="generated_model_path"><strong>🧭 `generated_model_path`</strong></summary>
 
-Custom output path for generated model files. Supports namespaced paths like `oraxen:models/weapons`.
+Custom output path for generated model files. Supports namespaced paths like `oraxen:weapons`. The `models/` prefix is inserted automatically, so do not include it.
 
 ```yaml
 my_item:
   Pack:
-    generated_model_path: oraxen:models/weapons
+    generated_model_path: oraxen:weapons
 ```
 </Details>
 
@@ -334,16 +334,13 @@ my_item:
 <Details>
 <summary id="exclude_from_predicates"><strong>🚫 `exclude_from_predicates`</strong></summary>
 
-Exclude this item from CustomModelData predicate generation.
+Exclude this item from CustomModelData predicate generation. Works on all versions. On `1.21.4+` it also excludes the item from custom_model_data component data and vanilla item definitions.
 
 ```yaml
 my_item:
   Pack:
     exclude_from_predicates: true
 ```
-
-**Minecraft version**<br />
-`1.21.4+`
 </Details>
 
 <Details>

@@ -96,6 +96,17 @@ myitem:
 </Details>
 
 <Details>
+<summary id="customname"><strong>🏷️ `customname`</strong></summary>
+
+Sets the item's custom name on `1.20.5+`. This sets the display name component, distinct from `itemname` which sets the item_name component.<br />
+
+```yaml
+myitem:
+  customname: "<red>My Cool Item"
+```
+</Details>
+
+<Details>
 <summary id="lore"><strong>📜 `lore`</strong></summary>
 
 Sets the item's lore lines.<br />
@@ -180,6 +191,15 @@ Makes the item inherit from another item template.<br />
 ```yaml
 myitem:
   template: base_sword
+```
+
+**Defining a template**<br />
+When `template` is the boolean `true`, the section becomes a reusable template and is excluded from the item registry.
+
+```yaml
+base_sword:
+  template: true
+  material: IRON_SWORD
 ```
 </Details>
 
@@ -301,27 +321,32 @@ A full list of supported attributes can be found <Highlight color="#1877F2" to="
  - `MULTIPLY_SCALAR_1`<br />
 
 **Slot groups**
- - `HAND`
+ - `HAND` (alias for `MAINHAND`)
+ - `MAINHAND`
  - `OFFHAND`
  - `HEAD`
  - `CHEST`
  - `LEGS`
  - `FEET`
+ - `BODY`
+ - `SADDLE`
  - `ARMOR`
  - `ANY`
+
+Unrecognized values silently fall back to `ANY`.
  
  <Callout type="important">
   Requires `Minecraft 1.20.5+` and `Oraxen v1.212.0+` for "modern" format attributes. 
  </Callout>
  
  <Callout type="info">
-  The legacy list format (`AttributeModifiers: [{...}]`) still works. If Oraxen detects a section format, it uses the modern parser. If it finds a list, it falls back to the legacy format. Both formats can coexist across different items.
+  The legacy list format (`AttributeModifiers: [{...}]`) still works. If Oraxen detects a section format, it uses the modern parser. If it finds a list, it falls back to the legacy format. Both formats can coexist across different items. In the list format, `operation` is numeric (`0` = ADD_NUMBER, `1` = ADD_SCALAR, `2` = MULTIPLY_SCALAR_1). String operation names only work in the section format.
  </Callout>
  
  <Details>
      <summary>👁️ `DisplayModes`</summary>
 
-   Display modes can control how each modifier appears in item tooltips.<br />
+   Display modes can control how each modifier appears in item tooltips. `display` parses only `type` and `text`.<br />
    ```yaml
    AttributeModifiers:
      hidden_armor:
@@ -331,16 +356,19 @@ A full list of supported attributes can be found <Highlight color="#1877F2" to="
        slot: CHEST
        display:
          type: hidden  # Completely hide from tooltip
-         custom_text:
-           attribute: ATTACK_DAMAGE
-           amount: 10
-           operation: ADD_NUMBER
-           slot: HAND
-           display:
-             type: override
-             text: "<red>+10 Fire Damage"  # Custom MiniMessage tooltip text
-             ```
-             
+   ```
+   ```yaml
+   AttributeModifiers:
+     fire_damage:
+       attribute: ATTACK_DAMAGE
+       amount: 10
+       operation: ADD_NUMBER
+       slot: MAINHAND
+       display:
+         type: override
+         text: "<red>+10 Fire Damage"  # Custom MiniMessage tooltip text
+   ```
+   
    **Display types**<br />
    - `hidden` (hide tooltip line)
    - `reset` or `default` (use vanilla tooltip line)
@@ -360,7 +388,7 @@ Adds potion effects to potion-like items.<br />
 ```yaml
 myitem:
   PotionEffects:
-    - Type: speed
+    - type: speed
       duration: 200
       amplifier: 1
       ambient: false
@@ -412,7 +440,7 @@ myitem:
   AttributeModifiers:
     - attribute: attack_damage
       amount: 7
-      operation: ADD_NUMBER
+      operation: 0 # 0 = ADD_NUMBER, 1 = ADD_SCALAR, 2 = MULTIPLY_SCALAR_1
       slot: HAND
       name: "flame_blade_damage"
 ```

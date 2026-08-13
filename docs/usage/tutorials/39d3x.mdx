@@ -8,7 +8,7 @@ import { Callout, Steps } from '@site/src/components/Compat'
 # 🪽 Creating an Elytra
 
 ## Overview
-Elytras & Armor are controlled via the <Highlight color="#1877F2">**Equippable**</Highlight> Component. Elytras are made out of 2 assets, an "icon" model / texture and a wing texture. 
+Elytras & Armor are controlled via the <Highlight color="#1877F2">**Equippable**</Highlight> Component. It requires Minecraft `1.21.2+` and the default `CustomArmor.type: COMPONENT` setting in `settings.yml`. Elytras are made out of 2 assets, an "icon" model / texture and a wing texture. 
 
 ## Tutorial
 
@@ -75,7 +75,7 @@ Place your Elytra texture at `plugins/Oraxen/pack/textures/default/armors/magic_
 
 
 ### Reload and regenerate pack
-Run `/oraxen reload all` and then give yourself the item via `/oraxen give <youritemname>` (or get it from `/oraxen inv`).
+Run `/oraxen reload all` and then give yourself the item via `/oraxen give @s magic_elytra` (or get it from `/oraxen inv`).
 </Steps>
 
 ## Troubleshooting

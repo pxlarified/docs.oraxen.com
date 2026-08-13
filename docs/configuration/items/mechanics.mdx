@@ -141,7 +141,7 @@ Mechanics:
 
 **Options**<br />
 `lightning_bolts_amount` defines how many bolts are spawned.<br />
-`random_location_variation` defines the random spread in blocks.<br />
+`random_location_variation` defines a random offset in blocks applied to each strike position on the X and Y axes.<br />
 `delay` defines the cooldown in milliseconds.<br />
 `charges` defines how many uses the item has before being consumed. Use `-1` for unlimited uses.
 </Details>
@@ -315,6 +315,14 @@ Mechanics:
 **Options**<br />
 `radius` defines the area around the broken block.<br />
 `depth` defines how many layers are mined.
+
+**Global configuration**<br />
+```yaml
+bigmining:
+  enabled: true
+  call_events: true
+```
+`call_events` controls whether Oraxen calls block break events for the extra blocks. Known to cause issues with some enchantment plugins when enabled.
 </Details>
 
 <Details>
@@ -325,13 +333,20 @@ Automatically smelts supported mined blocks.<br />
 ```yaml
 Mechanics:
   smelting:
-    enabled: true
     play_sound: true
 ```
 
 **Options**<br />
-`enabled` toggles the mechanic for the item.<br />
 `play_sound` controls whether a sound is played during smelting.
+
+**Global configuration**<br />
+```yaml
+smelting:
+  enabled: true
+  blacklist_cooked:
+    - WET_SPONGE
+```
+`blacklist_cooked` defines drops that should never be smelted.
 </Details>
 
 <Details>
@@ -352,7 +367,7 @@ Mechanics:
 ```yaml
 bottledexp:
   enabled: true
-  durability_cost: 1
+  durability_cost: 10
 ```
 </Details>
 
@@ -370,7 +385,8 @@ Mechanics:
 
 **Options**<br />
 `hardness` defines the delay between break animation updates.<br />
-`probability` defines the chance to receive the bedrock drop.
+`probability` defines the chance to receive the bedrock drop.<br />
+`delay` defines the delay in ticks before breaking starts.
 
 **Global configuration**<br />
 ```yaml
@@ -472,6 +488,7 @@ backpack:
 `rows` defines the inventory size.<br />
 `title` defines the backpack GUI title.<br />
 `open_sound` and `close_sound` define the sounds played when the backpack opens and closes.<br />
+`volume` and `pitch` define the sound volume and pitch (both default to `1.0`).<br />
 `blocked-items` defines items that cannot be stored in the backpack. Vanilla item IDs can be namespaced or unnamespaced, while Oraxen item IDs require the `oraxen:` prefix. Blocking `shulker_box` also blocks every colored shulker box.
 
 <Callout type="warning">
@@ -506,7 +523,7 @@ leather_backpack:
 ```
 
 **Options**<br />
-`slot` defines where the item must be equipped or stored for the cosmetic to render.<br />
+`slot` defines where the item must be equipped or stored for the cosmetic to render. The special value `INVENTORY` triggers from anywhere in the inventory except the hands.<br />
 `model` optionally overrides the displayed model.<br />
 `offset` defines the rendered position relative to the player.<br />
 `scale` defines the rendered size.<br />
@@ -674,7 +691,7 @@ Runs configured commands as console, player, or opped player.<br />
 ```yaml
 Mechanics:
   commands:
-    cooldown: 5
+    cooldown: 5000 # 5 seconds
     permission: "my.awesome.perm"
     one_usage: true
     console:
@@ -686,10 +703,37 @@ Mechanics:
 ```
 
 **Options**<br />
-`cooldown` defines the delay between uses in seconds.<br />
+`cooldown` defines the delay between uses in milliseconds.<br />
 `permission` defines a required permission node.<br />
 `one_usage` consumes one item on use.<br />
 `console`, `player`, and `opped_player` define command lists for each sender type.
+</Details>
+
+<Details>
+    <summary id="custom"><strong>🧩 `custom`</strong></summary>
+
+Runs configurable actions when an event happens with the item. Each subsection is a freely named variant with its own event and actions.<br />
+
+```yaml
+Mechanics:
+  custom:
+    my_variant:
+      event: CLICK:right:block
+      one_usage: false
+      cooldown: 40
+      conditions:
+        - '#player.isSneaking()'
+      actions:
+        - '[console] say <player> used the item'
+        - '[message] <green>Hello <player>!'
+```
+
+**Options**<br />
+`event` defines the trigger. Supported types are `BREAK`, `CLICK`, `INV_CLICK`, `DROP`, `PICKUP`, `EQUIP`, `UNEQUIP`, and `DEATH`. `CLICK` accepts optional parameters as `CLICK:<right|left|all>:<air|block|all>`.<br />
+`one_usage` consumes one item when the actions run. Defaults to `false`.<br />
+`cooldown` defines the delay between uses in ticks.<br />
+`conditions` defines optional expressions evaluated on the player. All must pass for the actions to run.<br />
+`actions` defines the actions to run. Supported prefixes are `[console]`, `[player]`, `[message]`, `[actionbar]`, and `[sound]`. `<player>` is replaced by the player name. A variant without actions is ignored.
 </Details>
 
 <Details>
@@ -721,6 +765,14 @@ Mechanics:
 Each subsection key is a potion effect type.<br />
 `requires_full_set` makes the effect apply only when the full armor set is worn.<br />
 `duration`, `amplifier`, `ambient`, `particles`, and `icon` control the effect behavior.
+
+**Global configuration**<br />
+```yaml
+armor_effects:
+  enabled: true
+  delay_in_ticks: 20
+```
+`delay_in_ticks` defines how often effects are reapplied (defaults to `20`). It is also the default `duration` for each effect.
 </Details>
 
 <Details>
@@ -747,8 +799,7 @@ Lets the item be worn on the player's head.<br />
 
 ```yaml
 Mechanics:
-  hat:
-    enabled: true
+  hat: {}
 ```
 
 <Callout type="info">
@@ -1019,12 +1070,12 @@ table:
 `seat` adds one legacy seat. `height` controls the vertical offset and optional `yaw` fixes the seated player's rotation; without `yaw`, the furniture yaw is used.<br />
 `seats` adds multiple seats, formatted as `<x>,<y>,<z>` or `<x>,<y>,<z> <yaw>`. Offsets are relative to the furniture center and are rotated with the furniture. When `seats` is present, it is used instead of `seat`.<br />
 `restricted_rotation` (`NONE`, `STRICT`, or `VERY_STRICT`) and `rotatable` control placement rotation.<br />
-`light`, `lights`, `hardness`, and `drop` define placed behavior. `lights` entries use `<x>,<y>,<z> <level>` for per-offset light sources.<br />
+`light`, `lights`, `hardness`, and `drop` define placed behavior. `lights` entries use `<x>,<y>,<z> <level>` for per-offset light sources. `drop` also supports `fortune`, `minimal_type`, and `best_tools`.<br />
 `item` defines an alternate display item when placed.<br />
-`limited_placing`, `blocklocker`, and `storage` add placement rules, protection, and container behavior.<br />
+`limited_placing`, `blocklocker`, and `storage` add placement rules, protection, and container behavior. `limited_placing` also supports `block_tags`, `oraxen_blocks`, and a `radius_limitation` subsection with `radius` and `amount`. `storage` also supports `open_sound`, `close_sound`, `open_animation`, `close_animation`, `volume`, and `pitch`.<br />
 `jukebox` lets the furniture play music discs and swap to an active model.<br />
-`evolution`, `farmland_required`, and `farmblock_required` support plant and farming setups.<br />
-`text_entity`, `text_entities`, and `display_entity_properties` configure attached text displays and display entity rendering. Display entity properties support `display_transform`, `scale`, `translation`, `brightness.block_light`, `brightness.sky_light`, `tracking_rotation`, `view_range`, `interpolation_duration`, `interpolation_delay`, `shadow_strength`, `shadow_radius`, `displayWidth`, and `displayHeight`.<br />
+`evolution`, `farmland_required`, and `farmblock_required` support plant and farming setups. `evolution` also supports `light_boost`, `rain_boost`, and `bone_meal` subsections.<br />
+`text_entity`, `text_entities`, and `display_entity_properties` configure attached text displays and display entity rendering. Text displays also support `line_width`, `background_color`, `text_opacity`, `see_through`, `shadow`, `default_background`, `alignment`, `billboard`, `scale`, `view_range`, and `refresh_ticks`. Display entity properties support `display_transform`, `scale`, `translation`, `brightness.block_light`, `brightness.sky_light`, `tracking_rotation`, `view_range`, `interpolation_duration`, `interpolation_delay`, `shadow_strength`, `shadow_radius`, `displayWidth`, and `displayHeight`.<br />
 `armor_stand_properties` configures armor-stand furniture `scale` and `translation`; armor stands can also reuse `display_entity_properties.scale` and `display_entity_properties.translation` for convenience.<br />
 `modelengine_id` is also supported for ModelEngine-based furniture.
 

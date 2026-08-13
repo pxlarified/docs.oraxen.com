@@ -8,7 +8,7 @@ import { Callout } from '@site/src/components/Compat'
 # 📟 HUDs
 
 ## Overview
-HUDs in Oraxen use glyphs to render custom textures directly in text-based displays. This lets you build bars, counters, icons, and other on-screen overlays in places like action bars, scoreboards, and GUI titles. Under the hood, each HUD element is a Unicode character mapped to a texture through Minecraft’s font system. Because fonts can be separated, the same character can show different visuals depending on the selected font, giving you flexible control over how your HUD appears.
+HUDs in Oraxen use glyphs to render custom textures in the action bar. This lets you build bars, counters, icons, and other on-screen overlays. Under the hood, each HUD element is a Unicode character mapped to a texture through Minecraft’s font system. Because fonts can be separated, the same character can show different visuals depending on the selected font, giving you flexible control over how your HUD appears.
 
 ## Configuration
 HUDs are configured in the `hud.yml` file in the `plugins/Oraxen/` directory.
@@ -35,11 +35,11 @@ HUDs are configured in the `hud.yml` file in the `plugins/Oraxen/` directory.
 />
 
 ### Properties
-`permission` - The permissions required to use this HUD.<br />
-`display_text` - The text to display for this HUD.<br />
-`disabled_whilst_in_water` - Whether the HUD is disabled whilst in water.<br />
-`enabled_by_default` - Whether the HUD is enabled by default.<br />
-`enable_for_spectator_mode` - Whether this HUD appears for spectators.<br />
+`permission` - The permissions required to use this HUD. Defaults to none.<br />
+`display_text` - The text to display for this HUD. A HUD without it is skipped with a warning.<br />
+`disabled_whilst_in_water` - Whether the HUD is disabled whilst in water. Defaults to false.<br />
+`enabled_by_default` - Whether the HUD is enabled by default. Defaults to false.<br />
+`enable_for_spectator_mode` - Whether this HUD appears for spectators. Defaults to false.<br />
 
 <Callout type="warning">
   Oraxen's HUD system is not complex or advanced. For more advanced HUDs, consider using a third-party plugin such as MythicHUD.
@@ -52,7 +52,7 @@ You can fine-tune HUD placement using `<shift>` and `<font>` in `display_text`.
 - `<shift:-10>` moves elements **10 pixels left**
 - `<shift:10>` moves elements **10 pixels right**
 
-This shift behavior is specific to HUD rendering and is useful for lining up text, icons, and bars precisely.
+`<shift>` works everywhere Oraxen parses MiniMessage and is useful for lining up text, icons, and bars precisely.
 
 `<font:...>` lets you render normal text/placeholders with a custom font file, similar to glyph rendering. This is especially useful for vertical alignment (moving text up/down) using the font's `ascent` value.
 

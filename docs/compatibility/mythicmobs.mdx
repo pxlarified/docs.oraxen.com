@@ -18,7 +18,9 @@ Oraxen includes built-in MythicMobs compatibility. This allows you to use Oraxen
 <details>
 <summary id="using-an-oraxen-item-for-drops"><strong>Using an Oraxen Item for Drops</strong></summary>
 
-`oraxen [oraxen item name] [amount to drop(number or region)] [chance to drop(0-1)]`
+`oraxen [oraxen item name] [amount to drop(hyphenated range)] [chance to drop(0-1)]`
+
+The amount must be a hyphenated range. A plain number falls back to 1. Use `6-6` for a fixed amount.
 
 **Example**
 ```yml

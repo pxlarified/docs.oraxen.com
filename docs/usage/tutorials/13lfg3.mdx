@@ -16,7 +16,7 @@ If you want to stop that sound completely, disable the sound action. If you stil
 
 
 <Callout type="tip">
-    You can remove the default sound automatically via the `/oraxen remove-branding` command.
+    You can remove the default sound automatically via the `/oraxen remove-branding` command. It asks you to confirm with `/oraxen remove-branding confirm`, and it also disables default asset generation.
 </Callout>
 
 
@@ -50,30 +50,32 @@ Go to your Oraxen plugin folder and open `plugins/Oraxen/settings.yml`.
 In the `settings.yml`, the welcome sound is located in the `Pack.receive.loaded.actions.sound` section.
 
 ```yaml
-receive:
-  enabled: true
-  loaded:
-    actions:
-      sound:
-        enabled: true
-        type: minecraft:welcome
-        volume: 1.0
-        pitch: 1.0
+Pack:
+  receive:
+    enabled: true
+    loaded:
+      actions:
+        sound:
+          enabled: true
+          type: oraxen:welcome
+          volume: 1.0
+          pitch: 1.0
 ```
 
 ### Disable the sound
 To stop the welcome sound from playing, change `enabled: true` to `enabled: false`.
 
 ```yaml
-receive:
-  enabled: true
-  loaded:
-    actions:
-      sound:
-        enabled: false
-        type: minecraft:welcome
-        volume: 1.0
-        pitch: 1.0
+Pack:
+  receive:
+    enabled: true
+    loaded:
+      actions:
+        sound:
+          enabled: false
+          type: oraxen:welcome
+          volume: 1.0
+          pitch: 1.0
 ```
 
 <Callout>
@@ -84,15 +86,16 @@ receive:
 If you want to keep the effect but use another sound, leave `enabled: true` and replace `type` with a valid Minecraft sound key.
 
 ```yaml
-receive:
-  enabled: true
-  loaded:
-    actions:
-      sound:
-        enabled: true
-        type: minecraft:block.note_block.pling
-        volume: 1.0
-        pitch: 1.0
+Pack:
+  receive:
+    enabled: true
+    loaded:
+      actions:
+        sound:
+          enabled: true
+          type: minecraft:block.note_block.pling
+          volume: 1.0
+          pitch: 1.0
 ```
 </Callout>
 

@@ -143,7 +143,16 @@ myitem:
 
 **Fields**<br />
 `value` sets the durability value and must be at least `1`.<br />
-`damage_block_break` and `damage_entity_hit` are booleans and default to `true`.
+`damage_block_break` and `damage_entity_hit` are booleans and default to `false`. Set them to `true` explicitly to enable durability damage.
+
+**Shorthand**<br />
+An integer value works as shorthand for the section form.
+
+```yaml
+myitem:
+  Components:
+    durability: 250
+```
 
 <Callout type="info">
   On modern versions, this replaces the legacy `durability` mechanic for item durability configuration.
@@ -199,7 +208,21 @@ myitem:
 `consume_seconds` is the consumption time in seconds and defaults to `1.6`.<br />
 `animation` defines the use animation.<br />
 `sound` defines the consume sound.<br />
-`has_consume_particles` controls whether consume particles are shown and defaults to `true`.
+`has_consume_particles` controls whether consume particles are shown and defaults to `true`.<br />
+`on_consume_effects` is a list of effects applied on consumption. Each entry has a `type` of `apply_effects`, `remove_effects`, `clear_all_effects`, `teleport_randomly`, or `play_sound`.
+
+```yaml
+myitem:
+  Components:
+    consumable:
+      on_consume_effects:
+        - type: apply_effects
+          effects:
+            minecraft:haste:
+              duration: 3600
+              amplifier: 0
+          probability: 1.0
+```
 
 <Callout type="info">
   Valid sound keys use Minecraft sound resource locations, such as `entity.generic.eat` or `item.honey_bottle.drink`.
@@ -232,7 +255,8 @@ myitem:
 `model` defines the model resource location.<br />
 `equip_sound` defines the equip sound.<br />
 `dispensable`, `swappable`, and `damage_on_hurt` default to `true`.<br />
-`camera_overlay` defines the overlay texture.
+`camera_overlay` defines the overlay texture.<br />
+`allowed_entity_types` is a list of entity type names allowed to wear the item.
 
 **Slot groups**<br />
 - `HAND`
@@ -261,18 +285,18 @@ myitem:
       damage_per_block: 1
       default_mining_speed: 4.0
       rules:
-        - blocks: "minecraft:mineable/pickaxe"
+        - tag: "minecraft:mineable/pickaxe"
           speed: 8.0
           correct_for_drops: true
 ```
 
 **Minecraft version**<br />
-`1.20.5+`
+`1.20.6+`
 
 **Fields**<br />
 `damage_per_block` sets the durability damage dealt per block and defaults to `1`.<br />
 `default_mining_speed` sets the mining speed and defaults to `1.0`.<br />
-`rules` defines optional mining rules for specific block tags or blocks.
+`rules` defines optional mining rules. Each rule targets blocks with `material`, `materials`, `tag`, or `tags`, and sets `speed` and `correct_for_drops`.
 </Details>
 
 <Details>
@@ -292,8 +316,8 @@ myitem:
 `1.21.2+`
 
 **Fields**<br />
-`seconds` sets the cooldown duration in seconds and must be at least `0`.<br />
-`group` defines the shared cooldown group.
+`seconds` sets the cooldown duration in seconds, must be at least `0`, and defaults to `1.0`.<br />
+`group` defines the shared cooldown group and defaults to `oraxen:<item_id>`.
 </Details>
 
 <Details>
@@ -322,6 +346,7 @@ myitem:
 
 **Fields**<br />
 `oraxen_item`, `minecraft_type`, `crucible_item`, `mmoitems_id`, `mmoitems_type`, and `ecoitem_id` define the item that is returned.<br />
+`minecraft_item` accepts a serialized ItemStack.<br />
 `amount` sets how many of that item remain and defaults to `1`.
 </Details>
 
@@ -342,7 +367,7 @@ myitem:
 `1.21+`
 
 **Fields**<br />
-`show_in_tooltip` controls whether the song appears in the tooltip and defaults to `true`.<br />
+`show_in_tooltip` controls whether the song appears in the tooltip. When the section is present and the key is omitted, it is treated as `false` and the tooltip line is hidden.<br />
 `song_key` is the namespaced song key.
 
 **Format**<br />
@@ -386,7 +411,7 @@ myitem:
 <Details>
 <summary id="generic"><strong>➕ `generic`</strong></summary>
 
-Allows you to use any Minecraft component, even if it is not specifically handled by Oraxen.<br />
+Allows you to use Minecraft components that are not specifically handled by Oraxen. Only components written as a YAML section are passed through. Scalar or list values, such as `enchantable: 15` or `glider: true`, are silently skipped.<br />
 
 ```yaml
 myitem:

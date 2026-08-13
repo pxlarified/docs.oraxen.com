@@ -1,0 +1,24 @@
+---
+title: "🔒 BlockLocker"
+description: "BlockLocker integration for Oraxen."
+---
+
+import { Callout, Tabs, Tab, Steps } from '@site/src/components/Compat'
+
+# 🔒 BlockLocker
+
+## Overview
+Oraxen includes built-in BlockLocker compatibility. It loads automatically when BlockLocker is installed. Custom blocks and furniture opt in via a `blocklocker` mechanic section, allowing players to protect them with BlockLocker.
+
+## Usage
+Add a `blocklocker` section to the `noteblock`, `stringblock` or `furniture` mechanic.
+
+```yaml
+my_container:
+  displayname: "<gradient:#59A7EA:#F1D2FF>Container"
+  Mechanics:
+    furniture:
+      blocklocker:
+        can_protect: true # Optional, defaults to true
+        protection_type: CONTAINER # Optional, defaults to CONTAINER
+```

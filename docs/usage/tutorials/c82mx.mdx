@@ -15,8 +15,8 @@ You can replace it with any custom glyph by defining your own and pointing the l
 
 <Steps>
 
-### Disable default asset generation
-Open `plugins/Oraxen/settings.yml` and disable default asset generation.
+### Disable default asset generation (optional)
+Optionally open `plugins/Oraxen/settings.yml` and disable default asset generation.
 
 <PluginFileTree
   initialTreeData={[
@@ -46,7 +46,7 @@ Plugin:
 ```
 
 <Callout type="note">
-  `pack/lang` files are extracted from Oraxen's default pack assets. If `default_assets` stays enabled, Oraxen will restore the default logo entries on every pack generation.
+  `pack/lang` files are extracted from Oraxen's default pack assets, but only when the whole `pack/lang` folder is missing. Edits to existing files survive pack regeneration. `pack/lang/global.json` is re-extracted if the file is deleted, so edit it rather than deleting it.
 </Callout>
 
 ### Create the logo glyph
@@ -166,7 +166,7 @@ If you use locale files such as `pack/lang/en_us.json`, mirror the same changes 
 Locale files can override `global.json`, so if `en_us.json` still contains the old `menu.game` value, your custom logo will not appear for players using that locale.
 
 <Callout type="tip">
-  After editing the glyph and language files, run `/o reload` and regenerate the resource pack to see the updated pause menu logo in game.
+  After editing the glyph and language files, run `/o reload all` and regenerate the resource pack to see the updated pause menu logo in game.
 </Callout>
 
 </Steps>

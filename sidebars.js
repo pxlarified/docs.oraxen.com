@@ -18,7 +18,7 @@ const sidebars = {docsSidebar: [
     'usage/commands', 'usage/recipes', 'usage/merging', 'usage/hosting', 'usage/settings',
   ]},
   {type: 'category', label: '🤝 Compatibility', link: {type: 'doc', id: 'compatibility/index'}, items: [
-    'compatibility/placeholderapi', 'compatibility/skript', 'compatibility/viaversion', 'compatibility/packlayer', 'compatibility/modelengine', 'compatibility/mythichud', 'compatibility/mythiccrucible', 'compatibility/mythicmobs', 'compatibility/mmoitems', 'compatibility/betterhud',
+    'compatibility/placeholderapi', 'compatibility/skript', 'compatibility/viaversion', 'compatibility/packlayer', 'compatibility/modelengine', 'compatibility/mythichud', 'compatibility/mythiccrucible', 'compatibility/mythicmobs', 'compatibility/mmoitems', 'compatibility/betterhud', 'compatibility/blocklocker', 'compatibility/ecoitems', 'compatibility/executableitems', 'compatibility/worldedit',
     {type: 'category', label: '🧱 Bedrock', link: {type: 'doc', id: 'compatibility/bedrock/index'}, items: [
       {type: 'category', label: '🪶 FeatherConvert', link: {type: 'doc', id: 'compatibility/bedrock/feather/index'}, items: ['compatibility/bedrock/feather/usage']},
     ]},

@@ -49,14 +49,16 @@ Glyphs are configured in `.yml` files in the `plugins/Oraxen/glyphs` directory.
 `texture` - The path to your texture file (relative to `pack/textures/`).<br />
 `ascent` - The vertical offset of the glyph.<br />
 `height` - The scale/height of the glyph.<br />
-`char` - The unicode character used for this glyph (the character the glyph will be mapped to).<br />
+`char` - The unicode character used for this glyph (the character the glyph will be mapped to). Also accepts a list of strings, one per bitmap row. `chars` is an accepted alias.<br />
 `is_emoji` - Whether this glyph appears in `/oraxen emojis`. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+`chat.placeholders` - A list of chat placeholders for the glyph. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+`chat.permission` - The permission required to use the glyph. Defaults to none. <Highlight color="#2E8B57">**Optional**</Highlight><br />
 
 <Callout type="warning">
   The height value must always be greater than or equal to the ascent value. This is a strict requirement enforced by Minecraft.
 </Callout>
 <Callout type="info">
-    Glyphs will not affect standard characters and cannot be used by players through chat, anvils, or other means, unless you use Minecraft's `minecraft:default` font. Please avoid using that font unless you have to.
+    Glyph placeholders like `:farmer:` work in chat, signs, and books for any font, because Oraxen injects the glyph's font component. Anvil renames insert the raw character without a font, so there the glyph only renders with the `minecraft:default` font. The same applies when typing the raw unicode character in places Oraxen does not intercept.
 </Callout>
 
 ### Additional Properties
@@ -66,7 +68,7 @@ Glyphs are configured in `.yml` files in the `plugins/Oraxen/glyphs` directory.
 Makes glyphs tab complete in chat.
 
 <Callout type="note">
-  This only works for glyphs using the `minecraft:default` font.
+  This works for any glyph. It completes the glyph's chat placeholders, so define `placeholders` for the glyph.
 </Callout>
 
 `tabcomplete` - Whether the glyph should tabcomplete.
@@ -121,13 +123,13 @@ Renders PNG sprite sheets and makes them animated ingame using core shaders.
 </Callout>
 
 <Callout type="important">
-  It's important that your texture is a square (e.g. `16x16`), otherwise your glyph will move to the right in each frame.<br />
+  Frames may be non-square. The sheet width or height must be divisible by the frame count. Vertical and horizontal sheets are both supported.<br />
 </Callout>
 
-`frames` - The number of frames in the sprite sheet.<br />
-`fps` - The frames per second of the animation.<br />
-`loop` - Whether the animation should loop.<br />
-`offset` - The horizontal offset of the animation. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+`frames` - The number of frames in the sprite sheet. Max 16, extra frames are dropped with a warning.<br />
+`fps` - The frames per second of the animation. Clamped to 1-127, defaults to 10.<br />
+`loop` - Whether the animation should loop. Defaults to true.<br />
+`offset` - The horizontal offset of the animation. If omitted, the offset is calculated automatically. <Highlight color="#2E8B57">**Optional**</Highlight><br />
 
 ```yaml
 animation:
@@ -143,7 +145,7 @@ animation:
 
 Multi-bitmap glyphs allow you to display multiple custom textures from a single image file by splitting it into a grid.
 
-`cols` - The number of columns in the image.<br />
+`cols` - The number of columns in the image. `columns` is an accepted alias.<br />
 `rows` - The number of rows in the image.<br />
 
 ```yaml
@@ -156,8 +158,12 @@ myglyph:
 ```
 
 <Callout type="info">
-  In this example, the texture is split into 1 column and 5 rows, creating 5 glyph entries from a single file.
+  In this example, the texture is split into 1 column and 5 rows, creating one glyph that spans multiple characters. `<glyph:myglyph>` renders all rows.
 </Callout>
+
+You can select single cells or ranges.<br />
+`<glyph:myglyph:3>` - Renders the third character.<br />
+`<glyph:myglyph:1..4>` - Renders characters 1 to 4.<br />
 
 ![Bitmap Glyphs](/assets/584337616-f468612f-38db-4e42-a90b-e25ce1a5fb1d.png)
 
@@ -169,22 +175,27 @@ myglyph:
 Reference glyphs let you alias part of an existing multi-bitmap glyph.
 
 `glyph` - The unique identifier of the glyph.<br />
-`index` - The characters to include (1-indexed).<br />
+`index` - The characters to include (1-indexed). Accepts a single number or a range (`1..5` or `1-5`). Omitting it selects all characters. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+
+The `reference` section is nested under the glyph name.
 
 ```yaml
-reference:
-  glyph: yourglyph
-  index: 1
+myreference:
+  reference:
+    glyph: yourglyph
+    index: 1
 ```
 
 ```yaml
 emoji-1:
-  reference: yourmultibitmap
-  index: 1
+  reference:
+    glyph: yourmultibitmap
+    index: 1
 
 emoji-10:
-  reference: yourmultibitmap
-  index: 10
+  reference:
+    glyph: yourmultibitmap
+    index: 10
 ```
 </details>
 
@@ -205,17 +216,53 @@ farmer:
     permission: oraxen.chat.farmer
 ```
 
+### font.yml
+
+The `plugins/Oraxen/font.yml` file controls font generation.
+
+`settings.automatically_generate` - Whether Oraxen generates `default.json` for you.<br />
+`settings.perms_chatcolor` - A placeholder used to suffix glyphs in chat. Requires PlaceholderAPI. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+
+The `bitmaps` section defines shared bitmap grids. Each entry takes `texture`, `rows`, `columns`, `ascent` (default 8) and `height` (default 8). Glyphs reference a cell with `bitmap: {id, row, column}`.
+
+The `fonts` section registers ttf fonts with `type`, `file`, `shift_x`, `shift_y`, `size` and `oversample`.
+
+```yaml
+settings:
+  automatically_generate: true
+  perms_chatcolor: "%luckperms_meta_chatcolor%"
+
+bitmaps:
+  example_bitmap:
+    texture: example/texture
+    rows: 2
+    columns: 9
+    ascent: 8
+    height: 8
+
+fonts:
+  my_cool_font:
+    type: "ttf"
+    file: "minecraft:PPP.ttf"
+    shift_x: 0.0
+    shift_y: 1.6
+    size: 8.0
+    oversample: 10.0
+```
+
 ## Usage
 <details>
 <summary id="shifts"><strong>➡️ Shifts</strong></summary>
 
-Shifts are pre-made glyphs that let you move text or glyphs to the left or right by a specific number of pixels.
+Shifts are generated space-font characters that let you move text or glyphs to the left or right by a specific number of pixels.
 
 <Callout type="info">
   Shifts can be used in MiniMessage and PlaceholderAPI.<br />
+  Each tag supports up to 2047 pixels in either direction.<br />
 </Callout>
 
 `<shift:N>` - Shifts N pixels (Negative values supported).<br />
+`<s:N>` - Shorthand for `<shift:N>`.<br />
 
 `%oraxen_shift_N%` - Shifts N pixels to the right (positive).<br />
 `%oraxen_neg_shift_N%` - Shifts N pixels to the left (negative).<br />
