@@ -8,8 +8,8 @@ const config = {
   future: {v4: true},
   url: 'https://oraxen.mizius.com',
   baseUrl: '/',
-  organizationName: 'oraxen',
-  projectName: 'docs.oraxen.com',
+  organizationName: 'miziusLabs',
+  projectName: 'OraxenDocs',
   onBrokenLinks: 'throw',
   i18n: {defaultLocale: 'en', locales: ['en']},
   plugins: [
@@ -29,7 +29,7 @@ const config = {
     docs: {
       sidebarPath: './sidebars.js',
       routeBasePath: '/',
-      editUrl: 'https://github.com/pxlarified/docs.oraxen.com/edit/main/',
+      editUrl: 'https://github.com/miziusLabs/OraxenDocs/edit/main/',
     },
     blog: false,
     theme: {customCss: './src/css/custom.css'},
