@@ -3,6 +3,11 @@
   "framework": null,
   "redirects": [
     {
+      "source": "/",
+      "destination": "https://docs.oraxen.com/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "destination": "https://docs.oraxen.com/:path*",
       "permanent": true
