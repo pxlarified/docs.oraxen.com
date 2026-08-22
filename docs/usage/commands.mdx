@@ -1,0 +1,460 @@
+---
+title: "⌨️ Commands"
+description: "All available Oraxen commands, aliases, permissions, and usage."
+---
+
+import { Callout } from '@site/src/components/Compat'
+
+# ⌨️ Commands
+
+## Overview
+Oraxen is managed through the `/oraxen` root command. It also includes the `/o` and `/oxn` aliases. Most subcommands are intended for administrators, while a few are player-facing tools such as item browsing, emoji browsing, and HUD toggling.
+
+## Permissions
+The root command uses `oraxen.command`.<br />
+Most subcommands also use their own permission nodes, such as `oraxen.command.give` or `oraxen.command.reload`.<br />
+Some subcommands inherit access from their parent command, while others add an extra permission requirement.<br />
+
+## Command Reference
+
+### Core Commands
+
+<details>
+<summary id="inventory"><strong>📦 Inventory</strong></summary>
+
+Opens the Oraxen item browser GUI.
+
+`/oraxen inventory` - Open the item browser.<br />
+`/oraxen inv` - Alias for the same command.<br />
+
+```yml
+/oraxen inventory
+/oraxen inv
+```
+
+`oraxen.command.inventory.view` - Allows viewing the item browser.<br />
+Anyone who can open the browser can take items from it. There is no separate permission for this.<br />
+</details>
+
+<details>
+<summary id="give"><strong>🎁 Give</strong></summary>
+
+Gives an Oraxen item to one or more players.
+
+```yml
+/oraxen give <targets> <item>
+/oraxen give <targets> <item> <amount>
+```
+
+`oraxen.command.give` - Allows using the give command.<br />
+
+<Callout type="note">
+  `targets` uses the standard Minecraft player selector format, so you can target one player, multiple players, or selector groups.
+</Callout>
+</details>
+
+<details>
+<summary id="take"><strong>📤 Take</strong></summary>
+
+Removes matching Oraxen items from one or more players.
+
+```yml
+/oraxen take <targets> <item>
+/oraxen take <targets> <item> [amount]
+```
+
+If `amount` is omitted, Oraxen removes all matching items from each target.
+
+`oraxen.command.take` - Allows using the take command.<br />
+</details>
+
+<details>
+<summary id="dye"><strong>🎨 Dye</strong></summary>
+
+Dyes the item in your main hand using a hex color.
+
+```yml
+/oraxen dye <#RRGGBB>
+```
+
+`oraxen.command.dye` - Allows using the dye command.<br />
+
+<Callout type="warning">
+  This command only works for players and expects a valid hex color such as `#FFAA00`.
+</Callout>
+</details>
+
+<details>
+<summary id="repair"><strong>🛠️ Repair</strong></summary>
+
+Repairs the item in your hand or all repairable items in your inventory.
+
+```yml
+/oraxen repair hand
+/oraxen repair all
+```
+
+`oraxen.command.repair` - Allows using `/oraxen repair`.<br />
+`oraxen.command.repair.all` - Allows using `/oraxen repair all`.<br />
+
+<Callout type="note">
+  This command is marked as deprecated in the plugin source, but it is still registered and available.
+</Callout>
+</details>
+
+<details>
+<summary id="reload"><strong>🔄 Reload</strong></summary>
+
+Reloads specific Oraxen systems or everything at once.
+
+```yml
+/oraxen reload <items|pack|hud|recipes|configs|messages|paintings|discs|all>
+/oraxen rl <items|pack|hud|recipes|configs|messages|paintings|discs|all>
+```
+
+`oraxen.command.reload` - Allows using the reload command.<br />
+
+`items` - Reload item definitions and refresh the item browser.<br />
+`pack` - Regenerate the resource pack.<br />
+`hud` - Reload HUD configuration and restart HUD tasks.<br />
+`recipes` - Reload recipes.<br />
+`configs` - Reload configuration files, custom paintings, and custom jukebox songs.<br />
+`messages` - Reload configuration files/messages.<br />
+`paintings` - Reload custom paintings.<br />
+`discs` - Reload custom jukebox song (music disc) configuration.<br />
+`all` - Reload messages, paintings, jukebox songs, mechanics, items, pack, HUDs, and recipes.<br />
+</details>
+
+<details>
+<summary id="version"><strong>🏷️ Version</strong></summary>
+
+Shows the installed Oraxen version.
+
+```yml
+/oraxen version
+```
+
+`oraxen.command.version` - Allows using the version command.<br />
+</details>
+
+### Resource Pack
+
+<details>
+<summary id="pack"><strong>🧳 Pack</strong></summary>
+
+Handles resource-pack delivery utilities and default asset extraction.
+
+```yml
+/oraxen pack send [targets]
+/oraxen pack extract_default [all|textures|models|sounds] [override]
+```
+
+`oraxen.command.pack` - Base permission for the pack command.<br />
+`oraxen.command.pack.send` - Extra permission required for `/oraxen pack send`.<br />
+
+`send` - Sends the configured resource pack to the selected players, or to yourself if no target is provided.<br />
+`extract_default` - Extracts bundled default assets into the Oraxen data folder.<br />
+
+<Callout type="warning">
+  `pack extract_default` does not define its own extra permission in code, so access depends on the parent `/oraxen pack` permission.
+</Callout>
+</details>
+
+### Recipes
+
+<details>
+<summary id="recipes-showcase"><strong>📖 Recipes Showcase</strong></summary>
+
+Opens the recipe showcase GUI for all permitted recipes or one specific recipe.
+
+```yml
+/oraxen recipes show <all|recipe_name>
+```
+
+`oraxen.command.recipes` - Base permission for recipe commands.<br />
+`oraxen.command.recipes.show` - Allows opening the recipe showcase.<br />
+</details>
+
+<details>
+<summary id="recipe-builder"><strong>🧪 Recipe Builder</strong></summary>
+
+Opens the interactive recipe builder or creates a builder for a specific recipe type.
+
+```yml
+/oraxen recipes builder
+/oraxen recipes builder shaped
+/oraxen recipes builder shapeless
+/oraxen recipes builder furnace <cookingtime> <experience>
+/oraxen recipes builder blasting <cookingtime> <experience>
+/oraxen recipes builder campfire <cookingtime> <experience>
+/oraxen recipes builder smoking <cookingtime> <experience>
+/oraxen recipes builder stonecutting
+```
+
+`oraxen.command.recipes.builder` - Allows opening and using the recipe builder.<br />
+</details>
+
+<details>
+<summary id="recipe-save"><strong>💾 Recipe Save</strong></summary>
+
+Saves the currently open recipe builder to disk.
+
+```yml
+/oraxen recipes save <name> [permission]
+```
+
+`oraxen.command.recipes.builder` - Allows saving built recipes.<br />
+
+If `permission` is set, the saved recipe uses that permission as its unlock requirement.
+</details>
+
+### Player Utilities
+
+<details>
+<summary id="emojis"><strong>😊 Emojis</strong></summary>
+
+Opens the emoji book and shows all configured emoji glyphs the player can access.
+
+```yml
+/oraxen emojis
+```
+
+`oraxen.command.emojis` - Allows using the emoji command.<br />
+
+<Callout type="note">
+  Clicking an emoji entry copies the glyph character to the clipboard, and hovering it shows its placeholders.
+</Callout>
+</details>
+
+<details>
+<summary id="hud-toggle"><strong>🖥️ HUD Toggle</strong></summary>
+
+Enables or disables a specific HUD for the player.
+
+```yml
+/oraxen hud toggle <hud_id>
+```
+
+`oraxen.command.hud.toggle` - Allows toggling HUDs.<br />
+
+<Callout type="warning">
+  The root `hud` command defines a `toggle` argument in code, but the actual executable path is `/oraxen hud toggle <hud_id>`.
+</Callout>
+</details>
+
+### Information Commands
+
+<details>
+<summary id="glyph-info"><strong>🔤 Glyph Info</strong></summary>
+
+Shows information about a configured glyph, including texture and Unicode characters.
+
+```yml
+/oraxen info glyph <glyphid|all>
+```
+
+`oraxen.command.info` - Allows using info commands.<br />
+</details>
+
+<details>
+<summary id="item-info"><strong>📦 Item Info</strong></summary>
+
+Shows debug information about an Oraxen item such as material, model data, item model, display name, and generated model path.
+
+```yml
+/oraxen info item <itemid|all>
+```
+
+`oraxen.command.info` - Allows using info commands.<br />
+</details>
+
+<details>
+<summary id="block-info"><strong>🧱 Block Info</strong></summary>
+
+Shows block-state information for Oraxen blocks, including noteblock or stringblock data.
+
+```yml
+/oraxen info block <itemid|all>
+```
+
+`oraxen.command.info` - Allows using info commands.<br />
+</details>
+
+<details>
+<summary id="report"><strong>🧾 Report</strong></summary>
+
+Prints a small system report with plugin, server, and operating-system information.
+
+```yml
+/oraxen report
+```
+
+`oraxen.command.report` - Allows using the report command.<br />
+</details>
+
+<details>
+<summary id="highest-model-data"><strong>🧮 Highest Model Data</strong></summary>
+
+Lists the highest used custom model data value for each material.
+
+```yml
+/oraxen highest-modeldata
+```
+
+`oraxen.command.debug` - Allows using this command.<br />
+</details>
+
+### Update And Admin Tools
+
+<details>
+<summary id="update"><strong>♻️ Update</strong></summary>
+
+Updates Oraxen items in player inventories or refreshes nearby furniture entities.
+
+```yml
+/oraxen update item <targets>
+/oraxen update furniture [radius]
+```
+
+`oraxen.command.update` - Allows using update commands.<br />
+
+`item` - Updates Oraxen items for the selected players.<br />
+`furniture` - Updates nearby furniture around the executing player. The default radius is `10`.<br />
+</details>
+
+<details>
+<summary id="remove-branding"><strong>🪣 Remove Branding</strong></summary>
+
+Removes branding (escape menu) and disables the "welcome" sound.<br />
+
+```yml
+/oraxen remove-branding
+/oraxen remove-branding confirm
+```
+
+`oraxen.command.remove-branding` - Allows removing branding after confirmation.<br />
+
+</details>
+
+<details>
+<summary id="remove-defaults"><strong>💎 Remove Defaults</strong></summary>
+
+Removes all shipped default assets and configs (for a clean, minimalistic setup).<br />
+
+<Callout type="warning">
+	It's not recommended to use this command if you have already added your own configs or assets.
+</Callout>
+
+```yml
+/oraxen remove-defaults
+/oraxen remove-defaults confirm
+```
+
+`oraxen.command.remove-defaults` - Allows removing defaults after confirmation.<br />
+
+</details>
+
+<details>
+<summary id="admin-block-tools"><strong>🧱 Admin Block Tools</strong></summary>
+
+Places or removes Oraxen blocks in a single location or in an area.
+
+```yml
+/oraxen admin block <block> <place|remove> [location] [radius] [random]
+```
+
+`oraxen.command.admin` - Allows using admin tools.<br />
+
+`location` defaults to the executing player's position.<br />
+`radius` defaults to `1`.<br />
+`random` limits the action to one random block in the selected area when set to `true`.<br />
+</details>
+
+<details>
+<summary id="admin-furniture-tools"><strong>🪑 Admin Furniture Tools</strong></summary>
+
+Places or removes Oraxen furniture in a single location or in an area.
+
+```yml
+/oraxen admin furniture <place|remove> <furniture> [location] [radius] [random]
+```
+
+`oraxen.command.admin` - Allows using admin tools.<br />
+</details>
+
+<details>
+<summary id="totem-animation"><strong>🪄 Totem Animation</strong></summary>
+
+Plays a totem-resurrection animation for a player using an Oraxen item or vanilla item material.
+
+```yml
+/oraxen totem-animation <player> <item|minecraft:material>
+```
+
+`oraxen.command.totem-animation` - Allows playing custom totem animations.<br />
+
+<Callout type="note">
+  This command is only available on servers running Minecraft 1.21.2 or newer.
+</Callout>
+
+<Callout type="note">
+  Vanilla items can be written as `minecraft:totem_of_undying` or by material name. Oraxen applies Paper death-protection components when supported so custom items can trigger the animation.
+</Callout>
+</details>
+
+### Debug And Maintenance
+
+<details>
+<summary id="debug"><strong>🐞 Debug</strong></summary>
+
+Enables or disables Oraxen debug mode in `settings.yml`.
+
+```yml
+/oraxen debug
+/oraxen debug <true|false>
+```
+
+`oraxen.command.debug` - Allows toggling debug mode.<br />
+</details>
+
+<details>
+<summary id="dump-log"><strong>📋 Dump Log</strong></summary>
+
+Uploads `logs/latest.log` to mclo.gs, with a Hastebin fallback if needed.
+
+```yml
+/oraxen dump-log
+```
+
+`oraxen.command.dumplog` - Allows using the log dump command.<br />
+
+<Callout type="warning">
+  Oraxen redacts the default Atlas pack URL pattern before uploading, but you should still review logs before sharing them publicly.
+</Callout>
+</details>
+
+<details>
+<summary id="schema"><strong>🧬 Schema</strong></summary>
+
+Generates the Oraxen JSON schema file inside the plugin folder.
+
+```yml
+/oraxen schema
+```
+
+`oraxen.command.schema` - Allows generating the schema.<br />
+</details>
+
+## Notes
+
+<Callout type="info">
+  The text effect commands were removed from the plugin. An old `text_effects.yml` is migrated to a backup folder automatically.
+</Callout>
+
+<Callout type="info">
+  Many utility and admin commands are player-only in practice, even when the syntax looks generic. Commands such as `/oraxen inventory`, `/oraxen repair`, `/oraxen recipes`, `/oraxen emojis`, `/oraxen hud toggle`, `/oraxen totem-animation`, and the admin placement tools should be run by or target an online player ingame.
+</Callout>
+
+<Callout type="warning">
+  This page is based on the currently registered commands in the plugin source. If you are using an older build, some commands may be missing or behave slightly differently.
+</Callout>

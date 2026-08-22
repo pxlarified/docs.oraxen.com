@@ -1,0 +1,1085 @@
+---
+title: "🔧 Mechanics"
+description: "Adding mechanics & abilities to Oraxen items."
+---
+
+import { Callout, Details } from '@site/src/components/Compat'
+
+# 🔧 Mechanics
+
+## Overview
+Mechanics define the behavior and functionality of Oraxen items. They allow you to create simple or complex interactions, or implement custom features such as furniture, blocks, and unique abilities. Mechanics are controlled by the `Mechanics` section in each item config.
+
+## Configuration
+Mechanics are configured per item in `.yml` files inside `plugins/Oraxen/items`.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/items",
+              name: "items",
+              children: [
+                {
+                  id: "plugins/Oraxen/items/weapons.yml",
+                  name: "weapons.yml",
+                },
+                {
+                  id: "plugins/Oraxen/items/foods.yml",
+                  name: "foods.yml",
+                }
+              ]
+            },
+          ]
+        }
+      ]
+    }
+  ]}
+/>
+
+```yaml {3-6}
+my_backpack:
+  material: PAPER
+  Mechanics:
+    backpack:
+      rows: 4
+      title: "<red>Backpack"
+```
+
+## Enabling/Disabling Mechanics
+To improve performance, Oraxen allows you to disable / enable mechanics via the `mechanics.yml` file at `plugins/Oraxen/mechanics.yml`.
+You can disable mechanics you don't use or need.
+
+```yaml {2, 5, 8, 11}
+itemtype:
+  enabled: false
+
+soulbound:
+  enabled: true
+
+backpack:
+  enabled: true
+
+music_disc:
+  enabled: true
+```
+
+## Mechanics
+
+<Details>
+    <summary id="spear_lunge"><strong>🗡️ `spear_lunge`</strong></summary>
+
+A charged attack mechanic that lets the player lunge forward and hit entities in front of them.<br />
+
+```yaml
+my_spear:
+  material: IRON_SWORD
+  Pack:
+    generate_model: false
+    model: default/spear_inactive
+  Mechanics:
+    spear_lunge:
+      active_model: default/spear_active
+      intermediate_models:
+        - default/spear_frame0
+        - default/spear_frame1
+      smooth_frames: 2
+      charge_ticks: 20
+      lunge_velocity: 0.8
+      max_range: 5.0
+      damage: 10.0
+      min_damage: 2.0
+      knockback: 0.8
+      hitbox_radius: 0.5
+      min_charge_percent: 0.25
+      charge_slowdown: 0.5
+      max_hold_ticks: 60
+      max_targets: 3
+      particles:
+        enabled: true
+        charge: CRIT
+        lunge: SWEEP_ATTACK
+        hit: DAMAGE_INDICATOR
+      sounds:
+        enabled: true
+        charge: ITEM_TRIDENT_RIPTIDE_1
+        lunge: ENTITY_PLAYER_ATTACK_SWEEP
+        hit: ENTITY_PLAYER_ATTACK_STRONG
+```
+
+**Options**<br />
+`active_model` defines the model shown at full charge.<br />
+`intermediate_models` defines optional animation frames during charging.<br />
+`smooth_frames` controls how many transition frames are used.<br />
+`charge_ticks` defines how long full charge takes.<br />
+`lunge_velocity`, `max_range`, `damage`, `min_damage`, `knockback`, `hitbox_radius`, `min_charge_percent`, `charge_slowdown`, `max_hold_ticks`, and `max_targets` control the attack behavior.
+
+**Minecraft version**<br />
+`1.21.4+` for model swapping during charge
+</Details>
+
+<Details>
+    <summary id="thor"><strong>⚡ `thor`</strong></summary>
+
+Spawns lightning bolts when the item is used.<br />
+
+```yaml
+Mechanics:
+  thor:
+    lightning_bolts_amount: 5
+    random_location_variation: 1.5
+    delay: 20000
+    charges: -1
+```
+
+**Options**<br />
+`lightning_bolts_amount` defines how many bolts are spawned.<br />
+`random_location_variation` defines a random offset in blocks applied to each strike position on the X and Y axes.<br />
+`delay` defines the cooldown in milliseconds.<br />
+`charges` defines how many uses the item has before being consumed. Use `-1` for unlimited uses.
+</Details>
+
+<Details>
+    <summary id="lifeleech"><strong>🩸 `lifeleech`</strong></summary>
+
+Steals health from the target when the player hits them.<br />
+
+```yaml
+Mechanics:
+  lifeleech:
+    amount: 2
+```
+
+**Options**<br />
+`amount` defines how many half-hearts are leeched.
+</Details>
+
+<Details>
+    <summary id="bleeding"><strong>🩹 `bleeding`</strong></summary>
+
+Applies bleed damage over time on hit.<br />
+
+```yaml
+Mechanics:
+  bleeding:
+    chance: 0.3
+    duration: 100
+    damage_per_interval: 0.5
+    interval: 20
+```
+
+**Options**<br />
+`chance` defines the chance to apply bleeding.<br />
+`duration` defines the total duration in ticks.<br />
+`damage_per_interval` defines how much damage each tick cycle deals.<br />
+`interval` defines the delay between bleed damage ticks.
+</Details>
+
+<Details>
+    <summary id="energyblast"><strong>💥 `energyblast`</strong></summary>
+
+Creates a particle cone attack that damages entities in front of the player.<br />
+
+```yaml
+Mechanics:
+  energyblast:
+    delay: 20000
+    length: 5
+    damage: 10.0
+    charges: -1
+    particle:
+      type: REDSTONE
+      size: 1
+      color:
+        red: 0
+        green: 255
+        blue: 255
+```
+
+**Options**<br />
+`delay` defines the cooldown in milliseconds.<br />
+`length` defines the length of the blast.<br />
+`damage` defines how much damage it deals.<br />
+`charges` defines how many uses the item has before being consumed.<br />
+`particle` configures the particle effect. `REDSTONE` supports custom size and color.
+</Details>
+
+<Details>
+    <summary id="witherskull"><strong>☠️ `witherskull`</strong></summary>
+
+Launches wither skulls on use.<br />
+
+```yaml
+Mechanics:
+  witherskull:
+    charged: false
+    delay: 3000
+    charges: -1
+```
+
+**Options**<br />
+`charged` controls whether the skull can break blocks.<br />
+`delay` defines the cooldown in milliseconds.<br />
+`charges` defines how many uses the item has before being consumed.
+</Details>
+
+<Details>
+    <summary id="fireball"><strong>🔥 `fireball`</strong></summary>
+
+Launches an exploding fireball on use.<br />
+
+```yaml
+Mechanics:
+  fireball:
+    delay: 3000
+    yield: 2.0
+    speed: 1.0
+    charges: 5
+```
+
+**Options**<br />
+`delay` defines the cooldown in milliseconds.<br />
+`yield` defines the explosion power.<br />
+`speed` defines projectile speed.<br />
+`charges` defines how many uses the item has before being consumed.
+</Details>
+
+<Details>
+    <summary id="knockback_strike"><strong>🥊 `knockback_strike`</strong></summary>
+
+A combo-based mechanic that applies a stronger knockback effect after a configurable number of consecutive hits.<br />
+
+```yaml
+Mechanics:
+  knockback_strike:
+    required_hits: 15
+    knockback_horizontal: 2.0
+    knockback_vertical: 1.2
+    reset_time: 80
+    play_sound: true
+    sound_type: ENTITY_ENDER_DRAGON_HURT
+    sound_volume: 1.5
+    sound_pitch: 0.8
+    particle:
+      type: DUST
+      count: 200
+      spread: 0.5
+```
+
+**Options**<br />
+`required_hits` defines how many consecutive hits are needed before the effect triggers.<br />
+`knockback_horizontal` and `knockback_vertical` define the knockback force.<br />
+`reset_time` defines how long the combo can idle before it resets.<br />
+`play_sound`, `sound_type`, `sound_volume`, and `sound_pitch` configure the sound effect.<br />
+`particle.type`, `particle.count`, and `particle.spread` configure the particle burst.
+</Details>
+
+<Details>
+    <summary id="harvesting"><strong>🌾 `harvesting`</strong></summary>
+
+Automatically harvests and replants crops in an area.<br />
+
+```yaml
+Mechanics:
+  harvesting:
+    cooldown: 10000 # 10 seconds
+    radius: 5
+    height: 3
+```
+
+**Options**<br />
+`cooldown` defines the delay between uses in milliseconds.<br />
+`radius` defines the horizontal area around the clicked block.<br />
+`height` defines how far above the clicked block the mechanic checks.
+</Details>
+
+<Details>
+    <summary id="bigmining"><strong>⛏️ `bigmining`</strong></summary>
+
+Breaks multiple blocks at once, commonly used for hammer-style tools.<br />
+
+```yaml
+Mechanics:
+  bigmining:
+    radius: 1
+    depth: 1
+```
+
+**Options**<br />
+`radius` defines the area around the broken block.<br />
+`depth` defines how many layers are mined.
+
+**Global configuration**<br />
+```yaml
+bigmining:
+  enabled: true
+  call_events: true
+```
+`call_events` controls whether Oraxen calls block break events for the extra blocks. Known to cause issues with some enchantment plugins when enabled.
+</Details>
+
+<Details>
+    <summary id="smelting"><strong>🔥 `smelting`</strong></summary>
+
+Automatically smelts supported mined blocks.<br />
+
+```yaml
+Mechanics:
+  smelting:
+    play_sound: true
+```
+
+**Options**<br />
+`play_sound` controls whether a sound is played during smelting.
+
+**Global configuration**<br />
+```yaml
+smelting:
+  enabled: true
+  blacklist_cooked:
+    - WET_SPONGE
+```
+`blacklist_cooked` defines drops that should never be smelted.
+</Details>
+
+<Details>
+    <summary id="bottledexp"><strong>🧪 `bottledexp`</strong></summary>
+
+Converts player experience into experience bottles.<br />
+
+```yaml
+Mechanics:
+  bottledexp:
+    ratio: 0.95
+```
+
+**Options**<br />
+`ratio` defines how much experience is converted into bottles.
+
+**Global configuration**<br />
+```yaml
+bottledexp:
+  enabled: true
+  durability_cost: 10
+```
+</Details>
+
+<Details>
+    <summary id="bedrockbreak"><strong>🪨 `bedrockbreak`</strong></summary>
+
+Allows the item to break bedrock.<br />
+
+```yaml
+Mechanics:
+  bedrockbreak:
+    hardness: 10
+    probability: 1
+```
+
+**Options**<br />
+`hardness` defines the delay between break animation updates.<br />
+`probability` defines the chance to receive the bedrock drop.<br />
+`delay` defines the delay in ticks before breaking starts.
+
+**Global configuration**<br />
+```yaml
+bedrockbreak:
+  enabled: true
+  disable_on_first_layer: false
+  durability_cost: 500
+```
+
+<Callout type="warning">
+  This mechanic depends on ProtocolLib. Disable it in `mechanics.yml` if ProtocolLib is not installed.
+</Callout>
+</Details>
+
+<Details>
+    <summary id="watering"><strong>💧 `watering`</strong></summary>
+
+Creates a watering can system with linked empty and filled items.<br />
+
+```yaml
+empty_watering_can:
+  displayname: "<gray>Empty Watering Can"
+  material: PAPER
+  Mechanics:
+    watering:
+      filledCanItem: filled_watering_can
+
+filled_watering_can:
+  displayname: "<aqua>Filled Watering Can"
+  material: PAPER
+  Mechanics:
+    watering:
+      emptyCanItem: empty_watering_can
+```
+
+**Options**<br />
+`filledCanItem` defines which item the empty can becomes when filled.<br />
+`emptyCanItem` defines which item the filled can becomes after watering.
+</Details>
+
+<Details>
+    <summary id="food"><strong>🍖 `food`</strong></summary>
+
+Lets any item behave like food with custom hunger, saturation, replacement items, and potion effects.<br />
+
+```yaml
+Mechanics:
+  food:
+    hunger: 10
+    saturation: 10
+    replacement:
+      oraxen_item: any_oraxen_itemid
+    effect_probability: 0.35
+    effects:
+      hunger:
+        amplifier: 1
+        duration: 20
+        is_ambient: true
+        has_particles: true
+        has_icon: true
+      night_vision:
+        duration: 60
+```
+
+**Options**<br />
+`hunger` and `saturation` define the food values.<br />
+`replacement` defines which item replaces the consumed item.<br />
+`effect_probability` defines the chance that the listed effects are applied.<br />
+`effects` defines potion effects and their settings.
+
+<Callout type="info">
+  On `1.20.5+`, prefer the `food` component instead of this legacy mechanic.
+</Callout>
+</Details>
+
+<Details>
+    <summary id="backpack"><strong>🎒 `backpack`</strong></summary>
+
+Turns an item into portable storage.<br />
+
+```yaml
+backpack:
+  displayname: backpack
+  material: PAPER
+  unstackable: true
+  Mechanics:
+    backpack:
+      rows: 4
+      title: "<red>Backpack"
+      open_sound: "entity.shulker.open"
+      close_sound: "entity.shulker.close"
+      blocked-items:
+        - shulker_box
+        - minecraft:ender_chest
+        - oraxen:another_backpack
+```
+
+**Options**<br />
+`rows` defines the inventory size.<br />
+`title` defines the backpack GUI title.<br />
+`open_sound` and `close_sound` define the sounds played when the backpack opens and closes.<br />
+`volume` and `pitch` define the sound volume and pitch (both default to `1.0`).<br />
+`blocked-items` defines items that cannot be stored in the backpack. Vanilla item IDs can be namespaced or unnamespaced, while Oraxen item IDs require the `oraxen:` prefix. Blocking `shulker_box` also blocks every colored shulker box.
+
+<Callout type="warning">
+  Use `unstackable: true` for backpack items. Stackable materials can cause duplication issues.
+</Callout>
+</Details>
+
+<Details>
+    <summary id="backpack_cosmetic"><strong>🎽 `backpack_cosmetic`</strong></summary>
+
+Displays a cosmetic backpack on the player using a packet-based armor stand.<br />
+
+```yaml
+leather_backpack:
+  material: LEATHER_CHESTPLATE
+  Pack:
+    generate_model: true
+    parent_model: item/generated
+    textures:
+      - leather_backpack
+  Mechanics:
+    backpack_cosmetic:
+      slot: CHEST
+      offset:
+        x: 0.0
+        y: 0.2
+        z: -0.2
+      scale: 0.8
+      view_distance: 48
+      hide_while_swimming: true
+      hide_while_gliding: true
+```
+
+**Options**<br />
+`slot` defines where the item must be equipped or stored for the cosmetic to render. The special value `INVENTORY` triggers from anywhere in the inventory except the hands.<br />
+`model` optionally overrides the displayed model.<br />
+`offset` defines the rendered position relative to the player.<br />
+`scale` defines the rendered size.<br />
+`view_distance` defines the maximum visible distance.<br />
+`hide_in_spectator`, `small`, and `visible_to_self` control extra render behavior.<br />
+`hide_while_swimming` defines whether the backpack gets hidden when swimming (defaults to `true` when not defined).<br />
+`hide_while_gliding` defines whether the backpack gets hidden when gliding (defaults to `true` when not defined).
+
+**Global configuration**<br />
+```yaml
+backpack_cosmetic:
+  enabled: true
+```
+</Details>
+
+<Details>
+    <summary id="music_disc"><strong>🎵 `music_disc`</strong></summary>
+
+Creates a custom music disc that plays a configured sound.<br />
+
+```yaml
+Mechanics:
+  music_disc:
+    song: "minecraft:my_music_disc_song.mysong"
+```
+
+**Options**<br />
+`song` defines the namespaced sound key from `sound.yml`.
+
+<Callout type="info">
+  On `1.21+`, prefer the jukebox playable component instead of this legacy mechanic.
+</Callout>
+</Details>
+
+<Details>
+    <summary id="durability"><strong>🔨 `durability`</strong></summary>
+
+Applies custom durability behavior to an Oraxen item.<br />
+
+```yaml
+Mechanics:
+  durability:
+    value: 5000
+```
+
+**Options**<br />
+`value` defines the durability value used by the mechanic.
+
+<Callout type="info">
+  On `1.20.5+`, prefer the `durability` component instead of this legacy mechanic.
+</Callout>
+</Details>
+
+<Details>
+    <summary id="efficiency"><strong>⚒️ `efficiency`</strong></summary>
+
+Applies a mining speed boost while the item is held. Negative values apply mining fatigue instead.<br />
+
+```yaml
+Mechanics:
+  efficiency:
+    amount: 2
+```
+
+**Options**<br />
+`amount` defines the haste or mining fatigue level.
+</Details>
+
+<Details>
+    <summary id="consumable"><strong>🥤 `consumable`</strong></summary>
+
+Makes the item consumable on right-click.<br />
+
+```yaml
+Mechanics:
+  consumable: {}
+```
+</Details>
+
+<Details>
+    <summary id="consumable_potion_effects"><strong>🧴 `consumable_potion_effects`</strong></summary>
+
+Applies potion effects when the item is consumed or used.<br />
+
+```yaml
+Mechanics:
+  consumable_potion_effects:
+    speed:
+      amplifier: 1
+      duration: 600
+      ambient: false
+      particles: true
+      icon: true
+    regeneration:
+      amplifier: 0
+      duration: 200
+```
+
+**Options**<br />
+Each subsection key is a potion effect type.<br />
+`amplifier`, `duration`, `ambient`, `particles`, and `icon` control the effect behavior.
+</Details>
+
+<Details>
+    <summary id="misc"><strong>🧰 `misc`</strong></summary>
+
+Groups several smaller vanilla-behavior toggles into one mechanic.<br />
+
+```yaml
+Mechanics:
+  misc:
+    breaks_from_cactus: true
+    burns_in_fire: true
+    burns_in_lava: true
+    disable_vanilla_interactions: false
+    can_strip_logs: false
+    piglins_ignore_when_equipped: false
+    compostable: false
+    allow_in_vanilla_recipes: true
+    prevent_renaming: true
+```
+
+**Options**<br />
+`breaks_from_cactus`, `burns_in_fire`, and `burns_in_lava` control environmental damage behavior.<br />
+`disable_vanilla_interactions` disables normal vanilla interactions.<br />
+`can_strip_logs` controls whether the item can strip logs.<br />
+`piglins_ignore_when_equipped` makes piglins ignore the player when the item is worn.<br />
+`compostable` controls whether the item can be composted.<br />
+`allow_in_vanilla_recipes` controls whether vanilla recipes can use the item.<br />
+`prevent_renaming` controls whether the item can be renamed.<br />
+
+<Callout type="info">
+  On modern versions, several of these behaviors are better handled with components.
+</Callout>
+</Details>
+
+<Details>
+    <summary id="repair"><strong>🛠️ `repair`</strong></summary>
+
+Lets an item repair another item using either a percentage or a fixed amount.<br />
+
+```yaml
+Mechanics:
+  repair:
+    ratio: 0.10
+    fixed_amount: 10
+```
+
+**Options**<br />
+Use either `ratio` or `fixed_amount` for a given repair item.
+
+**Global configuration**<br />
+```yaml
+repair:
+  enabled: true
+  oraxen_durability_only: false
+```
+</Details>
+
+<Details>
+    <summary id="commands"><strong>⌨️ `commands`</strong></summary>
+
+Runs configured commands as console, player, or opped player.<br />
+
+```yaml
+Mechanics:
+  commands:
+    cooldown: 5000 # 5 seconds
+    permission: "my.awesome.perm"
+    one_usage: true
+    console:
+      - "kill %p%"
+    player:
+      - "spawn"
+    opped_player:
+      - "give diamond_sword 1"
+```
+
+**Options**<br />
+`cooldown` defines the delay between uses in milliseconds.<br />
+`permission` defines a required permission node.<br />
+`one_usage` consumes one item on use.<br />
+`console`, `player`, and `opped_player` define command lists for each sender type.
+</Details>
+
+<Details>
+    <summary id="custom"><strong>🧩 `custom`</strong></summary>
+
+Runs configurable actions when an event happens with the item. Each subsection is a freely named variant with its own event and actions.<br />
+
+```yaml
+Mechanics:
+  custom:
+    my_variant:
+      event: CLICK:right:block
+      one_usage: false
+      cooldown: 40
+      conditions:
+        - '#player.isSneaking()'
+      actions:
+        - '[console] say <player> used the item'
+        - '[message] <green>Hello <player>!'
+```
+
+**Options**<br />
+`event` defines the trigger. Supported types are `BREAK`, `CLICK`, `INV_CLICK`, `DROP`, `PICKUP`, `EQUIP`, `UNEQUIP`, and `DEATH`. `CLICK` accepts optional parameters as `CLICK:<right|left|all>:<air|block|all>`.<br />
+`one_usage` consumes one item when the actions run. Defaults to `false`.<br />
+`cooldown` defines the delay between uses in ticks.<br />
+`conditions` defines optional expressions evaluated on the player. All must pass for the actions to run.<br />
+`actions` defines the actions to run. Supported prefixes are `[console]`, `[player]`, `[message]`, `[actionbar]`, and `[sound]`. `<player>` is replaced by the player name. A variant without actions is ignored.
+</Details>
+
+<Details>
+    <summary id="armor_effects"><strong>🛡️ `armor_effects`</strong></summary>
+
+Applies potion effects while armor or hats are equipped.<br />
+
+```yaml
+Mechanics:
+  armor_effects:
+    night_vision:
+      duration: 10
+      amplifier: 0
+      ambient: true
+      particles: true
+      icon: true
+```
+
+```yaml
+Mechanics:
+  armor_effects:
+    night_vision:
+      requires_full_set: true
+      duration: 10
+      amplifier: 0
+```
+
+**Options**<br />
+Each subsection key is a potion effect type.<br />
+`requires_full_set` makes the effect apply only when the full armor set is worn.<br />
+`duration`, `amplifier`, `ambient`, `particles`, and `icon` control the effect behavior.
+
+**Global configuration**<br />
+```yaml
+armor_effects:
+  enabled: true
+  delay_in_ticks: 20
+```
+`delay_in_ticks` defines how often effects are reapplied (defaults to `20`). It is also the default `duration` for each effect.
+</Details>
+
+<Details>
+    <summary id="aura"><strong>✨ `aura`</strong></summary>
+
+Shows particles while the player holds the item.<br />
+
+```yaml
+Mechanics:
+  aura:
+    type: simple
+    particle: PORTAL
+```
+
+**Options**<br />
+`type` supports `simple`, `ring`, and `helix`.<br />
+`particle` defines the Bukkit particle type to render.
+</Details>
+
+<Details>
+    <summary id="hat"><strong>🎩 `hat`</strong></summary>
+
+Lets the item be worn on the player's head.<br />
+
+```yaml
+Mechanics:
+  hat: {}
+```
+
+<Callout type="info">
+  On `1.21.2+`, prefer the `equippable` component instead of this legacy mechanic.
+</Callout>
+</Details>
+
+<Details>
+    <summary id="skinnable"><strong>🖌️ `skinnable`</strong></summary>
+
+Allows the item texture to be changed by an item using the `skin` mechanic.<br />
+
+```yaml
+Mechanics:
+  skinnable: {}
+```
+</Details>
+
+<Details>
+    <summary id="itemtype"><strong>🧱 `itemtype`</strong></summary>
+
+Overrides the item type detected by Oraxen blocks.<br />
+
+```yaml
+Mechanics:
+  itemtype:
+    value: SUPER_MATERIAL
+```
+
+**Options**<br />
+`value` must match an item type declared for the relevant block mechanic.
+</Details>
+
+<Details>
+    <summary id="soulbound"><strong>🔒 `soulbound`</strong></summary>
+
+Prevents the item from being lost on death, optionally with a configurable lose chance.<br />
+
+```yaml
+Mechanics:
+  soulbound:
+    lose_chance: 0
+```
+
+**Options**<br />
+`lose_chance` is a value from `0` to `1`.
+</Details>
+
+<Details>
+    <summary id="toggle_light"><strong>💡 `toggle_light`</strong></summary>
+
+Adds interactive lighting to furniture, noteblocks, and stringblocks that can be toggled by right-clicking.<br />
+
+```yaml
+Mechanics:
+  toggle_light:
+    light: 5
+    toggle_light: 15
+```
+
+**Options**<br />
+`light` defines the base light level that is always active.<br />
+`toggle_light` defines the alternate light level applied when the player toggles the item.
+</Details>
+
+<Details>
+    <summary id="skin"><strong>🎨 `skin`</strong></summary>
+
+Makes the item act as a skin source for `skinnable` items. Both items must use the same base material.<br />
+
+```yaml
+Mechanics:
+  skin:
+    consume: true
+```
+
+**Options**<br />
+`consume` defines whether one skin item is consumed on use.
+</Details>
+
+
+<Details>
+    <summary id="block"><strong>🧱 `block`</strong></summary>
+
+Makes the item placeable as a block.<br />
+
+```yaml
+Mechanics:
+  block:
+    type: FULL # FULL, STRING, CHORUS, STAIR, SLAB, DOOR, TRAPDOOR, GRATE, BULB
+    light: 15
+    block-sounds:
+      break-sound: block.wood.break
+      place-sound: block.wood.place
+    placeable:
+       floor: true # top of blocks
+       wall: true  # sides of blocks
+       roof: false # underside of blocks
+       allow:
+          - minecraft:grass
+       disallow:
+          - minecraft:dirt
+    custom-variation: 5
+    appearance: # Also supports textures
+      model: crystalmush_log
+    events: # Run actions when a placed block is clicked
+      - click: right # both, left, right
+        actions:
+          - command: 'say "<Player> clicked this block"'
+            executor: CONSOLE # PLAYER, CONSOLE, OP-PLAYER
+          - message: '<green>Hi <Player>!'
+    breaking: # New drop & breaking config section
+      - when: # When the tool is...
+          - minecraft:iron_axe
+          - minecraft:golden_axe
+          - minecraft:diamond_axe
+          - minecraft:netherite_axe # Also supports tags via "#<tag>"
+        hardness: 2 # Hardness when these tools are used
+        drops: # Drops when this tool is used
+          - item: crystalmush_log
+            probability: 1.0
+            silk-touch: any # Drop with or without Silk Touch
+            fortune: 1 # Percentage (1 = 100%) to increase the loot amount per fortune level
+        durability:
+          remove: 1 # Remove or add durability when breaking.
+          add: 0
+      - else: # Anything that is not covered by another `when` section
+        hardness: 4
+        drops:
+          - item: crystalmush_log
+            probability: 1.0
+        durability:
+          remove: 2 # Remove or add durability when breaking.
+          add: 0
+```
+
+Each loot entry can use `silk-touch` to control whether it drops based on the breaking tool.<br />
+- `any` or `false` (default); Drop with or without Silk Touch.
+- `required` or `true`; drop only with Silk Touch.
+- `forbidden`; drop only without Silk Touch.
+
+This allows one block to drop itself with Silk Touch and different loot without it.
+
+```yaml
+magic_ore:
+  Mechanics:
+    block:
+      type: FULL
+      breaking:
+        - when: ["#minecraft:pickaxes"]
+          hardness: 3
+          drops:
+            - item: magic_ore
+              silk-touch: required
+              probability: 1.0
+            - item: magic_shard
+              silk-touch: forbidden
+              amount: 2..4
+              fortune: 0.5
+              probability: 1.0
+```
+</Details>
+
+
+<Details>
+    <summary id="furniture"><strong>🪑 `furniture`</strong></summary>
+
+Creates custom placed furniture using item frames, display entities, armor stands, or other supported furniture render types.<br />
+
+```yaml
+table:
+  Mechanics:
+    furniture:
+      type: DISPLAY_ENTITY
+      barrier: true
+      barriers:
+        - origin
+        - z: 1
+      hitboxes:
+        - 0,0,0 1,3 # Hitbox with 0,0,0 offset from the furniture with the size 1x3.
+        - 1,0,3 0.5,2.5 # Hitbox with 1,0,3 offset from the furniture with the size 0.5x2.5.
+
+      # Or the legacy single hitbox format.
+      hitbox:
+        width: 0.4
+        height: 0.3
+      seat:
+        height: 0.5
+        yaw: 0 # Optional fixed seat yaw. Omit to use the furniture yaw.
+      seats:
+        - 0,0,0 # Seat offset relative to the furniture center, uses furniture yaw.
+        - 0.5,0,0 90 # Seat offset with a fixed yaw.
+      restricted_rotation: VERY_STRICT
+      rotatable: true
+      light: 5
+      lights:
+        - 0,1,0 15 # Light offset with level 15.
+      hardness: 5
+      item: different_item_id
+      farmland_required: false
+      farmblock_required: false
+      blocklocker:
+        can_protect: true
+        protection_type: CONTAINER
+      limited_placing:
+        floor: true
+        wall: false
+        roof: false
+        type: ALLOW
+        block_types:
+          - GRASS_BLOCK
+      storage:
+        type: STORAGE
+        rows: 5
+        title: "<red>My Storage"
+      jukebox:
+        active_model: opened
+        volume: 1.0
+        pitch: 1.0
+        permission: "oraxen.jukebox.play"
+      evolution:
+        delay: 6000
+        next_stage: my_plant_stage2
+        probability: 0.5
+      text_entity:
+        text:
+          - "<gold>Workshop Table"
+        offset: { x: 0.0, y: 1.2, z: 0.0 }
+      display_entity_properties:
+        display_transform: NONE
+        brightness:
+          block_light: 15
+          sky_light: 0
+        scale:
+          x: 1
+          y: 1
+          z: 1
+        translation:
+          x: 0
+          y: 0
+          z: 0
+        tracking_rotation: FIXED
+        view_range: 1
+        interpolation_duration: 0
+        interpolation_delay: 0
+        shadow_strength: 0
+        shadow_radius: 0
+        displayWidth: 0
+        displayHeight: 0
+      armor_stand_properties:
+        scale:
+          x: 1
+          y: 1
+          z: 1
+        translation:
+          x: 0
+          y: 0
+          z: 0
+      drop:
+        silktouch: false
+        loots:
+          - { oraxen_item: table, probability: 1.0 }
+```
+
+**Options**<br />
+`type` defines the furniture render type. Common values are `DISPLAY_ENTITY`, `ITEM_FRAME`, `GLOW_ITEM_FRAME`, and `ARMOR_STAND`.<br />
+`barrier`, `barriers`, `hitbox`, and `hitboxes` define collision and interaction areas. Use `hitboxes` for multiple display-entity hitboxes, formatted as `<x>,<y>,<z> <width>,<height>`.<br />
+`seat` adds one legacy seat. `height` controls the vertical offset and optional `yaw` fixes the seated player's rotation; without `yaw`, the furniture yaw is used.<br />
+`seats` adds multiple seats, formatted as `<x>,<y>,<z>` or `<x>,<y>,<z> <yaw>`. Offsets are relative to the furniture center and are rotated with the furniture. When `seats` is present, it is used instead of `seat`.<br />
+`restricted_rotation` (`NONE`, `STRICT`, or `VERY_STRICT`) and `rotatable` control placement rotation.<br />
+`light`, `lights`, `hardness`, and `drop` define placed behavior. `lights` entries use `<x>,<y>,<z> <level>` for per-offset light sources. `drop` also supports `fortune`, `minimal_type`, and `best_tools`.<br />
+`item` defines an alternate display item when placed.<br />
+`limited_placing`, `blocklocker`, and `storage` add placement rules, protection, and container behavior. `limited_placing` also supports `block_tags`, `oraxen_blocks`, and a `radius_limitation` subsection with `radius` and `amount`. `storage` also supports `open_sound`, `close_sound`, `open_animation`, `close_animation`, `volume`, and `pitch`.<br />
+`jukebox` lets the furniture play music discs and swap to an active model.<br />
+`evolution`, `farmland_required`, and `farmblock_required` support plant and farming setups. `evolution` also supports `light_boost`, `rain_boost`, and `bone_meal` subsections.<br />
+`text_entity`, `text_entities`, and `display_entity_properties` configure attached text displays and display entity rendering. Text displays also support `line_width`, `background_color`, `text_opacity`, `see_through`, `shadow`, `default_background`, `alignment`, `billboard`, `scale`, `view_range`, and `refresh_ticks`. Display entity properties support `display_transform`, `scale`, `translation`, `brightness.block_light`, `brightness.sky_light`, `tracking_rotation`, `view_range`, `interpolation_duration`, `interpolation_delay`, `shadow_strength`, `shadow_radius`, `displayWidth`, and `displayHeight`.<br />
+`armor_stand_properties` configures armor-stand furniture `scale` and `translation`; armor stands can also reuse `display_entity_properties.scale` and `display_entity_properties.translation` for convenience.<br />
+`modelengine_id` is also supported for ModelEngine-based furniture.
+
+<Callout type="info">
+  `storage` on furniture requires a barrier or barriers. For modern servers, `DISPLAY_ENTITY` furniture also supports `hitbox`, `hitboxes`, and `display_entity_properties`.
+</Callout>
+</Details>

@@ -1,0 +1,172 @@
+---
+title: "🧩 Creating an Escape Menu Logo"
+description: "Replace the pause menu logo with your own glyph using Oraxen language keys."
+---
+
+import { Callout, Steps } from '@site/src/components/Compat'
+
+# 🧩 Creating an Escape Menu Logo
+
+## Overview
+The pause menu is controlled through language keys in `pack/lang`.
+You can replace it with any custom glyph by defining your own and pointing the language key at it.
+
+## Tutorial
+
+<Steps>
+
+### Disable default asset generation (optional)
+Optionally open `plugins/Oraxen/settings.yml` and disable default asset generation.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/settings.yml",
+              name: "settings.yml",
+            },
+          ],
+        },
+      ],
+    },
+  ]}
+/>
+
+```yaml
+Plugin:
+  generation:
+    default_assets: false
+```
+
+<Callout type="note">
+  `pack/lang` files are extracted from Oraxen's default pack assets, but only when the whole `pack/lang` folder is missing. Edits to existing files survive pack regeneration. `pack/lang/global.json` is re-extracted if the file is deleted, so edit it rather than deleting it.
+</Callout>
+
+### Create the logo glyph
+Create a glyph file for your logo, for example `plugins/Oraxen/glyphs/logos.yml`, and place the texture in `pack/textures/glyphs/logo/`.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/glyphs",
+              name: "glyphs",
+              children: [
+                {
+                  id: "plugins/Oraxen/glyphs/logos.yml",
+                  name: "logos.yml",
+                },
+              ],
+            },
+            {
+              id: "plugins/Oraxen/pack",
+              name: "pack",
+              children: [
+                {
+                  id: "plugins/Oraxen/pack/textures",
+                  name: "textures",
+                  children: [
+                    {
+                      id: "plugins/Oraxen/pack/textures/glyphs",
+                      name: "glyphs",
+                      children: [
+                        {
+                          id: "plugins/Oraxen/pack/textures/glyphs/logo",
+                          name: "logo",
+                          children: [
+                            {
+                              id: "plugins/Oraxen/pack/textures/glyphs/logo/esc_logo.png",
+                              name: "esc_logo.png",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ]}
+/>
+
+```yaml
+esc_logo:
+  texture: glyphs/logo/esc_logo
+  ascent: 8
+  height: 8
+```
+
+### Point the language key at your glyph
+Open `plugins/Oraxen/pack/lang/global.json` and update the pause menu keys.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/pack",
+              name: "pack",
+              children: [
+                {
+                  id: "plugins/Oraxen/pack/lang",
+                  name: "lang",
+                  children: [
+                    {
+                      id: "plugins/Oraxen/pack/lang/global.json",
+                      name: "global.json",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ]}
+/>
+
+```json
+{
+  "menu.game": "<glyph:esc_logo>",
+  "menu.disconnect": "<gray>See you soon!",
+  "menu.returnToGame": "Back to the server"
+}
+```
+
+`menu.game` controls the logo shown at the top of the pause menu. You can also customise `menu.disconnect` and `menu.returnToGame` to match your own branding.
+
+### Check locale-specific overrides
+If you use locale files such as `pack/lang/en_us.json`, mirror the same changes there too.
+
+Locale files can override `global.json`, so if `en_us.json` still contains the old `menu.game` value, your custom logo will not appear for players using that locale.
+
+<Callout type="tip">
+  After editing the glyph and language files, run `/o reload all` and regenerate the resource pack to see the updated pause menu logo in game.
+</Callout>
+
+</Steps>

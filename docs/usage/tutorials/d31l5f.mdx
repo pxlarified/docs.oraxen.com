@@ -1,0 +1,75 @@
+---
+title: "🔊 Creating a custom sound"
+description: "Add a custom sound file to Oraxen and make it available in-game."
+---
+
+import { Callout, Steps } from '@site/src/components/Compat'
+
+# 🔊 Creating a custom sound
+
+## Overview
+Custom sounds are configured in `sounds.yml`. Oraxen reads this file and generates `assets/<namespace>/sounds.json`.
+
+Use it to add brand new sound events, override existing vanilla sounds, or package longer audio tracks for music discs and other custom content.
+
+## Tutorial
+
+<Steps>
+
+### Open `sounds.yml`
+Go to `plugins/Oraxen/sounds.yml`.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/sounds.yml",
+              name: "sounds.yml",
+            },
+          ],
+        },
+      ],
+    },
+  ]}
+/>
+
+<Callout type="note">
+  `settings.automatically_generate` must stay enabled if you want Oraxen to build `sounds.json` from this file.
+</Callout>
+
+### Add a sound entry
+Each entry in the `sounds:` list becomes one sound event. Every custom entry needs an `id`.
+
+```yaml
+sounds:
+  - id: oraxen:welcome
+    category: records
+    sound: welcome.ogg
+```
+
+If no namespace is specified, Minecraft's namespace is used. For example, `id: welcome` becomes `minecraft:welcome`.
+
+### Point to your audio file
+Sound files live in `plugins/Oraxen/pack/sounds/`. Oraxen then exports them to `assets/minecraft/sounds/` in the generated resource pack. Only the generated `sounds.json` is placed per event namespace. Namespaced sound files belong under `plugins/Oraxen/pack/assets/<namespace>/sounds/`.
+
+`sound: welcome.ogg` points to `plugins/Oraxen/pack/sounds/welcome.ogg`.<br />
+`sound: music/welcome` points to `plugins/Oraxen/pack/sounds/music/welcome.ogg`.<br />
+
+The `.ogg` extension is optional.
+
+<Callout type="info">
+  You can use `sounds:` instead of `sound:` to provide multiple audio files for one sound event.
+</Callout>
+
+<Callout>
+  After generation, the sound can be used as `oraxen:welcome`.
+</Callout>
+
+</Steps>

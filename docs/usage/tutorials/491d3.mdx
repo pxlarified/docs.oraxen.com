@@ -1,0 +1,96 @@
+---
+title: "🎨 Creating a painting"
+description: "Add a custom painting to Oraxen and make it placeable via items."
+---
+
+import { Callout, Steps } from '@site/src/components/Compat'
+
+# 🎨 Creating a custom painting
+
+## Overview
+On `1.21.5+`, custom paintings are built from two parts. Paintings themselves register from `1.21.3+`, but the `painting_variant` item component needs `1.21.5+`.
+
+1. a custom painting entry in `paintings.yml`
+2. a custom item with the `painting_variant` component
+
+Oraxen then generates the painting datapack automatically from the painting entry, and the item can be placed on a wall as a custom painting.
+
+## Tutorial
+
+<Steps>
+
+### Open `paintings.yml`
+Go to `plugins/Oraxen/paintings.yml`.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/paintings.yml",
+              name: "paintings.yml",
+            },
+            {
+              id: "plugins/Oraxen/items",
+              name: "items",
+              children: [
+                {
+                  id: "plugins/Oraxen/items/paintings.yml",
+                  name: "paintings.yml",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ]}
+/>
+
+### Add the painting
+Create a new painting entry.
+
+```yaml
+paintings:
+  oraxen:edna:
+    author: the_jan_craft
+    title: <red>Edna Painting
+    asset_id: oraxen:edna # This will reference plugins/Oraxen/pack/assets/oraxen/textures/painting/edna.png
+    width: 1
+    height: 1
+    include_in_random: false
+```
+
+Place the texture file in `plugins/Oraxen/pack/assets/oraxen/textures/painting/edna.png`.
+Make sure your texture file uses power-of-2 dimensions, such as `16x16`, `32x32`, `64x64`, or `128x128`.
+
+### Create the painting item
+Now add an item that uses the painting key through the `painting_variant` component.
+
+```yaml
+edna_painting:
+  material: PAINTING
+  itemname: "<gold>Edna Painting"
+  Components:
+    painting_variant: "oraxen:edna"
+```
+
+`painting_variant` must point to the same painting key from `paintings.yml`, with the `oraxen:` namespace.
+
+### Reload and test
+Save both files, then run `/oraxen reload paintings` to re-register the painting.
+If you changed the item file too, run `/oraxen reload items` (or `/oraxen reload all`) so the item is updated.
+Regenerate and resend the resource pack if you added or changed the painting texture.
+
+Paintings are hot-reloadable, so you do not have to restart your server.
+You may need to rejoin for some painting changes to apply due to Minecraft limitations.
+
+You can now place the painting item on a wall and your custom texture will be shown.
+
+</Steps>

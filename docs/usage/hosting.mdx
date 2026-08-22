@@ -1,0 +1,184 @@
+---
+title: "📦 Pack Hosting"
+description: "Oraxen resource pack hosting."
+---
+
+import { Callout } from '@site/src/components/Compat'
+
+# 📦 Pack Hosting
+
+## Overview
+Oraxen needs a hosted resource pack so players can download it when they join your server.
+After Oraxen builds the pack, it uploads the file and serves it through your selected hosting method.
+
+## Configuration
+<details>
+<summary id="oraxen-atlas"><strong>🧿 Oraxen Atlas</strong></summary>
+
+Oraxen Atlas is a managed Polymath service run by the Oraxen team.  
+It works out of the box, needs almost no setup, and avoids extra port work.
+
+<Callout type="warning">
+  Oraxen Atlas is blocked in Russia and China, so you have to use your own hosting method if you have users from these regions.
+</Callout>
+<Callout type="important">
+  Oraxen Atlas may only be used for Oraxen.
+</Callout>
+
+```yaml
+Pack:
+  upload:
+    enabled: true
+    type: polymath
+    polymath:
+      server: atlas.oraxen.com
+      secret: "oraxen"
+```
+
+**➕ Pros**
+- Free to use.
+- Fast setup. 
+- No extra ports required.
+
+**➖ Tradeoffs**
+- Blocked in Russia and China.
+- Short service interruptions can happen (unlikely though).
+
+</details>
+<details>
+<summary id="polymath"><strong>📦 Polymath</strong></summary>
+
+You can run your own Polymath service and point Oraxen to it.  
+This removes dependency on Atlas and helps in regions where external access is limited.
+
+Set up Polymath first from the <Highlight color="#2E8B57" to="https://github.com/oraxen/polymath/">**official repository**</Highlight>, then update Oraxen upload settings.
+
+```yaml
+Pack:
+  upload:
+    enabled: true
+    type: polymath
+    polymath:
+      server: your-domain.example
+      secret: "your-secret"
+```
+
+**➕ Pros**
+- Full control over hosting  
+- Works globally including restricted regions  
+
+**➖ Tradeoffs**
+- Requires a web server  
+- Requires deployment and maintenance  
+- Public network access is required  
+</details>
+
+<details>
+<summary id="self-host"><strong>💻 Self Host</strong></summary>
+
+Oraxen can serve the resource pack directly from your Minecraft server machine through Java HTTP support.
+
+<Callout type="warning">
+  Your selected port must be reachable from outside your local network.
+</Callout>
+
+<Callout type="important">
+  Multi Version packs are unsupported with this pack hosting type.
+</Callout>
+
+```yaml
+Pack:
+  upload:
+    enabled: true
+    type: self-host
+    self-host:
+      host: "0.0.0.0"
+      port: 8080
+      domain: "your-domain.example:8080"
+```
+
+**➕ Pros**
+- Independent from Atlas.  
+- Works globally including restricted regions.
+
+**➖ Tradeoffs**
+- Open port is required.
+- Slight extra server resource usage may occur (unlikely though). 
+</details>
+
+<details>
+<summary id="lobfile"><strong>📤 Lobfile</strong></summary>
+
+Lobfile is a free file sharing / hosting service.
+
+```yaml
+Pack:
+  upload:
+    enabled: true
+    type: lobfile
+    lobfile:
+      api-key: ""
+      pack-name: "Oraxen"
+```
+
+You can find / change the API key in your lobfile settings (after creating an account) <Highlight color="#2E8B57" to="https://lobfile.com/">**here**</Highlight>.
+
+<Callout type="note">
+  When Multi Version packs are enabled the pack will be uploaded for each version with the format `<pack-name>_<version>`.
+</Callout>
+
+**➕ Pros**
+- Free to use.
+- Fast setup. 
+- No extra ports required.
+- Supports multi-version packs.
+
+**➖ Tradeoffs**
+</details>
+
+<details>
+<summary id="external"><strong>🔌 External</strong></summary>
+
+`type: external` loads a custom hosting provider from another plugin or library.
+
+`Pack.upload.options.class` must name a fully qualified class implementing `HostingProvider` with a no-arg constructor or one taking a `ConfigurationSection`. The whole `options` section is passed to the provider.
+
+```yaml
+Pack:
+  upload:
+    enabled: true
+    type: external
+    options:
+      class: "com.example.MyHostingProvider"
+```
+
+**➕ Pros**
+- Full control over upload behavior.
+- Supports multi-version packs.
+
+**➖ Tradeoffs**
+- Requires a custom `HostingProvider` implementation.
+</details>
+
+<Callout type="note">
+  An unknown or invalid `type` value falls back to Polymath.
+</Callout>
+
+## Example
+
+```yaml
+Pack:
+  upload:
+    enabled: true
+    type: polymath #lobfile, polymath, self-host, or external
+    polymath:
+      server: atlas.oraxen.com # you can also host your own polymath instance
+      secret: "oraxen" # change this if you host your own polymath to limit access to resource pack uploading
+    lobfile:
+      api-key: ""
+      pack-name: Oraxen # Will use <pack-name>_<version> when using multi version packs
+    self-host:
+      host: "0.0.0.0" # The IP address to bind the HTTP server to (0.0.0.0 = listen on all interfaces)
+      port: 8080 # The port the HTTP server will listen on
+      domain: "localhost:8080" # The domain/IP:port that players will use to download the pack (e.g., "my-server.com:8080" or "192.168.1.100:8080")
+```

@@ -1,0 +1,150 @@
+---
+title: "🛡️ Creating custom armor using trims"
+description: "Create a custom armor set using Oraxen's armor-trim system."
+---
+
+import { Callout, Steps } from '@site/src/components/Compat'
+
+## Overview
+This tutorial demonstrates how to create a custom armor set using Oraxen's armor-trim system.
+Trim-based armor is intended for Minecraft `1.20`–`1.21.1`. On `1.21.2+`, use component-based armor.
+
+<Callout type="important">
+	Helmets support 3D models and therefore do not require armor-layer textures.
+</Callout>
+
+## Tutorial
+
+<Steps>
+
+### Enable trim-based armor
+
+Open `plugins/Oraxen/settings.yml` and configure the `CustomArmor` section.
+
+```yaml
+CustomArmor:
+  type: TRIMS
+  auto_select_type: true
+  disable_leather_repair: true
+  trims_settings:
+    material_replacement: CHAINMAIL
+    auto_assign_settings: true
+```
+
+`material_replacement` is the vanilla armor material Oraxen reserves for custom trim armor. Valid materials are `CHAINMAIL`, `IRON`, `GOLD`, `DIAMOND`, `NETHERITE`, and `LEATHER`.
+
+Every piece must use the selected material. `CHAINMAIL` is recommended because it has no normal crafting recipe.
+
+### Add the textures
+
+Add two transparent worn textures, typically `64x32` pixels:
+
+- `ruby_armor_layer_1.png` contains the helmet, chestplate, and boots.
+- `ruby_armor_layer_2.png` contains the leggings.
+
+```text
+plugins/Oraxen/pack/textures/armor/ruby_armor_layer_1.png
+plugins/Oraxen/pack/textures/armor/ruby_armor_layer_2.png
+```
+
+Add an inventory icon, typically `16x16` pixels, for each piece in the same directory:
+
+```text
+ruby_helmet.png
+ruby_chestplate.png
+ruby_leggings.png
+ruby_boots.png
+```
+
+The exact layer suffixes are required. Keep the `ruby` prefix consistent across all files.
+
+### Configure the armor items
+
+Create `plugins/Oraxen/items/ruby_armor.yml` and add all four pieces.
+
+```yaml
+ruby_helmet:
+  itemname: "<gradient:#ff1744:#9c0025>Ruby Helmet</gradient>"
+  material: CHAINMAIL_HELMET
+  Pack:
+    generate_model: true
+    parent_model: "item/generated"
+    textures:
+      - armor/ruby_helmet
+
+ruby_chestplate:
+  itemname: "<gradient:#ff1744:#9c0025>Ruby Chestplate</gradient>"
+  material: CHAINMAIL_CHESTPLATE
+  Pack:
+    generate_model: true
+    parent_model: "item/generated"
+    textures:
+      - armor/ruby_chestplate
+
+ruby_leggings:
+  itemname: "<gradient:#ff1744:#9c0025>Ruby Leggings</gradient>"
+  material: CHAINMAIL_LEGGINGS
+  Pack:
+    generate_model: true
+    parent_model: "item/generated"
+    textures:
+      - armor/ruby_leggings
+
+ruby_boots:
+  itemname: "<gradient:#ff1744:#9c0025>Ruby Boots</gradient>"
+  material: CHAINMAIL_BOOTS
+  Pack:
+    generate_model: true
+    parent_model: "item/generated"
+    textures:
+      - armor/ruby_boots
+```
+
+The shared `ruby` item-ID prefix selects the generated `oraxen:ruby` trim pattern.
+
+### Generate the resource pack and datapack
+
+Save the files and run the following command.
+
+```text
+/oraxen reload all
+```
+
+Oraxen generates the `oraxen:ruby` pattern and the `oraxen_trim_armor` datapack. Fully restart the server after generating the datapack for the first time; Minecraft's `/reload` command is not sufficient. Check `/datapack list` and, if necessary, enable the datapack:
+
+```text
+/datapack enable "file/oraxen_trim_armor"
+```
+
+Restart the server again after enabling the datapack.
+
+</Steps>
+
+<Callout type="info">
+
+With `auto_assign_settings: true`, Oraxen assigns the trim and hides its tooltip:
+
+```yaml
+trim_pattern: oraxen:ruby
+ItemFlags:
+  - HIDE_ARMOR_TRIM
+```
+</Callout>
+
+<Callout type="note">
+If `auto_assign_settings` is `false`, add these settings to every piece after generating the pattern and restarting:
+
+```yaml
+ruby_helmet:
+  itemname: "<red>Ruby Helmet"
+  material: CHAINMAIL_HELMET
+  trim_pattern: oraxen:ruby
+  ItemFlags:
+    - HIDE_ARMOR_TRIM
+```
+
+</Callout>
+
+## Troubleshooting
+
+If equipped armor appears vanilla or the pattern is missing, verify that the texture suffixes and shared `ruby` prefix are correct, the configured replacement material is used, the datapack is enabled, and the server has been fully restarted. If only the leggings look wrong, check `ruby_armor_layer_2.png`. Trim armor must use real armor items such as `CHAINMAIL_HELMET`, not `PAPER`.

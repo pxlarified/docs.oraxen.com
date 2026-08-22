@@ -1,0 +1,40 @@
+---
+title: "🖨️ BetterHUD"
+description: "BetterHUD compatibility for Oraxen."
+---
+
+import { Callout, Tabs, Tab, Steps } from '@site/src/components/Compat'
+
+# 🖨️ BetterHUD
+
+## Overview
+Oraxen allows you to configure BetterHUD and Oraxen to be fully compatible together. For BetterHUD to display the custom textures, you have to merge BetterHUD's Pack into Oraxen's Pack.
+
+## Merging
+Merging a pack into Oraxen is simple and we have a dedicated documentation page for it <Highlight to="https://oraxen.mizius.com/usage/merging" color="#2E8B57">**here**</Highlight>.
+
+1. Go to Oraxen's settings.yml (`plugins/Oraxen/settings.yml`)
+2. Ensure `hide_scoreboard_numbers` is set to `false`. (`plugins/Oraxen/settings.yml`)
+3. Ensure `Pack.import.remove_core_shaders_from_imported_packs` is set to `false`. (`plugins/Oraxen/settings.yml`) (otherwise BetterHUD's core shaders won't be merged into the pack; see more below.)
+4. Ensure `TextEffects` is set to `Enabled: false`. (`plugins/Oraxen/settings.yml`) <Highlight color="#e74c3c">**Optional**</Highlight>
+5. Ensure you have no animated glyphs configured. (No glyphs of the <Highlight color="#1877F2">**Animation**</Highlight> type) <Highlight color="#e74c3c">**Optional**</Highlight>
+6. Edit your BetterHUD configuration to have the `build-folder-location` set to `Oraxen/pack/uploads/BetterHUD` and `pack-type` to `zip` in the `BetterHUD/config.yml`.
+
+<Callout type="info">
+	Oraxen will merge BetterHUD's `pack.mcmeta` into Oraxen's `pack.mcmeta`.
+</Callout>
+
+<Callout type="warning">
+	If you run into any issues, `core shaders` are a likely cause. Both BetterHUD and Oraxen use core shaders, which can cause conflicts because core shaders cannot be merged.
+	Oraxen includes a setting for disabling core shader removal from imported packs: `Pack.import.remove_core_shaders_from_imported_packs`. Enabling this setting will prevent core shaders from being merged into the pack, which means some (or all) of BetterHUD's features may not work.
+	You can also disable Oraxen's core shader generation.
+	To do this, make sure `hide_scoreboard_numbers` is set to `false` and `TextEffects.enabled` is set to `false` in `plugins/Oraxen/settings.yml`. Also make sure you have no animated glyphs configured. (No glyphs of the <Highlight color="#1877F2">**Animation**</Highlight> type)
+</Callout>
+
+<details>
+<summary id="config"><strong>Config</strong></summary>
+```yml
+build-folder-location: Oraxen/pack/uploads/BetterHUD
+pack-type: zip #BetterHud/config.yml
+```
+</details>

@@ -1,0 +1,147 @@
+---
+title: "🏞️ Paintings"
+description: "Creating custom paintings using Oraxen."
+---
+
+import { Callout, Details } from '@site/src/components/Compat'
+
+# 🏞️ Paintings
+
+## Overview
+Custom paintings are configured in `paintings.yml`. Oraxen reads this file and then generates the paintings via server internals.
+Use this file to register new paintings.
+
+<Callout type="important">
+	Paintings require Paper 1.21.3+. The `painting_variant` item component used to give paintings as items requires Paper 1.21.5+.
+</Callout>
+<Callout type="note">
+	Paintings are hot-reloadable, meaning that your server doesn't require a restart for your changes to apply.
+	Run `/oraxen reload paintings` to re-register paintings. Please note that you will have to rejoin for some changes to apply; this is a limitation of Minecraft.
+</Callout>
+
+<Callout type="warning">
+	To turn the painting into an actual item you still need to use the <Highlight to="https://oraxen.mizius.com/configuration/items/data/components#painting_variant" color="#1877F2">`painting_variant`</Highlight> component or see the full tutorial <Highlight to="https://oraxen.mizius.com/usage/tutorials/491d3" color="#2E8B57">**here**</Highlight>.
+</Callout>
+
+## Configuration
+Paintings are configured in `plugins/Oraxen/paintings.yml`.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/paintings.yml",
+              name: "paintings.yml",
+            }
+          ]
+        }
+      ]
+    }
+  ]}
+/>
+
+<Callout type="info">
+Painting texture files live in `plugins/Oraxen/pack/assets/oraxen/textures/painting/`.
+
+`asset_id: oraxen:edna` points to `plugins/Oraxen/pack/assets/oraxen/textures/painting/edna.png`.<br />
+`asset_id: minecraft:ball` points to `plugins/Oraxen/pack/assets/minecraft/textures/painting/ball.png`.<br />
+
+A key without a namespace, for example `edna`, becomes `oraxen:edna`. Its texture is then looked up at `assets/oraxen/textures/painting/edna.png`.
+</Callout>
+
+## Painting Entry
+
+Each entry under `paintings:` becomes one painting.
+
+<Details>
+  <summary id="enabled"><strong>✅ `enabled`</strong></summary>
+
+Disables a painting without deleting it. Defaults to `true`.<br />
+
+```yaml
+paintings:
+  oraxen:edna:
+    enabled: false
+```
+</Details>
+
+<Details>
+  <summary id="author"><strong>👤 `author`</strong></summary>
+
+Sets the author of the painting. Supports MiniMessage formatting. Defaults to `Oraxen`.<br />
+
+```yaml
+paintings:
+  oraxen:edna:
+    author: the_jan_craft
+```
+</Details>
+
+<Details>
+  <summary id="title"><strong>🎨 `title`</strong></summary>
+
+Defines the title of the painting. Supports MiniMessage formatting. Defaults to the key path.<br />
+
+```yaml
+paintings:
+  oraxen:edna:
+    title: Edna
+```
+</Details>
+
+<Details>
+  <summary id="asset-id"><strong>📝 `asset_id`</strong></summary>
+
+Sets the asset ID of the painting. Defaults to the painting key.<br />
+
+```yaml
+paintings:
+  oraxen:edna:
+    asset_id: "oraxen:edna"
+```
+</Details>
+
+<Details>
+  <summary id="size"><strong>📏 `width` & `height`</strong></summary>
+
+Sets the width and height (in blocks) of the painting when placed. Both default to `1` and are clamped to `1` to `16`.<br />
+
+```yaml
+paintings:
+  oraxen:edna:
+    width: 1
+    height: 1
+```
+</Details>
+
+<Details>
+  <summary id="include_in_random"><strong>📡 `include_in_random`</strong></summary>
+
+  Whether this painting can be randomly selected when a player places a painting. Defaults to `false`. The legacy `random_place` key is honored when `include_in_random` is absent.<br />
+
+```yaml
+paintings:
+  oraxen:edna:
+    include_in_random: false
+```
+</Details>
+
+## Example
+
+```yaml
+paintings:
+  oraxen:edna:
+    author: the_jan_craft
+    title: <red>Edna Painting
+    asset_id: oraxen:edna # This will reference plugins/Oraxen/pack/assets/oraxen/textures/painting/edna.png
+    width: 1
+    height: 1
+    include_in_random: false
+```

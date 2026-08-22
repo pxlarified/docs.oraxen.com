@@ -1,0 +1,501 @@
+---
+title: "⚙️ Settings"
+description: "All available Oraxen settings."
+---
+
+import { Callout, Details } from '@site/src/components/Compat'
+
+# ⚙️ Settings
+
+## Overview
+Oraxen is managed through the `/oraxen` root command. It also includes the `/o` and `/oxn` aliases. Most subcommands are intended for administrators, while a few are player-facing tools such as item browsing, emoji browsing, and HUD toggling.
+
+## Settings
+The examples below show the most important parts of `settings.yml`. Each section is collapsed into a `Details` block so you can quickly scan what a setting group does before opening the sample config.
+
+<Details>
+<summary id="debug"><strong>🚩 `debug`</strong></summary>
+
+Toggles debug mode, which will output detailed additional informational messages to the console. This option can also be toggled via the `/oraxen debug` command.
+
+```yaml
+debug: false
+```
+
+`debug` - Enables verbose console logging for Oraxen diagnostics. Use this when you need extra information while troubleshooting.<br />
+
+</Details>
+
+<Details>
+<summary id="plugin"><strong>🧩 `Plugin`</strong></summary>
+
+Controls Oraxen's global behavior, including config housekeeping, language selection, first-run messaging, Paper config tweaks for custom blocks, default asset/config generation, and which UI surfaces use MiniMessage formatting.
+
+```yaml
+Plugin:
+  keep_this_up_to_date: true
+  language: "english"
+  introduction:
+    enabled: true
+    console_sent: false
+  auto_update_paper_config: true
+  generation:
+    default_assets: true
+    default_configs: true
+  formatting:
+    inventory_titles: true
+    titles: true
+    subtitles: true
+    action_bar: true
+    anvil: true
+    signs: true
+    chat: true
+    books: true
+```
+
+`keep_this_up_to_date` - Automatically updates the config when settings change between Oraxen versions. Oraxen may delete obsolete settings when this is enabled.<br />
+`language` - Selects the language file Oraxen uses for messages. Valid options include `czech`, `english`, `french`, `german`, `jpn_JP`, `korean`, `pt-BR`, `ru-RU`, `zh-CN`, and `zh-TW`.<br />
+`introduction.enabled` - Shows the first-run welcome message. Set this to `false` to suppress it entirely.<br />
+`introduction.console_sent` - Internal flag set after the welcome message has been shown in console.<br />
+`auto_update_paper_config` - Updates `paper-global.yml` to disable block updates for custom blocks.<br />
+`generation.default_assets` - Generates the default resource-pack assets that ship with Oraxen.<br />
+`generation.default_configs` - Generates the default config files that Oraxen provides.<br />
+`formatting.inventory_titles` - Formats inventory titles with MiniMessage.<br />
+`formatting.titles` - Formats title packets with MiniMessage.<br />
+`formatting.subtitles` - Formats subtitle packets with MiniMessage.<br />
+`formatting.action_bar` - Formats action bar messages with MiniMessage.<br />
+`formatting.anvil` - Formats anvil result text sent by plugins.<br />
+`formatting.signs` - Formats sign text when placed or edited.<br />
+`formatting.chat` - Formats chat messages and glyphs in chat. Disable this if a chat plugin conflicts with it.<br />
+`formatting.books` - Formats glyphs shown in written books.<br />
+
+<Callout type="info">
+	The `formatting` section uses MiniMessage. Legacy color formats such as `§c` or `&c` are not supported here.
+</Callout>
+
+</Details>
+
+<Details>
+<summary id="configstools"><strong>🛠️ `ConfigsTools`</strong></summary>
+
+Controls model-data and glyph-code generation, plus the fallback item shown when a config entry cannot be resolved.
+
+```yaml
+ConfigsTools:
+  skipped_model_data_numbers: []
+  disable_automatic_model_data: false
+  disable_automatic_glyph_code: false
+  error_item:
+    material: PODZOL
+    excludeFromInventory: false
+    injectId: false
+```
+
+`skipped_model_data_numbers` - Reserves specific CustomModelData values so Oraxen will not assign them automatically. This list accepts singular numbers and ranges such as `1-4`.<br />
+`disable_automatic_model_data` - Disables automatic model-data assignment.<br />
+`disable_automatic_glyph_code` - Stops Oraxen from auto-generating glyph codes.<br />
+`error_item.material` - Material used for the fallback item shown when a config entry fails.<br />
+`error_item.excludeFromInventory` - Hides the fallback item from inventories when enabled.<br />
+`error_item.injectId` - Injects the Oraxen item-ID tag into the fallback item so Oraxen recognizes it as an Oraxen item. Defaults to `true` in code. The legacy `injectID` casing shipped in the default `settings.yml` is not read and has no effect.<br />
+
+</Details>
+
+<Details>
+<summary id="glyphs"><strong>✦ `Glyphs`</strong></summary>
+
+Controls emoji-list permissions and glyph tab completions.
+
+```yaml
+Glyphs:
+  emoji_list_permission_only: true
+  unicode_completions: true
+```
+
+`emoji_list_permission_only` - Shows only emojis the player has permission to use.<br />
+`unicode_completions` - Makes glyph tab completion show Unicode values instead of glyph placeholders.<br />
+
+</Details>
+
+<Details>
+<summary id="customarmor"><strong>🛡️ `CustomArmor`</strong></summary>
+
+Controls which custom armor system Oraxen uses and how component- or trim-based armor is configured.
+
+```yaml
+CustomArmor:
+  type: COMPONENT
+  auto_select_type: true
+  disable_leather_repair: true
+  component_settings:
+    auto_assign_component: true
+  trims_settings:
+    material_replacement: CHAINMAIL
+    auto_assign_settings: true
+```
+
+`type` - Selects the custom armor system Oraxen should use. Valid types are `COMPONENT`, `TRIMS`, and `NONE`.<br />
+`auto_select_type` - Lets Oraxen replace incompatible armor types with the best type for the detected server version.<br />
+`disable_leather_repair` - Prevents custom armor from being repaired with leather. Custom armor can only be repaired with copies of the same custom armor.<br />
+`component_settings.auto_assign_component` - Automatically adds the equippable-model component unless you set it manually.<br />
+`trims_settings.material_replacement` - Chooses the vanilla material used to represent trim-based armor. Valid materials are `CHAINMAIL`, `IRON`, `GOLD`, `DIAMOND`, `NETHERITE`, and `LEATHER`.<br />
+`trims_settings.auto_assign_settings` - Automatically applies trim and item-flag settings for custom armor.<br />
+
+</Details>
+
+<Details>
+<summary id="itemupdater"><strong>🔁 `ItemUpdater`</strong></summary>
+
+Keeps player inventories, loaded block inventories, and loaded entity-held items synced to the latest Oraxen item definitions.
+
+```yaml
+ItemUpdater:
+  update_items: true
+  update_tile_entity_contents: true
+  update_entity_contents: true
+  override_renamed_items: false
+  override_item_lore: false
+  update_items_on_reload: true
+```
+
+`update_items` - Updates player inventories to the current item config when they join.<br />
+`update_tile_entity_contents` - Updates items in loaded block inventories such as chests and furnaces.<br />
+`update_entity_contents` - Updates items held by loaded entities such as item frames, mobs, and ender chests.<br />
+`override_renamed_items` - Replaces items even if they were renamed by a player.<br />
+`override_item_lore` - Forces item lore to match the Oraxen item definition.<br />
+`update_items_on_reload` - Re-applies item updates to online players after `/oraxen reload items` or `/oraxen reload all`.<br />
+
+</Details>
+
+<Details>
+<summary id="furnitureupdater"><strong>🪑 `FurnitureUpdater`</strong></summary>
+
+Keeps placed furniture synced when players join, reload items, or load entities and chunks, and can try to repair broken furniture.
+
+```yaml
+FurnitureUpdater:
+  update_furniture: true
+  update_on_reload: false
+  update_on_load: false
+  experimental_furniture_type_update: false
+  experimental_fix_broken_furniture: false
+```
+
+`update_furniture` - Keeps placed furniture synced with the current config.<br />
+`update_on_reload` - Updates furniture after `/oraxen reload items` or `/oraxen reload all`.<br />
+`update_on_load` - Updates the furniture item whenever an entity is loaded.<br />
+`experimental_furniture_type_update` - Enables experimental furniture type migration.<br />
+`experimental_fix_broken_furniture` - Tries to repair furniture that is not placed or broken correctly.<br />
+
+</Details>
+
+<Details>
+<summary id="pack"><strong>📦 `Pack`</strong></summary>
+
+Controls the resource-pack pipeline: generation, importing external pack content, uploading, dispatching to players, and handling pack-status feedback.
+
+### Generation
+
+```yaml
+Pack:
+  generation:
+    generate: true
+    disable_mcmeta_generation: false
+    multi_version_packs: false
+    excluded_file_extensions: []
+    appearance:
+      item_properties: true
+      model_data_ids: false
+      model_data_float: false
+      generate_predicates: false
+    verify_pack_files: true
+    fix_force_unicode_glyphs: true
+    atlas:
+      exclude_malformed_from_atlas: true
+      generate: true
+      type: "SPRITE"
+    auto_generated_models_follow_texture_path: false
+    compression: BEST_COMPRESSION
+    obfuscation:
+      type: NONE
+    protection: true
+    comment: "The content of this texture pack\n..."
+```
+
+`generation.generate` - Enables or disables all resource-pack generation.<br />
+`generation.disable_mcmeta_generation` - Prevents Oraxen from creating or modifying `pack.mcmeta`. The file at `plugins/Oraxen/pack/pack.mcmeta` is included exactly as provided, and automatic overlay entries are disabled.<br />
+`generation.multi_version_packs` - Generates separate packs for clients on 1.21.3 and below and clients on 1.21.4+. ViaVersion is used for client-version detection; without it, players receive the server-version pack. Multi-version packs require the `lobfile`, `polymath`, or `external` upload type.<br />
+`generation.excluded_file_extensions` - Lists file extensions that should not be included in the final zipped resource pack.<br />
+`generation.appearance.item_properties` - Uses the `minecraft:item_model` component with Oraxen item IDs and generates `assets/oraxen/items/<item_id>.json` for Minecraft 1.21.4+.<br />
+`generation.appearance.model_data_ids` - Uses `custom_model_data.strings[0]` with stable string identifiers such as `oraxen:<item_id>` and generates `minecraft:select` item definitions. This only applies to items that explicitly set `Pack.custom_model_data`.<br />
+`generation.appearance.model_data_float` - Uses `custom_model_data.floats[0]` with `minecraft:range_dispatch` and also sets integer CustomModelData for plugin compatibility. This only applies to items that explicitly set `Pack.custom_model_data`.<br />
+`generation.appearance.generate_predicates` - Generates legacy predicate override files on 1.21.4+. This is not normally needed unless an external tool requires legacy JSON files. Pre-1.21.4 servers always generate predicates.<br />
+`generation.verify_pack_files` - Checks textures and models for valid resource-pack formatting.<br />
+`generation.fix_force_unicode_glyphs` - Fixes glyphs not showing when Force Unicode is enabled.<br />
+`generation.atlas.exclude_malformed_from_atlas` - Excludes malformed textures from the atlas instead of including invalid entries.<br />
+`generation.atlas.generate` - Generates atlas files for the resource pack.<br />
+`generation.atlas.type` - Chooses the atlas mode. Valid options are `SPRITE` and `DIRECTORY`.<br />
+`generation.auto_generated_models_follow_texture_path` - Makes auto-generated models follow the source texture path.<br />
+`generation.compression` - Chooses the ZIP compression level used for the generated pack. This follows Java's `Deflater` constants.<br />
+`generation.obfuscation.type` - Chooses the pack obfuscation mode. `NONE` keeps keys readable, `SIMPLE` renames pack-internal model, texture, and sound paths while preserving namespaces, and `FULL` also replaces namespaces used by renamed resources.<br />
+`generation.protection` - Applies protection methods intended to make the pack difficult to extract with common archive tools.<br />
+`generation.comment` - Adds a comment to the generated pack archive.<br />
+
+<Callout type="warning">
+	Do not try to extract a pack after enabling `generation.protection`; protected archives can behave unexpectedly in normal archive tools.
+</Callout>
+
+<Callout type="info">
+	`generation.appearance.model_data_ids` and `generation.appearance.model_data_float` cannot be combined because both write to the same item definition files.
+</Callout>
+
+### Import
+
+```yaml
+Pack:
+  import:
+    merge_duplicate_fonts: true
+    merge_duplicates: true
+    remove_core_shaders_from_imported_packs: false
+    retain_custom_model_data: true
+    merge_item_base_models: false
+```
+
+`import.merge_duplicate_fonts` - Merges duplicate font files, most often `default.json`, into the final pack. Original files are not deleted, but duplicates are excluded in favor of the merged file.<br />
+`import.merge_duplicates` - Merges duplicate imported resources when possible.<br />
+`import.remove_core_shaders_from_imported_packs` - Removes imported Minecraft core shader files from `pack/assets` and uploaded ZIP merges. This is useful when external packs override Oraxen-generated text or scoreboard shaders.<br />
+`import.retain_custom_model_data` - Keeps CustomModelData values from imported files. Only enable this when another plugin requires those exact values, because it can conflict with other Oraxen items.<br />
+`import.merge_item_base_models` - Attempts to merge item base model JSON files such as `paper.json` from imported packs instead of generating item configs from them.<br />
+
+### Upload
+
+```yaml
+Pack:
+  upload:
+    enabled: true
+    type: polymath
+    polymath:
+      server: atlas.oraxen.com
+      secret: "oraxen"
+    lobfile:
+      api-key: ""
+      pack-name: Oraxen
+    self-host:
+      host: "0.0.0.0"
+      port: 8080
+      domain: "localhost:8080"
+```
+
+`upload.enabled` - Enables uploading the generated resource pack to the selected host.<br />
+`upload.type` - Chooses the upload backend. Valid options are `lobfile`, `polymath`, `self-host`, and `external`.<br />
+`upload.polymath.server` - Sets the Polymath server used for resource-pack uploads. You can use the public Oraxen Atlas endpoint or your own Polymath instance.<br />
+`upload.polymath.secret` - Sets the Polymath upload secret. Change this when hosting your own Polymath instance to limit upload access.<br />
+`upload.lobfile.api-key` - Sets the Lobfile API key used for uploads.<br />
+`upload.lobfile.pack-name` - Sets the Lobfile pack name. When multi-version packs are enabled, Oraxen uses `<pack-name>_<version>`.<br />
+`upload.self-host.host` - Sets the IP address the self-hosted HTTP server binds to. `0.0.0.0` listens on all interfaces.<br />
+`upload.self-host.port` - Sets the port the self-hosted HTTP server listens on.<br />
+`upload.self-host.domain` - Sets the domain or IP and port players use to download the self-hosted pack.<br />
+
+#### External upload type
+
+When `upload.type` is `external`, `Pack.upload.options.class` must name a fully qualified class implementing `HostingProvider`. The constructor may be no-arg or take a `ConfigurationSection`. The whole `options` section is passed to the provider. This section is not present in the default `settings.yml` and must be added manually.
+
+```yaml
+Pack:
+  upload:
+    type: external
+    options:
+      class: "com.example.MyHostingProvider"
+```
+
+### Dispatch
+
+```yaml
+Pack:
+  dispatch:
+    send: true
+    mode: "JOIN"
+    timeout: 30s
+    exclude: []
+    delay: -1
+    mandatory: true
+    disable:
+      movement: true
+      damage: true
+    prompt: "<#fa4943>Accept the pack to enjoy a full <b><gradient:#9055FF:#13E2DA>Oraxen</b><#fa4943> experience"
+    layer: ""
+```
+
+`dispatch.send` - Sends the pack to players when enabled.<br />
+`dispatch.mode` - Chooses when the pack is sent. Valid options are `JOIN` and `PRE-JOIN`. `PRE-JOIN` requires Paper 1.21.7+ and falls back to `JOIN` when unavailable.<br />
+`dispatch.timeout` - Time to wait for the client to respond in `PRE-JOIN` mode before continuing login. Supports values such as `30s`, `500ms`, `1m`, or `20t`.<br />
+`dispatch.exclude` - Client versions that should not receive the pack. Quote every rule, for example `'< 1.12'`, `'= 1.21.11'`, or `'> 1.21.11'`.<br />
+`dispatch.delay` - Delays pack sending by the configured number of seconds after join. Values at or below `0`, including `-1`, send immediately. This only applies to `JOIN` mode.<br />
+`dispatch.mandatory` - Makes the pack required instead of optional.<br />
+`dispatch.disable.movement` - Freezes player movement while the pack loads.<br />
+`dispatch.disable.damage` - Prevents damage while the pack loads.<br />
+`dispatch.prompt` - Sets the resource-pack prompt shown to players.<br />
+`dispatch.layer` - Currently has no effect. The plugin never reads this setting. On Minecraft 1.20.3+ Oraxen always sends its pack without replacing other packs, so multiple packs already coexist.<br />
+
+### Receive
+
+```yaml
+Pack:
+  receive:
+    enabled: true
+    loaded:
+      actions:
+        sound:
+          enabled: true
+          type: oraxen:welcome
+          volume: 1.0
+          pitch: 1.0
+        delay: 5
+        message:
+          enabled: false
+          type: ACTION_BAR
+          content: "<#55ffa4><bold>ResourcePack loaded"
+        commands:
+          console: []
+          player: []
+          opped_player: []
+    accepted:
+      actions:
+        message:
+          enabled: false
+          type: ACTION_BAR
+          content: "<#55ffa4><bold>ResourcePack accepted"
+        commands:
+          console: []
+          player: []
+          opped_player: []
+    denied:
+      actions:
+        message:
+          enabled: false
+          type: CHAT
+          content: "<red>You refused the ResourcePack..."
+        commands:
+          console: []
+          player: []
+          opped_player: []
+    failed_download:
+      actions:
+        message:
+          enabled: false
+          type: CHAT
+          content: "<red>You failed to download the ResourcePack..."
+        commands:
+          console: []
+          player: []
+          opped_player: []
+    failed_reload:
+      actions:
+        commands:
+          console: []
+          player: []
+          opped_player: []
+    downloaded:
+      actions:
+        commands:
+          console: []
+          player: []
+          opped_player: []
+    invalid_url:
+      actions:
+        commands:
+          console: []
+          player: []
+          opped_player: []
+    discarded:
+      actions:
+        commands:
+          console: []
+          player: []
+          opped_player: []
+```
+
+`receive.enabled` - Enables pack status feedback handling.<br />
+`receive.loaded.actions.sound.enabled` - Plays a sound after the pack is loaded when enabled.<br />
+`receive.loaded.actions.sound.type` - Sets the sound played after the pack is loaded.<br />
+`receive.loaded.actions.sound.volume` - Sets the loaded sound volume.<br />
+`receive.loaded.actions.sound.pitch` - Sets the loaded sound pitch.<br />
+`receive.loaded.actions.delay` - Delays loaded actions by the configured number of ticks.<br />
+`receive.<status>.actions.message.enabled` - Sends a message for the given pack status when enabled.<br />
+`receive.<status>.actions.message.type` - Chooses how the message is delivered. Valid options are `KICK`, `CHAT`, `ACTION_BAR`, and `TITLE`.<br />
+`receive.<status>.actions.message.content` - Sets the message content. Click and hover elements are only available with `CHAT` messages.<br />
+`receive.<status>.actions.commands.console` - Runs commands as console for the given pack status.<br />
+`receive.<status>.actions.commands.player` - Runs commands as the player for the given pack status.<br />
+`receive.<status>.actions.commands.opped_player` - Runs commands as a temporarily opped player for the given pack status.<br />
+
+Supported receive statuses are `loaded`, `accepted`, `denied`, `failed_download`, `failed_reload`, `downloaded`, `invalid_url`, and `discarded`. The `failed_reload`, `downloaded`, `invalid_url`, and `discarded` statuses are available on Minecraft 1.20.3+.
+
+</Details>
+
+<Details>
+<summary id="misc"><strong>⚙️ `Misc`</strong></summary>
+
+Contains smaller global toggles including recipes, scoreboard and tablist visuals, armor-equip bypasses, and vanilla item display overrides.
+
+```yaml
+Misc:
+  reset_recipes: true
+  add_recipes_to_book: true
+  hide_scoreboard_numbers: false
+  hide_scoreboard_background: false
+  hide_tablist_background: false
+  armor_equip_event_bypass:
+    - FURNACE
+    - CHEST
+    - TRAPPED_CHEST
+  shield_display: '{"thirdperson_righthand":{"rotation":[0,90,0],"translation":[10,6,-4],"scale":[1,1,1]}}'
+  bow_display: '{"thirdperson_righthand":{"rotation":[-80,260,-40],"translation":[-1,-2,2.5],"scale":[0.9,0.9,0.9]}}'
+  crossbow_display: '{"thirdperson_righthand":{"rotation":[-90,0,-60],"translation":[2,0.1,-3],"scale":[0.9,0.9,0.9]}}'
+```
+
+`reset_recipes` - Resets Oraxen recipes on reload. This can conflict with other plugins, but makes recipe testing easier.<br />
+`add_recipes_to_book` - Adds unlocked Oraxen recipes to the player recipe book.<br />
+`hide_scoreboard_numbers` - Hides scoreboard numbers on the sidebar. On Minecraft 26.x and above, this requires a packet adapter such as ProtocolLib or PacketEvents.<br />
+`hide_scoreboard_background` - Hides the scoreboard background on Minecraft 1.21.6 through 1.21.7.<br />
+`hide_tablist_background` - Hides the tablist background on Minecraft 1.21.6 through 1.21.7.<br />
+`armor_equip_event_bypass` - Lists blocks that should not trigger armor equip behavior when right-clicked. This should include blocks with inventories and other blocks that should not equip armor on interaction.<br />
+`shield_display` - Sets the vanilla shield display transform used when Oraxen needs to add custom shields.<br />
+`bow_display` - Sets the vanilla bow display transform used when Oraxen needs to add custom bows.<br />
+`crossbow_display` - Sets the vanilla crossbow display transform used when Oraxen needs to add custom crossbows.<br />
+
+</Details>
+
+<Details>
+<summary id="inventory-menu"><strong>🗂️ `inventory-menu`</strong></summary>
+
+Configures the built-in browser GUI that players open with Oraxen commands. It controls the menu title, pagination, and the category buttons shown in the item browser.
+
+```yaml
+inventory-menu:
+  title: "<shift:-18><glyph:menu_items><shift:-193>"
+  rows: 6
+  slots: 45
+
+  layout:
+    armors:
+      slot: 1
+      icon: emerald_chestplate
+      name: "<green>Armors"
+      title: "<main_menu_title><#362753><glyph:menu_items_overlay:colorable>"
+```
+
+`title` - Sets the title used for the main browser GUI.<br />
+`rows` - Sets how many rows the GUI uses.<br />
+`slots` - Sets how many item slots are shown per page.<br />
+`layout` - Defines the category buttons shown in the browser.<br />
+`layout.<category>.slot` - Chooses the slot used for the category button.<br />
+`layout.<category>.icon` - Chooses the Oraxen item icon shown for the category.<br />
+`layout.<category>.name` - Sets the visible name of the category button.<br />
+`layout.<category>.title` - Sets the GUI title shown when opening the category.<br />
+
+Default categories include `armors`, `blocks`, `furniture`, `flowers`, `hats`, `items`, `mystical`, `plants`, `skins`, `tools`, and `weapons`.
+
+<Callout type="info">
+	Existing `oraxen_inventory` configurations are migrated automatically to the `inventory-menu` format.
+</Callout>
+
+</Details>

@@ -1,0 +1,26 @@
+---
+title: "🧪 MMOItems"
+description: "MMOItems integration for Oraxen."
+---
+
+import { Callout, Tabs, Tab, Steps } from '@site/src/components/Compat'
+
+# 🧪 MMOItems
+
+## Overview
+Oraxen includes built-in MMOItems compatibility. This allows you to import items created with MMOItems and use them as a base for your Oraxen items (you will keep everything configured with MMOItems and add your own mechanics, textures, 3d models, etc).
+
+## Usage
+```yaml
+mymmoitem:
+  displayname: "<gradient:#59A7EA:#F1D2FF>Test"
+  mmoitem:
+    type: SWORD
+    id: FALCON_BLADE
+    level: 10 # Optional
+    tier: RARE # Optional
+```
+
+<Callout type="info">
+  `level` and `tier` are parsed but not currently applied when building the item.
+</Callout>

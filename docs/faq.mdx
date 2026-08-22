@@ -1,0 +1,129 @@
+---
+title: "❓ FAQ"
+description: "Frequently asked questions."
+---
+
+import { Callout } from '@site/src/components/Compat'
+
+# ❓ FAQ
+
+### Can I Disable The Default Assets And Configs Oraxen Comes With?
+
+Yes. Default configs are controlled by `Plugin.generation.default_configs` in `settings.yml` and can be removed with `/oraxen remove-defaults`. For the default assets and branding we have a dedicated tutorial <Highlight color="#2E8B57" to="usage/tutorials/d017g">**here**</Highlight>.
+
+### Can I Use Oraxen Items In Custom Recipes?
+Yes, Oraxen items can be used in both vanilla crafting recipes and custom recipes. You can reference Oraxen items in recipe configurations using their item IDs. Check the recipes documentation for detailed examples.
+
+### Can I Use Oraxen With Other Plugins?
+Yes, Oraxen is designed to be compatible with most plugins & allows easy integration for plugin developers. However, some plugins that heavily modify items or resource packs might conflict. For a detailed list of compatibility check out our <Highlight color="#2E8B57" to="/compatibility">**Compatibility**</Highlight> section.
+
+### Does Oraxen Replace Any Vanilla Items?
+The goal of Oraxen is to add things to the game without losing features, so the short answer is no. However, Minecraft has some limitations.
+
+### Does Oraxen Work With Modded Clients?
+Oraxen works with vanilla Minecraft clients and most modded clients that support resource packs. However, some mods might interfere with resource pack loading or custom model data (e.g. Optifine or Iris Shaders). Fabric/Forge clients generally work well with Oraxen. We will signal issues with well-known mods that interfere with resource packs in our docs (Optifine & Iris both work fine).
+
+### How Do I Back Up My Oraxen Configuration?
+Simply back up your entire `/plugins/Oraxen/` folder, which contains all configurations, items, mechanics, and generated resource pack files. It's recommended to back up before major updates or configuration changes.
+
+### How Do I Disable Or Change The Welcome Sound?
+You can configure this in `settings.yml`. The example below shows where you can disable or change the sound.
+
+```yaml
+Pack:
+  receive:
+    loaded:
+      actions:
+        sound:
+          enabled: true
+          type: oraxen:welcome
+          volume: 1.0
+          pitch: 1.0
+```
+
+### How Do I Hide Item Tooltips?
+Set `hide_tooltip: true` under the item's `Components` section (1.20.5+). For vanilla items you can use the <Highlight color="#1877F2" to="https://github.com/lolgeny/item-tooltip-remover">**Item Tooltip Remover**</Highlight> resource pack or datapack.
+
+### How Do I Just Use Oraxen's Mechanics (no resource pack)?
+Go to your `settings.yml` file and set the following options.
+
+```yaml
+Pack:
+  generation:
+    generate: false
+  upload:
+    enabled: false
+  dispatch:
+    send: false
+Plugin:
+  keep_this_up_to_date: false
+Misc:
+  reset_recipes: false
+ItemUpdater:
+  update_items: false
+```
+
+The configurations do not go in that exact order. Once you've changed these lines, delete what is inside the `/Oraxen/pack`, `/Oraxen/items` and `/Oraxen/glyphs` paths and restart the server.
+
+### How Do I Optimize Oraxen Performance?
+
+- Use texture atlasing to reduce the number of texture files
+- Optimize texture file sizes (use appropriate resolutions)
+- Disable unused mechanics in `settings.yml` and `mechanics.yml`
+- Use compression for resource pack generation
+- Limit the number of custom model data variations per item
+
+### How Do I Troubleshoot Resource Pack Issues?
+
+1. Check the server console for Oraxen errors or warnings
+2. Check the client logs (the logs of your Minecraft client) for the reason why the pack is having issues
+3. Remove the `/plugins/Oraxen/pack/pack.zip` file and reload.
+
+### How Do I Update Oraxen?
+1. Back up your current Oraxen folder
+2. Download the latest version
+3. Replace the old jar file with the new one
+4. Restart your server
+5. Check for any configuration updates or breaking changes in the changelog
+
+A helpful video guide can be found <Highlight color="#e74c3c" to="https://youtu.be/LkansZwVaPY">**here**</Highlight>.
+
+### I Use Bungee/Velocity But The Pack Keeps Reloading When Players Switch Servers?
+This happens because players technically leave one server and join another, causing Minecraft to remove and resend the resource pack.
+To prevent this, use <Highlight color="#1877F2" to="https://www.spigotmc.org/resources/%E2%9C%82%EF%B8%8F-bungee-pack-layer-optimize-resource-pack-sending.94978/">**BungeePackLayer**</Highlight>, a Bungee/Velocity plugin that prevents unnecessary pack resending. Note that packs will still be resent if they differ between servers (when config files aren't identical). Other optional plugins are <Highlight color="#FFA500" to="https://modrinth.com/plugin/bungeeresourcepacks">**BungeeResourcepacks**</Highlight>, <Highlight color="#2E8B57" to="https://modrinth.com/plugin/velocityresourcepacks">**VelocityResourcepacks**</Highlight> or <Highlight color="#1877F2" to="https://modrinth.com/plugin/worldresourcepacks">**WorldResourcepacks**</Highlight>
+
+### Is Oraxen a Mod?
+No, Oraxen is not a mod. It's a Minecraft plugin that adds custom items, blocks, and features to the game using only a resource pack and server-side implementation. Players don't need to install any client-side modifications.
+
+### Oraxen Is Using Its Own Resource Pack, Can I Still Use Mine?
+Yes, you can merge your existing resource pack with Oraxen's generated pack. More information about pack merging can be found <Highlight color="#1877F2" to="usage/merging">**here**</Highlight>.
+
+### What File Formats Does Oraxen Support For Textures?
+Oraxen supports PNG files for textures and JSON files for models. Textures should be in PNG format with appropriate resolutions (`16x16`, `32x32`, etc.). Models should follow Minecraft's JSON model format. We are restricted by Minecraft's texture limits (e.g. `256x256` for glyphs).
+
+### Where Do I Suggest New Features Or Report An Issue?
+- For critical issues (e.g. Dupe Glitches) join our <Highlight color="#1877F2" to="https://discord.gg/N7AJFJTgBS">**Discord**</Highlight> and open a support ticket. 
+- For normal suggestions or bug reports use the dedicated `#🐛┃bugs` and `#⭐┃suggestions` channels.
+
+### Why Do My Textures Work When I Use OptiFine But Not In Vanilla?
+
+Since Minecraft 1.11, vanilla resource packs don't support uppercase letters in folder, texture, or model names. OptiFine still supports uppercase, but you should always use lowercase letters and underscores to avoid compatibility issues.
+
+### How do I verify my purchase?
+Verify your purchase to access support channels and beta builds on Discord.
+
+#### Option 1 - Payment ID Verification  
+- Find your **Payment / Purchase ID** (available in your email receipt or via your payment provider such as Stripe or PayPal).
+- Go to https://thomas.md/license, log in using your **Email** or **Discord account**, and enter the **Payment / Purchase ID**.
+
+<Callout type="note">
+    This method may not work for older orders. For recent purchases, you should have also received a confirmation email.
+</Callout>
+
+#### Option 2 - Legacy Verification
+- Visit the original marketplace where you purchased your product (e.g., SpigotMC or Polymart).  
+- Capture a screenshot that clearly displays...
+  - Your **SpigotMC / Polymart username**  
+  - The product resource (e.g., download button or "Purchased Resources" section)  
+  - Your **Discord username** (for example, shown in a split view with Discord open)
+- Submit the screenshot in a new ticket on our <Highlight color="#1877F2" to="https://discord.gg/N7AJFJTgBS">**Discord**</Highlight>.

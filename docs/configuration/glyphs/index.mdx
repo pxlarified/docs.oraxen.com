@@ -1,0 +1,317 @@
+---
+title: "🖼️ Glyphs"
+description: "Creating custom images / glyphs & GUIs using Oraxen."
+asIndexPage: true
+---
+
+import { Callout } from '@site/src/components/Compat'
+
+# 🖼️ Glyphs
+
+## Overview
+Glyphs allow you to display custom textures anywhere text appears in Minecraft, including chat messages, item names, lore, scoreboards, and more. They work by mapping Unicode characters to custom image files through Minecraft's font system. Since Minecraft supports multiple font sets, the same character can display different visuals depending on the font used. This powerful system enables you to create custom GUIs, HUDs, emojis, rank icons, and much more.
+
+## Configuration
+Glyphs are configured in `.yml` files in the `plugins/Oraxen/glyphs` directory.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/glyphs",
+              name: "glyphs",
+              children: [
+                {
+                  id: "plugins/Oraxen/glyphs/emojis.yml",
+                  name: "emojis.yml",
+                },
+                {
+                  id: "plugins/Oraxen/glyphs/ranks.yml",
+                  name: "ranks.yml",
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]}
+/>
+
+### Properties
+`texture` - The path to your texture file (relative to `pack/textures/`).<br />
+`ascent` - The vertical offset of the glyph.<br />
+`height` - The scale/height of the glyph.<br />
+`char` - The unicode character used for this glyph (the character the glyph will be mapped to). Also accepts a list of strings, one per bitmap row. `chars` is an accepted alias.<br />
+`is_emoji` - Whether this glyph appears in `/oraxen emojis`. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+`chat.placeholders` - A list of chat placeholders for the glyph. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+`chat.permission` - The permission required to use the glyph. Defaults to none. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+
+<Callout type="warning">
+  The height value must always be greater than or equal to the ascent value. This is a strict requirement enforced by Minecraft.
+</Callout>
+<Callout type="info">
+    Glyph placeholders like `:farmer:` work in chat, signs, and books for any font, because Oraxen injects the glyph's font component. Anvil renames insert the raw character without a font, so there the glyph only renders with the `minecraft:default` font. The same applies when typing the raw unicode character in places Oraxen does not intercept.
+</Callout>
+
+### Additional Properties
+<details>
+<summary id="tab-completion"><strong>💬 Tab Completion</strong></summary>
+
+Makes glyphs tab complete in chat.
+
+<Callout type="note">
+  This works for any glyph. It completes the glyph's chat placeholders, so define `placeholders` for the glyph.
+</Callout>
+
+`tabcomplete` - Whether the glyph should tabcomplete.
+
+```yaml
+chat:
+  tabcomplete: true
+```
+</details>
+
+<details>
+<summary id="font"><strong>🔤 Font</strong></summary>
+
+Defines the font used for the glyph.
+
+`font` - The font that should be used for the glyph.
+
+```yaml
+appearance:
+  font: "minecraft:default"
+```
+</details>
+
+<details>
+<summary id="shadow"><strong>🖌️ Shadow Appearance</strong></summary>
+
+Defines the text shadow color.
+<Callout type="note">
+  This is only available on 1.21.4+.
+</Callout>
+
+`shadow_color` - The shadow color that should be used for the glyph.
+
+Supports ARGB, RGB and ShortRGB formats.<br />
+`#AARRGGBB` - Full format with alpha, red, green, blue.<br />
+`#RRGGBB` - RGB format (assumes FF alpha).<br />
+`#RGB` - Short format (expands to `#FFRRGGBB`).<br />
+
+```yaml
+appearance:
+  shadow_color: "#80000000"
+```
+</details>
+
+<details>
+<summary id="animations"><strong>🎞️ Animations</strong></summary>
+
+Renders PNG sprite sheets and makes them animated ingame using core shaders.
+
+<Callout type="info">
+  The sprite sheet should be a PNG file which can be referenced in the `texture` field.<br />
+</Callout>
+
+<Callout type="important">
+  Frames may be non-square. The sheet width or height must be divisible by the frame count. Vertical and horizontal sheets are both supported.<br />
+</Callout>
+
+`frames` - The number of frames in the sprite sheet. Max 16, extra frames are dropped with a warning.<br />
+`fps` - The frames per second of the animation. Clamped to 1-127, defaults to 10.<br />
+`loop` - Whether the animation should loop. Defaults to true.<br />
+`offset` - The horizontal offset of the animation. If omitted, the offset is calculated automatically. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+
+```yaml
+animation:
+  frames: 12
+  fps: 12
+  loop: true
+  offset: 0  
+```
+</details>
+
+<details>
+<summary id="bitmaps"><strong>🧿 Bitmaps</strong></summary>
+
+Multi-bitmap glyphs allow you to display multiple custom textures from a single image file by splitting it into a grid.
+
+`cols` - The number of columns in the image. `columns` is an accepted alias.<br />
+`rows` - The number of rows in the image.<br />
+
+```yaml
+myglyph:
+  texture: edna
+  ascent: 8
+  height: 8
+  cols: 1
+  rows: 5
+```
+
+<Callout type="info">
+  In this example, the texture is split into 1 column and 5 rows, creating one glyph that spans multiple characters. `<glyph:myglyph>` renders all rows.
+</Callout>
+
+You can select single cells or ranges.<br />
+`<glyph:myglyph:3>` - Renders the third character.<br />
+`<glyph:myglyph:1..4>` - Renders characters 1 to 4.<br />
+
+![Bitmap Glyphs](/assets/584337616-f468612f-38db-4e42-a90b-e25ce1a5fb1d.png)
+
+</details>
+
+<details>
+<summary id="reference"><strong>🔗 Reference</strong></summary>
+
+Reference glyphs let you alias part of an existing multi-bitmap glyph.
+
+`glyph` - The unique identifier of the glyph.<br />
+`index` - The characters to include (1-indexed). Accepts a single number or a range (`1..5` or `1-5`). Omitting it selects all characters. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+
+The `reference` section is nested under the glyph name.
+
+```yaml
+myreference:
+  reference:
+    glyph: yourglyph
+    index: 1
+```
+
+```yaml
+emoji-1:
+  reference:
+    glyph: yourmultibitmap
+    index: 1
+
+emoji-10:
+  reference:
+    glyph: yourmultibitmap
+    index: 10
+```
+</details>
+
+### Example
+
+```yaml
+farmer:
+  texture: default/chat/farmer
+  ascent: 8
+  height: 8
+  appearance:
+    font: "minecraft:default"
+    shadow_color: "#80000000"
+  chat:
+    tabcomplete: true
+    placeholders:
+      - ":farmer:"
+    permission: oraxen.chat.farmer
+```
+
+### font.yml
+
+The `plugins/Oraxen/font.yml` file controls font generation.
+
+`settings.automatically_generate` - Whether Oraxen generates `default.json` for you.<br />
+`settings.perms_chatcolor` - A placeholder used to suffix glyphs in chat. Requires PlaceholderAPI. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+
+The `bitmaps` section defines shared bitmap grids. Each entry takes `texture`, `rows`, `columns`, `ascent` (default 8) and `height` (default 8). Glyphs reference a cell with `bitmap: {id, row, column}`.
+
+The `fonts` section registers ttf fonts with `type`, `file`, `shift_x`, `shift_y`, `size` and `oversample`.
+
+```yaml
+settings:
+  automatically_generate: true
+  perms_chatcolor: "%luckperms_meta_chatcolor%"
+
+bitmaps:
+  example_bitmap:
+    texture: example/texture
+    rows: 2
+    columns: 9
+    ascent: 8
+    height: 8
+
+fonts:
+  my_cool_font:
+    type: "ttf"
+    file: "minecraft:PPP.ttf"
+    shift_x: 0.0
+    shift_y: 1.6
+    size: 8.0
+    oversample: 10.0
+```
+
+## Usage
+<details>
+<summary id="shifts"><strong>➡️ Shifts</strong></summary>
+
+Shifts are generated space-font characters that let you move text or glyphs to the left or right by a specific number of pixels.
+
+<Callout type="info">
+  Shifts can be used in MiniMessage and PlaceholderAPI.<br />
+  Each tag supports up to 2047 pixels in either direction.<br />
+</Callout>
+
+`<shift:N>` - Shifts N pixels (Negative values supported).<br />
+`<s:N>` - Shorthand for `<shift:N>`.<br />
+
+`%oraxen_shift_N%` - Shifts N pixels to the right (positive).<br />
+`%oraxen_neg_shift_N%` - Shifts N pixels to the left (negative).<br />
+
+For more details see the dedicated sections for <Highlight color="#1877F2" to="#minimessage">**MiniMessage**</Highlight> and <Highlight color="#1877F2" to="#placeholderapi">**PlaceholderAPI**</Highlight>.<br />
+</details>
+
+<details>
+<summary id="minimessage"><strong>💬 MiniMessage</strong></summary>
+
+<Callout type="info">
+  You can use shorthand aliases.<br />
+  `<g:yourglyph>` for `<glyph:yourglyph>`.<br />
+  `<g:yourglyph:c>` for `<glyph:yourglyph:colorable>`.<br />
+  `<g:yourglyph:s:#FF0000>` for `<glyph:yourglyph:shadow:#FF0000>`.<br />
+</Callout>
+
+`<glyph:yourglyph>` - Basic usage.<br />
+`<glyph:yourglyph:colorable>` - Inherits surrounding text color.<br />
+`<glyph:yourglyph:shadow:#FF0000>` - Override shadow with specific color.<br />
+`<shift:N>` - Shifts N pixels (Negative values supported).<br />
+
+You can combine multiple options together.<br />
+`<glyph:yourglyph:c:s:#80FF0000>` - Example of multiple arguments being used together.
+</details>
+
+<details>
+<summary id="placeholderapi"><strong>🔤 PlaceholderAPI</strong></summary>
+
+<Callout type="warning">
+  PlaceholderAPI has to be installed for this to work.<br />
+</Callout>
+
+`%oraxen_yourglyph%` - Basic usage.<br />
+`%oraxen_shift_N%` - Shifts N pixels to the right (positive).<br />
+`%oraxen_neg_shift_N%` - Shifts N pixels to the left (negative).<br />
+</details>
+
+<details>
+<summary id="guis"><strong>💼 GUIs</strong></summary>
+
+<Callout type="warning">
+  ProtocolLib or PacketEvents has to be installed for GUI Title placeholders to work.<br />
+</Callout>
+
+Oraxen handles GUI visuals rather than inventory logic. By aligning glyphs in titles, you can overlay custom textures on the standard Minecraft interface.<br />
+
+Oraxen dynamically replaces placeholders when a GUI opens, ensuring titles remain functional even if the underlying Unicode characters change.
+
+`<glyph:yourglyph>` - Basic usage.<br />
+`<shift:N>` - Shifts N pixels (Negative values supported).<br />
+</details>

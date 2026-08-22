@@ -1,0 +1,39 @@
+@media (min-width: 997px) {
+  .menu {
+    flex-grow: 1;
+    padding: 0.75rem;
+  }
+
+  @supports (scrollbar-gutter: stable) {
+    .menu {
+      padding: 0.75rem 0 0.75rem 0.75rem;
+      scrollbar-gutter: stable;
+    }
+  }
+
+  .menuWithAnnouncementBar {
+    margin-bottom: var(--docusaurus-announcement-bar-height);
+  }
+}
+
+.brand {
+  align-items: center;
+  color: var(--ifm-font-color-base);
+  display: flex;
+  font-size: 1.25rem;
+  font-weight: 700;
+  gap: 0.65rem;
+  margin: 0.25rem 0.5rem 1rem;
+  text-decoration: none;
+}
+
+.brand:hover {
+  color: var(--ifm-font-color-base);
+  text-decoration: none;
+}
+
+.logo {
+  border-radius: 6px;
+  height: 2rem;
+  width: 2rem;
+}

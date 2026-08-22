@@ -1,0 +1,146 @@
+---
+title: "🏔️ Terralith"
+description: "Add Oraxen custom blocks to Terralith world generation."
+---
+
+import { Callout, Steps } from '@site/src/components/Compat'
+
+# 🏔️ Terralith
+
+## Overview
+Terralith is a datapack that expands overworld terrain and biome generation. Oraxen does not integrate with Terralith automatically, but you can still add custom ores and blocks by editing Terralith's datapack files.
+
+<Callout type="warning">
+  This setup is fully manual. Make a backup of the datapack before editing it, and apply your changes before generating the world.
+</Callout>
+
+## Requirements
+`Terralith` extracted and ready to edit.<br />
+Your Oraxen custom block already configured.<br />
+Basic JSON editing knowledge.<br />
+Access to `/oraxen blockinfo` ingame.
+
+## Example
+
+<Steps>
+### Get the Oraxen block data
+Use `/oraxen blockinfo <itemid>` on the block you want to generate.
+
+```yml
+/oraxen blockinfo deepslate_valorite_ore
+```
+
+For noteblock-based blocks, Terralith needs the block-state values returned by that command, especially `instrument` and `note`.
+
+<Callout type="info">
+  Write those values down exactly as shown. You will use them in the configured feature file.
+</Callout>
+
+### Create the configured feature
+Go to `Terralith/data/terralith/worldgen/configured_feature` and create a new file such as `valorite_ore.json`.
+
+```json
+{
+  "type": "minecraft:ore",
+  "config": {
+    "discard_chance_on_air_exposure": 0.0,
+    "size": 8,
+    "targets": [
+      {
+        "state": {
+          "Name": "minecraft:note_block",
+          "Properties": {
+            "instrument": "basedrum",
+            "note": "6",
+            "powered": "false"
+          }
+        },
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "minecraft:deepslate_ore_replaceables"
+        }
+      }
+    ]
+  }
+}
+```
+
+`size` controls the vein size.<br />
+`instrument` and `note` must match `/oraxen blockinfo`.<br />
+`tag` decides which vanilla blocks can be replaced.
+
+### Create the placed feature
+Go to `Terralith/data/terralith/worldgen/placed_feature` and create a file with the same name.
+
+```json
+{
+  "feature": "terralith:valorite_ore",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 4
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": { "absolute": -64 },
+        "max_inclusive": { "absolute": -5 }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}
+```
+
+`feature` must match your configured feature ID.<br />
+`count` controls how many veins attempt to spawn per chunk.<br />
+`min_inclusive` and `max_inclusive` define the Y-level range.
+
+### Add the feature to Terralith biomes
+Go to `Terralith/data/terralith/worldgen/biome` and edit each biome where the ore should generate.
+
+Add your placed feature to the seventh `features` array.
+
+```json
+{
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "terralith:valorite_ore"
+    ]
+  ]
+}
+```
+
+<Callout type="note">
+  If you are editing many biome files, using a workspace editor such as VS Code makes bulk changes much easier.
+</Callout>
+
+### Repack and use the datapack
+Zip the modified datapack again, place it in `world/datapacks`, and generate a new world or new chunks.
+</Steps>
+
+## Troubleshooting
+`Ore not spawning` - Re-check the `instrument` and `note` values from `/oraxen blockinfo`.<br />
+`Wrong blocks replaced` - Verify the replacement `tag` such as `minecraft:stone_ore_replaceables` or `minecraft:deepslate_ore_replaceables`.<br />
+`Datapack fails to load` - Validate the edited JSON files and confirm the feature IDs match across both files.<br />
+
+## Notes
+<Callout type="warning">
+  Datapacks only affect newly generated chunks. Existing terrain will not update automatically.
+</Callout>
+
+<Callout type="info">
+  This same workflow can also be adapted for non-ore blocks by changing the feature type and placement rules.
+</Callout>

@@ -1,0 +1,446 @@
+---
+title: "🔢 Properties"
+description: "Adding properties to custom items in Oraxen."
+---
+
+import { Callout, Details } from '@site/src/components/Compat'
+
+# 🔢 Properties
+
+## Overview
+Properties define an item's built-in metadata in Oraxen, such as its material, display name, lore, flags, enchantments, and other vanilla item data.
+
+## Configuration
+Properties are configured per item in `.yml` files inside the `plugins/Oraxen/items` directory.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/items",
+              name: "items",
+              children: [
+                {
+                  id: "plugins/Oraxen/items/weapons.yml",
+                  name: "weapons.yml",
+                },
+                {
+                  id: "plugins/Oraxen/items/furniture.yml",
+                  name: "furniture.yml",
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]}
+/>
+
+```yaml {2-3}
+my_item:
+  material: PAPER
+  itemname: "Cool Item"
+```
+
+## Properties
+
+<Details>
+<summary id="material"><strong>🪨 `material`</strong></summary>
+
+Sets the base material of the item.<br />
+```yaml
+myitem:
+  material: PAPER
+```
+
+**Materials**<br />
+A full list of supported materials can be found <Highlight to="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html" color="#1877F2"><strong>here</strong></Highlight>.
+</Details>
+
+<Details>
+<summary id="itemname"><strong>🏷️ `itemname`</strong></summary>
+
+Sets the item's display name using MiniMessage formatting.<br />
+
+```yaml
+myitem:
+  itemname: "<red>My Cool Item"
+```
+
+<Callout type="info">
+  `itemname` is the recommended property for `1.20.5+`.
+</Callout>
+</Details>
+
+<Details>
+<summary id="displayname"><strong>🏷️ `displayname`</strong></summary>
+
+Sets the legacy display name.<br />
+
+```yaml
+myitem:
+  displayname: "<red>My Cool Item"
+```
+
+<Callout type="warning">
+  `displayname` is deprecated. Prefer using `itemname` instead.
+</Callout>
+</Details>
+
+<Details>
+<summary id="customname"><strong>🏷️ `customname`</strong></summary>
+
+Sets the item's custom name on `1.20.5+`. This sets the display name component, distinct from `itemname` which sets the item_name component.<br />
+
+```yaml
+myitem:
+  customname: "<red>My Cool Item"
+```
+</Details>
+
+<Details>
+<summary id="lore"><strong>📜 `lore`</strong></summary>
+
+Sets the item's lore lines.<br />
+
+```yaml
+myitem:
+  lore:
+    - "<gold>My Cool Item"
+    - "<gray>Some extra description"
+```
+</Details>
+
+<Details>
+<summary id="unbreakable"><strong>🔨 `unbreakable`</strong></summary>
+
+Makes the item unbreakable.<br />
+
+```yaml
+myitem:
+  unbreakable: true
+```
+</Details>
+
+<Details>
+<summary id="unstackable"><strong>📦 `unstackable`</strong></summary>
+
+Makes the item impossible to stack with identical copies.<br />
+
+```yaml
+myitem:
+  unstackable: true
+```
+</Details>
+
+<Details>
+<summary id="injectId"><strong>🆔 `injectId`</strong></summary>
+
+Controls whether Oraxen injects the item ID into NBT.<br />
+```yaml
+myitem:
+  injectId: true
+```
+</Details>
+
+<Details>
+<summary id="color"><strong>🎨 `color`</strong></summary>
+
+Sets an RGB color for supported items such as leather armor, potions, or maps.<br />
+
+```yaml
+myitem:
+  color: "#FF8000"
+```
+```yaml
+myitem:
+  color: "255, 128, 0"
+```
+
+**Accepted formats**<br />
+`#RRGGBB` or `R, G, B`
+</Details>
+
+<Details>
+<summary id="trim_pattern"><strong>🛡️ `trim_pattern`</strong></summary>
+
+Sets the armor trim pattern key.<br />
+
+```yaml
+myitem:
+  trim_pattern: "minecraft:coast"
+```
+
+**Patterns**<br />
+A full list of supported trim patterns can be found <Highlight to="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/inventory/meta/trim/TrimPattern.html#field-summary" color="#1877F2"><strong>here</strong></Highlight>.
+</Details>
+
+<Details>
+<summary id="template"><strong>🧬 `template`</strong></summary>
+
+Makes the item inherit from another item template.<br />
+
+```yaml
+myitem:
+  template: base_sword
+```
+
+**Defining a template**<br />
+When `template` is the boolean `true`, the section becomes a reusable template and is excluded from the item registry.
+
+```yaml
+base_sword:
+  template: true
+  material: IRON_SWORD
+```
+</Details>
+
+<Details>
+<summary id="excludeFromInventory"><strong>🙈 `excludeFromInventory`</strong></summary>
+
+Excludes the item from the `/oraxen inventory` menu.<br />
+
+```yaml
+myitem:
+  excludeFromInventory: true
+```
+</Details>
+
+<Details>
+<summary id="excludeFromCommands"><strong>⌨️ `excludeFromCommands`</strong></summary>
+
+Excludes the item from `/oraxen give` autocomplete and similar command suggestions.<br />
+
+```yaml
+myitem:
+  excludeFromCommands: true
+```
+</Details>
+
+<Details>
+<summary id="no_auto_update"><strong>🔄 `no_auto_update`</strong></summary>
+
+Disables automatic updating for the item.<br />
+
+```yaml
+myitem:
+  no_auto_update: true
+```
+</Details>
+
+<Details>
+<summary id="disable_enchanting"><strong>✨ `disable_enchanting`</strong></summary>
+
+Prevents the item from being enchanted.<br />
+
+```yaml
+myitem:
+  disable_enchanting: true
+```
+</Details>
+
+<Details>
+<summary id="ItemFlags"><strong>🚩 `ItemFlags`</strong></summary>
+
+Applies item flags to hide parts of the tooltip.<br />
+
+```yaml
+myitem:
+  ItemFlags:
+    - HIDE_ENCHANTS
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+```
+
+**Flags**<br />
+A full list of supported flags can be found <Highlight color="#1877F2" to="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/inventory/ItemFlag.html">**here**</Highlight>.
+</Details>
+
+<Details>
+<summary id="Enchantments"><strong>✨ `Enchantments`</strong></summary>
+
+Adds enchantments directly to the item.<br />
+```yaml
+myitem:
+  Enchantments:
+    sharpness: 5
+    unbreaking: 3
+```
+
+**Enchantments**<br />
+A full list of supported enchantments can be found <Highlight color="#1877F2" to="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/enchantments/Enchantment.html#field-summary">**here**</Highlight>.
+
+**Level**<br />
+Each enchantment is defined with a level. (min. `1`)
+</Details>
+
+<Details>
+<summary id="AttributeModifiers"><strong>📈 `AttributeModifiers`</strong></summary>
+
+Adds attribute modifiers to the item.<br />
+
+```yaml
+emerald_helmet:
+  material: PAPER
+  AttributeModifiers:
+    armor:
+      attribute: ARMOR
+      amount: 3
+      operation: ADD_NUMBER
+      slot: HEAD
+    toughness:
+      attribute: ARMOR_TOUGHNESS
+      amount: 2
+      operation: ADD_NUMBER
+      slot: HEAD
+    health_boost:
+      attribute: MAX_HEALTH
+      amount: 4
+      operation: ADD_NUMBER
+      slot: HEAD
+```
+
+<Callout type="important">
+    Only `attribute` and `amount` are required.
+</Callout>
+
+**Attributes**<br />
+A full list of supported attributes can be found <Highlight color="#1877F2" to="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/attribute/Attribute.html#field-summary">**here**</Highlight>.
+
+**Operations**<br />
+ - `ADD_NUMBER` <Highlight color="#e74c3c">**Default**</Highlight>
+ - `ADD_SCALAR`
+ - `MULTIPLY_SCALAR_1`<br />
+
+**Slot groups**
+ - `HAND` (alias for `MAINHAND`)
+ - `MAINHAND`
+ - `OFFHAND`
+ - `HEAD`
+ - `CHEST`
+ - `LEGS`
+ - `FEET`
+ - `BODY`
+ - `SADDLE`
+ - `ARMOR`
+ - `ANY`
+
+Unrecognized values silently fall back to `ANY`.
+ 
+ <Callout type="important">
+  Requires `Minecraft 1.20.5+` and `Oraxen v1.212.0+` for "modern" format attributes. 
+ </Callout>
+ 
+ <Callout type="info">
+  The legacy list format (`AttributeModifiers: [{...}]`) still works. If Oraxen detects a section format, it uses the modern parser. If it finds a list, it falls back to the legacy format. Both formats can coexist across different items. In the list format, `operation` is numeric (`0` = ADD_NUMBER, `1` = ADD_SCALAR, `2` = MULTIPLY_SCALAR_1). String operation names only work in the section format.
+ </Callout>
+ 
+ <Details>
+     <summary>👁️ `DisplayModes`</summary>
+
+   Display modes can control how each modifier appears in item tooltips. `display` parses only `type` and `text`.<br />
+   ```yaml
+   AttributeModifiers:
+     hidden_armor:
+       attribute: ARMOR
+       amount: 5
+       operation: ADD_NUMBER
+       slot: CHEST
+       display:
+         type: hidden  # Completely hide from tooltip
+   ```
+   ```yaml
+   AttributeModifiers:
+     fire_damage:
+       attribute: ATTACK_DAMAGE
+       amount: 10
+       operation: ADD_NUMBER
+       slot: MAINHAND
+       display:
+         type: override
+         text: "<red>+10 Fire Damage"  # Custom MiniMessage tooltip text
+   ```
+   
+   **Display types**<br />
+   - `hidden` (hide tooltip line)
+   - `reset` or `default` (use vanilla tooltip line)
+   - `override` or `custom` (replace tooltip line with `display.text`)
+   
+   <Callout type="important">
+       Requires `Oraxen v1.212.0+` and `Minecraft 1.21.6+`.
+   </Callout>
+ </Details>
+</Details>
+
+<Details>
+<summary id="PotionEffects"><strong>🧪 `PotionEffects`</strong></summary>
+
+Adds potion effects to potion-like items.<br />
+
+```yaml
+myitem:
+  PotionEffects:
+    - type: speed
+      duration: 200
+      amplifier: 1
+      ambient: false
+      particles: true
+      icon: true
+```
+**Potion Effects**<br />
+A full list of supported potion effects can be found <Highlight color="#1877F2" to="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html#field-summary">**here**</Highlight>.
+
+</Details>
+
+<Details>
+<summary id="PersistentData"><strong>🏷️ `PersistentData`</strong></summary>
+
+Stores custom persistent data on the item.<br />
+
+```yaml
+myitem:
+  PersistentData:
+    - key: "myplugin:custom_value"
+      type: STRING
+      value: "hello"
+```
+</Details>
+
+## Example
+
+```yaml
+myitem:
+  material: DIAMOND_SWORD
+  itemname: "<gradient:red:gold>Flame Blade"
+  lore:
+    - "<gray>A weapon forged in heat"
+    - "<red>Very dangerous"
+  unbreakable: true
+  unstackable: true
+  injectId: true
+  excludeFromInventory: false
+  excludeFromCommands: false
+  no_auto_update: false
+  disable_enchanting: false
+  ItemFlags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+  Enchantments:
+    sharpness: 5
+    fire_aspect: 2
+    unbreaking: 3
+  AttributeModifiers:
+    - attribute: attack_damage
+      amount: 7
+      operation: 0 # 0 = ADD_NUMBER, 1 = ADD_SCALAR, 2 = MULTIPLY_SCALAR_1
+      slot: HAND
+      name: "flame_blade_damage"
+```

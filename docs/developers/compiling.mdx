@@ -1,0 +1,65 @@
+---
+title: "🔨 Compiling"
+description: "How to compile Oraxen from source."
+---
+
+import { Callout, Tabs, Steps, Details, Table } from '@site/src/components/Compat'
+
+# 🔨 Compiling (Developers)
+
+## Overview
+Oraxen is open-source, meaning you can compile it yourself at no cost. We understand that not everyone is able to spend $20 on a Minecraft plugin, especially in difficult economic circumstances or in countries where income levels differ significantly. For that reason, we want Oraxen to remain accessible to everyone.
+We also want to make it easy for anyone to contribute, and for servers to modify Oraxen to better suit their specific needs.
+
+## Usage
+
+<Steps>
+### Clone Oraxen’s source code
+
+```bash
+git clone https://github.com/oraxen/oraxen
+```
+### Navigate to the project directory
+
+```bash
+cd oraxen
+```
+
+### Compile the project
+</Steps>
+
+<Details>
+<summary id="macos">`macOS / Linux`</summary>
+```bash
+./gradlew build
+```
+</Details>
+
+<Details>
+<summary id="macos">`Powershell`</summary>
+```powershell
+./gradlew build
+```
+</Details>
+
+<Details>
+<summary id="macos">`Windows Command Prompt`</summary>
+```batch
+gradlew build
+```
+</Details>
+
+## Limitations & Notes
+
+The compiled edition of Oraxen includes a few limitations.
+
+### Compiled
+- 🟢 × Functionality / features.
+- 🟠 × Development builds.
+- 🟠 × Oraxen studio.
+- 🔴 × Tickets / Advanced support.
+- 🔴 × Default items / assets (only required assets).
+
+<Callout type="warning">
+  - To remove the default items (which is a required step if you don't want to have a broken pack when using a compiled edition), run `/oraxen remove-defaults`.
+</Callout>

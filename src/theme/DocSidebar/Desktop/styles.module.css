@@ -1,0 +1,13 @@
+@media (min-width: 997px) {
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: var(--doc-sidebar-width);
+  }
+
+  .sidebarHidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

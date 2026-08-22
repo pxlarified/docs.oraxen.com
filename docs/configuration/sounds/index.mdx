@@ -1,0 +1,229 @@
+---
+title: "🔊 Sounds"
+description: "Creating custom sounds using Oraxen."
+---
+
+import { Callout, Details } from '@site/src/components/Compat'
+
+# 🔊 Sounds
+
+## Overview
+Custom sounds are configured in `sounds.yml`. Oraxen reads this file and generates one `sounds.json` per namespace, at `assets/<namespace>/sounds.json`. An event `oraxen:welcome` lands in `assets/oraxen/sounds.json`. Custom jukebox songs are registered directly into the server on Paper 1.21.6+, or packaged as a datapack on older versions.
+
+Use this file to add brand new sound events, override existing vanilla sounds, or package longer audio tracks for music discs and other custom content.
+
+## Configuration
+Sounds are configured in `plugins/Oraxen/sounds.yml`.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/sounds.yml",
+              name: "sounds.yml",
+            }
+          ]
+        }
+      ]
+    }
+  ]}
+/>
+
+<Callout type="note">
+  `settings.automatically_generate` must stay enabled if you want Oraxen to build `sounds.json` from this file. `settings.generate_sounds` is accepted as an alias. Disabling generation also disables jukebox song parsing and registration.
+</Callout>
+
+<Callout type="info">
+Sound files live in `plugins/Oraxen/pack/sounds/`. Oraxen then exports them to `assets/minecraft/sounds/` in the generated resource pack. Namespaced sound files must go under `pack/assets/<namespace>/sounds/` instead.
+
+`sound: welcome.ogg` points to `plugins/Oraxen/pack/sounds/welcome.ogg`.<br />
+`sound: music/welcome` points to `plugins/Oraxen/pack/sounds/music/welcome.ogg`.<br />
+
+The `.ogg` extension is optional.
+</Callout>
+
+<Callout type="info">
+  Legacy `sound.yml` files are migrated into `sounds.yml` automatically. The old map format under `sounds:` is now a list of sound entries, and every entry needs an `id`.
+</Callout>
+
+## Sound Entry
+
+Each entry in the `sounds:` list becomes one sound event.
+
+<Details>
+  <summary id="id"><strong>🏷️ `id`</strong></summary>
+
+Sets the sound event id. This field is required for every entry, including vanilla `replace: true` entries.<br />
+
+```yaml
+sounds:
+  - id: oraxen:welcome
+```
+
+If no namespace is specified, Minecraft's namespace is used. For example, `id: welcome` becomes `minecraft:welcome`.
+</Details>
+
+<Details>
+  <summary id="category"><strong>🎵 `category`</strong></summary>
+
+Sets the sound category used when the sound plays.<br />
+
+```yaml
+sounds:
+  - id: oraxen:welcome
+    category: records
+```
+
+**Default**
+`master`
+
+**Categories**<br />
+A full list of supported sound categories can be found <Highlight color="#1877F2" to="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/SoundCategory.html#enum-constant-summary">**here**</Highlight>.
+
+<Callout type="info">
+  Common values include `master`, `music`, `records`, `blocks`, `hostile`, `neutral`, `players`, `ambient`, `voice`, and `weather`. `record` is accepted as an alias of `records`. Invalid categories fall back to `master` with a warning.
+</Callout>
+</Details>
+
+<Details>
+  <summary id="sound"><strong>🎧 `sound` / `sounds`</strong></summary>
+
+Defines the audio file or files used by the sound event.<br />
+
+```yaml
+sounds:
+  - id: oraxen:welcome
+    sound: welcome.ogg
+```
+```yaml
+sounds:
+  - id: oraxen:welcome
+    sounds:
+      - welcome_1
+      - welcome_2
+      - welcome_3
+```
+
+**Sounds**<br />
+Path to an existing sound file (relative to `pack/sounds/`, without `.ogg`).
+
+<Callout type="info">
+  `sound` is used when `sounds` is not set. An explicit empty `sounds` list produces an event with no files.
+</Callout>
+</Details>
+
+<Details>
+  <summary id="subtitle"><strong>📝 `subtitle`</strong></summary>
+
+Sets the subtitle shown when the sound plays.<br />
+
+```yaml
+sounds:
+  - id: oraxen:welcome
+    subtitle: "Welcome Song"
+```
+</Details>
+
+<Details>
+  <summary id="replace"><strong>🔁 `replace`</strong></summary>
+
+Marks the sound event as a replacement for an existing vanilla entry.<br />
+
+```yaml
+sounds:
+  - id: block.wood.place
+    replace: true
+```
+</Details>
+
+<Details>
+  <summary id="stream"><strong>📡 `stream`</strong></summary>
+
+Tells Minecraft to stream the audio instead of loading it like a short sound effect.<br />
+
+```yaml
+sounds:
+  - id: oraxen:welcome
+    stream: true
+```
+</Details>
+
+<Details>
+  <summary id="sound_options"><strong>🎚️ `sound options`</strong></summary>
+
+These fields are applied to the generated sound entries in `sounds.json`. They control stuff like volume, pitch or the attenuation distance.<br />
+
+```yaml
+sounds:
+  - id: oraxen:welcome
+    sound: welcome
+    volume: 1.0
+    pitch: 1.0
+    weight: 1
+    attenuation_distance: 16
+    preload: false
+```
+</Details>
+
+<Details>
+  <summary id="jukebox"><strong>💿 `jukebox`</strong></summary>
+
+Turns this sound into a custom jukebox song. `jukebox_song` is accepted as a section alias.<br />
+
+```yaml
+sounds:
+  - id: oraxen:welcome
+    jukebox:
+      description: "<gold>Welcome <yellow>Song</yellow></gold>"
+      duration: 180s
+      comparator_output: 12
+      range: 8
+```
+
+**Fields**<br />
+`description` - `string`, MiniMessage formatted, default `subtitle` or `<white>Music Disc</white>`<br />
+`duration` - duration, plain seconds or values with `s`/`m` style suffixes, for example `180` or `3m`, default `120s`, `length_in_seconds` is accepted as an alias<br />
+`comparator_output` - `integer`, clamped to `1` to `15`, default `15`<br />
+`range` - positive number, optional sound range<br />
+`song_key` - optional namespaced id for the jukebox song entry<br />
+
+<Callout type="info">
+  When `song_key` is omitted, a non-namespaced sound id maps to `oraxen:<key>` while a namespaced id is used as-is. When `attenuation_distance` is unset and `range` is set, it defaults to the range rounded up.
+</Callout>
+
+<Callout type="info">
+  On Paper 1.21.6+ songs are registered into the jukebox song registry at bootstrap and can be reloaded live with `/oraxen reload discs`. A datapack is generated only on versions below 1.21.6. On 1.21.6+ the old datapack is removed.
+</Callout>
+</Details>
+
+## Example
+
+```yaml
+settings:
+  automatically_generate: true
+
+sounds:
+  - id: oraxen:welcome
+    category: records
+    sound: welcome.ogg
+    stream: true
+    subtitle: "Welcome Song"
+    jukebox:
+      description: "<gold>Welcome <yellow>Song</yellow></gold>"
+      duration: 180s
+      comparator_output: 12
+      range: 8
+
+  - id: block.wood.place
+    replace: true
+
+  - id: block.wood.break
+    replace: true
+```

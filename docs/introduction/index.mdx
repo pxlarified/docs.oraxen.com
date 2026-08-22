@@ -1,0 +1,39 @@
+---
+title: "📘 Introduction"
+description: "Introduction to Oraxen and the Oraxen documentation."
+---
+
+import { Callout } from '@site/src/components/Compat'
+
+# 📘 Introduction
+
+## Overview
+Oraxen allows you to customize your Minecraft server by allowing the creation of new blocks, items, and recipes. 
+This can be accomplished entirely through a resource pack and server-side implementation, eliminating the requirement for any client-side mod installations.
+
+## How It Works
+Oraxen reads your configuration files and uses them to generate a Minecraft resource pack that will then be uploaded to a resource pack server which then sends the pack to players joining your server.
+Polymath is a free and open-source software written in Python by Oraxen to host Minecraft resource packs. Oraxen supplies you with a free Polymath instance, hosted in Switzerland on an Oracle Virtual Private Server.
+
+## Purchasing
+Oraxen can be purchased on <Highlight color="#FFA500" to="https://www.spigotmc.org/resources/oraxen.72448">**Spigot**</Highlight> & <Highlight color="#1877F2" to="https://builtbybit.com/resources/16594">**BuiltByBit**</Highlight>.
+
+## Support
+- You can receive support in our <Highlight color="#1877F2" to="https://discord.gg/N7AJFJTgBS">**Discord**</Highlight> from our support team or via the community help channels.
+- You can use a free LLM AI Assistant via <Highlight color="#f218e3bd" to="http://deepwiki.com/oraxen/oraxen">**DeepWiki**</Highlight>
+
+<Callout type="important">
+  Verification is required to access support (pre-purchase & community support excluded). If you are a developer for an openly available project (e.g. a paid or free plugin that wants to integrate with Oraxen) you will also receive support.
+</Callout>
+
+## Version
+Oraxen is developed and designed for the <Highlight color="#1877F2" to="https://papermc.io/downloads/paper">**Paper**</Highlight> Server Software. It is compatible with most common Paper forks such as Purpur and <Highlight color="#1877F2" to="https://papermc.io/software/folia/">**Folia**</Highlight>. Oraxen is a Paper plugin and cannot load on Spigot or CraftBukkit.
+
+Oraxen includes support for versions from **1.20.1** up to **26.2**. Oraxen has ViaVersion support, for that please read the documentation <Highlight color="#2E8B57" to="./compatibility/viaversion">**here**</Highlight>.
+
+## Installation
+Drag and drop the `.jar` file into your server's `/plugins` folder and restart your server.
+
+<Callout type="note">
+  Oraxen works best with PacketEvents (or ProtocolLib). Without one it still loads, but some packet-based features are disabled. Since version 1.203.1, Oraxen automatically downloads PacketEvents when not already installed.
+</Callout>

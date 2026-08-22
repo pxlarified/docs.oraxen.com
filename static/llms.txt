@@ -1,0 +1,9 @@
+# Oraxen Documentation
+
+Oraxen is a Minecraft plugin for creating custom items, blocks, glyphs, furniture, sounds, and other resource-pack content.
+
+Documentation pages are available as raw MDX for agents and other tools. Append `.mdx` to a page URL, removing any trailing slash first.
+
+Example:
+- Page: https://oraxen.mizius.com/configuration/items/data/properties
+- Raw MDX: https://oraxen.mizius.com/configuration/items/data/properties.mdx

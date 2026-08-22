@@ -1,0 +1,128 @@
+---
+title: "🧊 Import a Blockbench model"
+description: "Export a Blockbench model and texture for use in an Oraxen resource pack."
+---
+
+import { Callout, Steps } from '@site/src/components/Compat'
+
+# 🧊 Import a Blockbench model
+
+## Overview
+
+Oraxen uses the standard Minecraft Java resource-pack model format. A Blockbench project must therefore be exported as a JSON model and one or more PNG textures before it can be used by Oraxen.
+
+This tutorial only covers preparing the model files. Configure the exported model as an Oraxen item or furniture item afterwards.
+
+## Export the model
+
+<Steps>
+
+### Use a Minecraft Java project
+
+Create or convert the project to the **Minecraft Java Block/Item** format in Blockbench.
+
+Bedrock models, Java entity models, and `.bbmodel` project files cannot be used directly as Minecraft resource-pack models.
+
+### Create and save the texture
+
+Create or import the texture in Blockbench. Save or export it as a `.png` file.
+
+Use lowercase file names and avoid spaces, for example `wooden_chair.png`.
+
+### Export the JSON model
+
+In Blockbench, export the project as a Minecraft Java block/item model. Save the file as `wooden_chair.json`.
+
+Do not use the `.bbmodel` file as the model inside the resource pack. Keep it separately as the editable Blockbench source file.
+
+### Place the files in Oraxen
+
+For a model named `wooden_chair`, place the exported files in the Oraxen pack directory.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/pack",
+              name: "pack",
+              children: [
+                {
+                  id: "plugins/Oraxen/pack/models",
+                  name: "models",
+                  children: [
+                    {
+                      id: "plugins/Oraxen/pack/models/furniture",
+                      name: "furniture",
+                      children: [
+                        {
+                          id: "plugins/Oraxen/pack/models/furniture/wooden_chair.json",
+                          name: "wooden_chair.json",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  id: "plugins/Oraxen/pack/textures",
+                  name: "textures",
+                  children: [
+                    {
+                      id: "plugins/Oraxen/pack/textures/furniture",
+                      name: "furniture",
+                      children: [
+                        {
+                          id: "plugins/Oraxen/pack/textures/furniture/wooden_chair.png",
+                          name: "wooden_chair.png",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ]}
+/>
+
+The model path is now `furniture/wooden_chair`.
+
+</Steps>
+
+## Set the texture path
+
+Open the exported JSON model and make sure its texture reference points to the correct texture.
+
+```json
+{
+  "textures": {
+    "0": "furniture/wooden_chair"
+  }
+}
+```
+
+Oraxen models do not require a namespace. The texture path is relative to `plugins/Oraxen/pack/textures`. Do not include `textures/` or the `.png` extension in the JSON path.
+
+<Callout type="warning">
+  Minecraft does not allow uppercase characters in resource-pack paths. Always use lowercase file and folder names, for example `wooden_chair.png` instead of `Wooden_Chair.png`.
+</Callout>
+
+## Test the exported files
+
+Add the model to an Oraxen item configuration. Then run `/oraxen reload all`.
+
+Check the console for model or texture validation errors. Reconnect after the pack has been regenerated so the client receives the new files.
+
+## Troubleshooting
+- Texture is missing or purple/black - verify that the JSON texture reference matches the texture file exactly, including its path and capitalization.
+- Model is a paper item - verify that the item uses the same model path as the exported JSON file. The path is relative to `plugins/Oraxen/pack/models` and does not include `.json`.
+- Model faces the wrong direction - correct the model orientation, pivots, or display settings in Blockbench and export it again. Do not try to fix a wrongly exported model only with furniture translation settings.

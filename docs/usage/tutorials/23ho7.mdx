@@ -1,0 +1,115 @@
+---
+title: "💿 Creating a jukebox disc"
+description: "Add a custom song to Oraxen and make it playable in jukeboxes."
+---
+
+import { Callout, Steps } from '@site/src/components/Compat'
+
+# 💿 Creating a custom jukebox disc
+
+## Overview
+On `1.21+`, custom jukebox discs are built from two parts.
+
+1. a custom sound entry in `sounds.yml`
+2. a custom item with the `jukebox_playable` component
+
+On Paper `1.21.6+`, Oraxen registers the song directly into the jukebox song registry. On older versions it generates a song datapack instead. The item can be inserted into a jukebox like a normal disc.
+
+## Tutorial
+
+<Steps>
+
+### Open `sounds.yml`
+Go to `plugins/Oraxen/sounds.yml`.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/sounds.yml",
+              name: "sounds.yml",
+            },
+            {
+              id: "plugins/Oraxen/items",
+              name: "items",
+              children: [
+                {
+                  id: "plugins/Oraxen/items/discs.yml",
+                  name: "discs.yml",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ]}
+/>
+
+<Callout type="note">
+  `settings.automatically_generate` must stay enabled if you want Oraxen to build the sound files and jukebox datapack for you.
+</Callout>
+
+### Add the song
+Create a new sound entry in the `sounds:` list and add the `jukebox` section to it.
+
+```yaml
+sounds:
+  - id: oraxen:moonlight
+    category: records
+    sound: moonlight.ogg
+    stream: true
+    subtitle: "Moonlight"
+    jukebox:
+      description: "<gold>Moonlight</gold>"
+      duration: 168s
+      comparator_output: 10
+```
+
+Place the audio file in `plugins/Oraxen/pack/sounds/moonlight.ogg`.
+
+<Callout type="info">
+  The `.ogg` extension is optional in `sounds.yml`, but the file itself still needs to be an `.ogg` file.
+</Callout>
+
+### Create the disc item
+Now add an item that uses the song key through the `jukebox_playable` component.
+
+```yaml
+moonlight_disc:
+  material: MUSIC_DISC_13
+  itemname: "<gold>Moonlight Disc"
+  Pack:
+    model: discs/moonlight_disc
+  Components:
+    jukebox_playable:
+      show_in_tooltip: true
+      song_key: "oraxen:moonlight"
+```
+
+`song_key` must point to the same song id from `sounds.yml`. In this example, the generated jukebox song uses `oraxen:moonlight`.
+
+Place the disc model at `plugins/Oraxen/pack/models/discs/moonlight_disc.json`. Alternatively, replace `model` with `generate_model: true` and a `textures` list.
+
+<Callout type="tip">
+  If you want the disc to use a different base item, you can change `material`, but using a music disc material keeps the behavior and appearance close to vanilla.
+</Callout>
+
+### Reload and test
+Save both files, then run `/oraxen reload discs` (or `/o reload all`) and regenerate the resource pack if needed.
+On Paper `1.21.6+` the song is registered into the jukebox song registry and applies live. Below `1.21.6` the song is written to a datapack, so a server restart is required.
+
+Insert the disc into a jukebox to confirm that the song plays and the datapack entry was created.
+
+<Callout>
+  On `1.21+`, prefer this setup over the deprecated legacy `music_disc` mechanic.
+</Callout>
+
+</Steps>

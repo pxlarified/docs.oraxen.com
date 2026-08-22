@@ -1,0 +1,87 @@
+---
+title: "🪑 Creating furniture"
+description: "Create a placeable furniture item using an Oraxen model."
+---
+
+import { Callout, Steps } from '@site/src/components/Compat'
+
+# 🪑 Creating furniture
+
+## Overview
+
+Furniture is an Oraxen item with the `furniture` mechanic. This tutorial creates a simple display-entity furniture item from a model stored in the Oraxen resource pack.
+
+Before following this guide, prepare a model and texture. See [Import a Blockbench model](/usage/tutorials/a7k2m) for the export process.
+
+## Tutorial
+
+<Steps>
+
+### Create a furniture configuration file
+
+Create `plugins/Oraxen/items/furniture.yml`, or add the item to an existing file in the same directory.
+
+### Add the furniture item
+
+Add the following configuration.
+
+```yaml
+wooden_chair:
+  itemname: "<gold>Wooden Chair"
+  material: PAPER
+  Pack:
+    generate_model: false
+    model: furniture/wooden_chair
+  Mechanics:
+    furniture:
+      type: DISPLAY_ENTITY
+      barrier: true
+      hitbox:
+        width: 0.8
+        height: 1.0
+      rotatable: true
+      restricted_rotation: VERY_STRICT
+```
+
+`Pack.model` is the path to the model below `plugins/Oraxen/pack/models`, without `.json`.
+
+`DISPLAY_ENTITY` is the recommended furniture type for modern servers. The barrier and hitbox make the furniture interactable and stop players from walking through it.
+
+### Reload Oraxen
+
+Run `/oraxen reload all`.
+
+Watch the console for configuration or resource-pack errors.
+
+### Give and place the furniture
+
+Run `/oraxen give <player> wooden_chair`.
+
+Reconnect if necessary so the client receives the regenerated resource pack. Place the item and verify its model, texture, collision, and rotation.
+
+</Steps>
+
+<Callout type="note">
+Use `display_entity_properties` to adjust the size or position of a display-entity model.
+
+```yaml
+Mechanics:
+  furniture:
+    type: DISPLAY_ENTITY
+    display_entity_properties:
+      scale:
+        x: 0.8
+        y: 0.8
+        z: 0.8
+      translation:
+        x: 0
+        y: 0.1
+        z: 0
+```
+
+Use `hitbox` for a simple collision area. Use `hitboxes` when the furniture needs multiple collision areas.
+</Callout>
+
+<Callout type="info">
+  Use Blockbench to fix the model's base orientation. `scale` and `translation` are intended for small placement adjustments, not for correcting an incorrectly exported model.
+</Callout>

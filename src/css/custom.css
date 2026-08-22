@@ -1,0 +1,250 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-background-color: #ffffff;
+  --ifm-color-primary: #168ccc;
+  --ifm-color-primary-dark: #147eb8;
+  --ifm-color-primary-darker: #1377ad;
+  --ifm-color-primary-darkest: #0f628f;
+  --ifm-color-primary-light: #189ae0;
+  --ifm-color-primary-lighter: #1fa0e6;
+  --ifm-color-primary-lightest: #40afea;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+.navbar__logo img { border-radius: 6px; }
+.oraxen-desktop-search {
+  position: fixed;
+  right: 1.5rem;
+  top: 1rem;
+  z-index: var(--ifm-z-index-fixed);
+}
+.oraxen-desktop-search .navbar__search { margin-left: 0; }
+.oraxen-desktop-search,
+.oraxen-mobile-navbar {
+  --search-local-modal-shadow: none;
+  --search-local-hit-shadow: none;
+}
+.oraxen-desktop-search [class*='dropdownMenu'],
+.oraxen-mobile-navbar [class*='dropdownMenu'] {
+  border: 0;
+  box-shadow: none;
+}
+.oraxen-navbar-anchor {
+  border: 0;
+  box-shadow: none;
+  height: 0;
+  min-height: 0;
+  padding: 0;
+  position: absolute;
+}
+.oraxen-mobile-navbar { display: none; }
+@media (max-width: 996px) {
+  .oraxen-desktop-search { display: none; }
+  .oraxen-mobile-navbar { display: block; }
+  .theme-doc-toc-mobile { display: none; }
+}
+.theme-doc-sidebar-container {
+  --ifm-menu-link-padding-vertical: .5rem;
+  border-right: 0 !important;
+}
+.theme-doc-sidebar-container .menu__caret {
+  margin: .25rem;
+  padding: .25rem .5rem;
+}
+.pagination-nav { display: none; }
+.oraxen-callout {
+  --ifm-alert-background-color: var(--callout-bg);
+  --ifm-alert-background-color-highlight: color-mix(in srgb, var(--callout-accent) 12%, var(--callout-bg));
+  --ifm-alert-border-color: var(--callout-accent);
+  --ifm-alert-border-left-width: 0;
+  --ifm-alert-foreground-color: var(--callout-text);
+  --callout-title: var(--callout-accent);
+  background-image: linear-gradient(to right, var(--callout-accent) 0 5px, transparent 5px);
+  padding-left: calc(var(--ifm-alert-padding-horizontal) + 5px);
+}
+.oraxen-callout > div:first-child,
+.oraxen-callout > div:first-child svg {
+  color: var(--callout-title);
+  fill: var(--callout-title);
+}
+.oraxen-callout--note {
+  --callout-accent: #0f766e;
+  --callout-bg: #d9f2f3;
+  --callout-text: #0b2d35;
+}
+.oraxen-callout--info {
+  --callout-accent: #0ea5e9;
+  --callout-bg: #e0f2fe;
+  --callout-text: #0b2d35;
+}
+.oraxen-callout--warning {
+  --callout-accent: #d97706;
+  --callout-bg: #fffbeb;
+  --callout-text: #3a2a00;
+}
+.oraxen-callout--important {
+  --callout-accent: #2563eb;
+  --callout-bg: #eff6ff;
+  --callout-text: #081b3c;
+}
+.oraxen-callout--danger {
+  --callout-accent: #dc2626;
+  --callout-bg: #fef2f2;
+  --callout-text: #3a0a0a;
+}
+.oraxen-callout--tip {
+  --callout-accent: #16a34a;
+  --callout-bg: #ecfdf5;
+  --callout-text: #052e17;
+}
+details.alert {
+  --ifm-alert-background-color: var(--ifm-color-emphasis-200);
+  --ifm-alert-background-color-highlight: var(--ifm-color-emphasis-300);
+  --ifm-alert-foreground-color: var(--ifm-color-content);
+  --ifm-alert-border-color: transparent;
+  --ifm-alert-shadow: none;
+  --docusaurus-details-decoration-color: var(--ifm-color-emphasis-500);
+  background: var(--ifm-color-emphasis-200);
+  border: 0;
+  border-radius: 8px;
+  box-shadow: none;
+  margin: 1rem 0;
+  padding: .5rem 1rem;
+}
+details.alert > div > div { border-top: 0; margin-top: .5rem; padding-top: 0; }
+.file-tree summary { cursor: pointer; }
+details.alert > summary::before {
+  background-color: var(--docusaurus-details-decoration-color);
+  border: 0;
+  height: 1rem;
+  left: 0;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m9 18 6-6-6-6' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3C/svg%3E") center / contain no-repeat;
+  top: .2rem;
+  transform-origin: center;
+  width: 1rem;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m9 18 6-6-6-6' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+@media (prefers-reduced-motion: reduce) {
+  details.alert > summary::before { transition: none; }
+}
+summary[id] { padding-right: 2rem; position: relative; }
+.summary-link {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  color: var(--ifm-color-primary);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0;
+  padding: .15rem;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+summary[id]:hover .summary-link,
+.summary-link:focus-visible { opacity: 1; }
+.summary-link:hover { text-decoration: underline; }
+.summary-link:focus-visible { outline: 2px solid var(--ifm-color-primary); outline-offset: 2px; }
+.oraxen-steps {
+  counter-reset: oraxen-step;
+  margin: 2rem 0;
+  padding-left: 2.25rem;
+  position: relative;
+}
+.oraxen-steps::before {
+  background: var(--ifm-color-emphasis-300);
+  bottom: .75rem;
+  content: '';
+  left: .8rem;
+  position: absolute;
+  top: .8rem;
+  width: 2px;
+}
+.oraxen-steps > h3,
+.oraxen-steps > h4 {
+  counter-increment: oraxen-step;
+  margin-top: 2.25rem;
+  position: relative;
+}
+.oraxen-steps > h3:first-child,
+.oraxen-steps > h4:first-child {
+  margin-top: 0;
+}
+.oraxen-steps > h3::before,
+.oraxen-steps > h4::before {
+  align-items: center;
+  background: var(--ifm-color-emphasis-200);
+  border: 3px solid var(--ifm-background-color);
+  border-radius: 50%;
+  color: var(--ifm-color-content);
+  content: counter(oraxen-step);
+  display: flex;
+  font-size: .8rem;
+  font-weight: 700;
+  height: 1.75rem;
+  justify-content: center;
+  left: -2.3rem;
+  position: absolute;
+  top: -.15rem;
+  width: 1.75rem;
+  z-index: 1;
+}
+.oraxen-tab { border: 1px solid var(--ifm-color-emphasis-300); border-radius: 8px; margin: 1rem 0; padding: 1rem; }
+.oraxen-tab[data-label]::before { content: attr(data-label); display: block; font-weight: 700; margin-bottom: .75rem; }
+.file-tree { background: var(--ifm-color-emphasis-200); border: 0; border-radius: 8px; box-shadow: none; font-family: var(--ifm-font-family-monospace); margin: 1rem 0; padding: .5rem 1rem; }
+.file-tree-list { list-style: none; margin: 0; padding-left: 1.25rem; }
+.file-tree > .file-tree-list { padding-left: 0; }
+.file-tree details > div > div { border-top: 0; margin-top: 0; padding-top: 0; }
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-background-color: #191919;
+  --ifm-color-primary: #38bdf8;
+  --ifm-color-primary-dark: #20b5f7;
+  --ifm-color-primary-darker: #14b2f7;
+  --ifm-color-primary-darkest: #078fca;
+  --ifm-color-primary-light: #50c5f9;
+  --ifm-color-primary-lighter: #5cc8f9;
+  --ifm-color-primary-lightest: #80d4fa;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+[data-theme='dark'] .oraxen-desktop-search,
+[data-theme='dark'] .oraxen-mobile-navbar {
+  --search-local-modal-background: #242424;
+}
+[data-theme='dark'] .oraxen-callout--note,
+[data-theme='dark'] .oraxen-callout--info {
+  --callout-bg: #123c46;
+  --callout-text: rgba(230, 252, 255, 0.92);
+}
+[data-theme='dark'] .oraxen-callout {
+  --callout-title: color-mix(in srgb, var(--callout-accent) 72%, #ffffff);
+}
+[data-theme='dark'] .oraxen-callout--warning {
+  --callout-bg: #3a2f12;
+  --callout-text: rgba(255, 249, 229, 0.92);
+}
+[data-theme='dark'] .oraxen-callout--important {
+  --callout-bg: #0f2548;
+  --callout-text: rgba(234, 245, 255, 0.92);
+}
+[data-theme='dark'] .oraxen-callout--danger {
+  --callout-bg: #3b1414;
+  --callout-text: rgba(255, 237, 237, 0.92);
+}
+[data-theme='dark'] .oraxen-callout--tip {
+  --callout-bg: #0f2f1d;
+  --callout-text: rgba(236, 253, 245, 0.92);
+}
